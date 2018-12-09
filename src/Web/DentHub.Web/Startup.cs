@@ -37,9 +37,19 @@ namespace DentHub.Web
 
 			services.AddDbContext<DentHubContext>(options =>
 					options.UseSqlServer(
-						this.Configuration.GetConnectionString("DeaultConnectifon")));
+						this.Configuration.GetConnectionString("DefaultConnection")));
 
-			services.AddDefaultIdentity<DentHubUser>()
+			services.AddDefaultIdentity<DentHubUser>(
+				options =>
+				{
+					options.Password.RequiredLength = 6;
+					options.Password.RequireDigit = false;
+					options.Password.RequireLowercase = false;
+					options.Password.RequiredUniqueChars = 0;
+					options.Password.RequireNonAlphanumeric = false;
+					options.Password.RequireUppercase = false;
+				}
+				)
 				.AddEntityFrameworkStores<DentHubContext>();
 
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
