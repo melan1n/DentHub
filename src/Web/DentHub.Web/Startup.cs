@@ -9,9 +9,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using DentHub.Web.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using DentHub.Web.Models;
+using DentHub.Web.Areas.Identity.Data;
 
 namespace DentHub.Web
 {
@@ -34,11 +35,12 @@ namespace DentHub.Web
 				options.MinimumSameSitePolicy = SameSiteMode.None;
 			});
 
-			services.AddDbContext<ApplicationDbContext>(options =>
-				options.UseSqlServer(
-					Configuration.GetConnectionString("DefaultConnection")));
-			services.AddDefaultIdentity<IdentityUser>()
-				.AddEntityFrameworkStores<ApplicationDbContext>();
+			services.AddDbContext<DentHubContext>(options =>
+					options.UseSqlServer(
+						this.Configuration.GetConnectionString("DeaultConnectifon")));
+
+			services.AddDefaultIdentity<DentHubUser>()
+				.AddEntityFrameworkStores<DentHubContext>();
 
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 		}
