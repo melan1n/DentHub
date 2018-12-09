@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.106
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{348B11AA-5832-4FDC-94DF-0939198D509B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DentHub.Web", "Web\DentHub.Web\DentHub.Web.csproj", "{EA888DE0-9BA8-4605-BE4F-4FC0A1BE755E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EA888DE0-9BA8-4605-BE4F-4FC0A1BE755E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA888DE0-9BA8-4605-BE4F-4FC0A1BE755E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA888DE0-9BA8-4605-BE4F-4FC0A1BE755E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA888DE0-9BA8-4605-BE4F-4FC0A1BE755E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{EA888DE0-9BA8-4605-BE4F-4FC0A1BE755E} = {348B11AA-5832-4FDC-94DF-0939198D509B}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {865B6987-B275-46EE-87E8-3A6B6AB6F2DE}
+	EndGlobalSection
+EndGlobal
