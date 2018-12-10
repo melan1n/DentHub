@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using DentHub.Web.Models;
-using DentHub.Web.Areas.Identity.Data;
+using DentHub.Data.Models;
 
 namespace DentHub.Web
 {

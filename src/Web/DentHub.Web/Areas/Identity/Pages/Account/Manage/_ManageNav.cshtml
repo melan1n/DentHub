@@ -1,4 +1,6 @@
-﻿@inject SignInManager<DentHubUser> SignInManager
+﻿@using DentHub.Data.Models
+
+@inject SignInManager<DentHubUser> SignInManager
 @{
     var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
 }
