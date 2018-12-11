@@ -9,9 +9,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DentHub.Web", "Web\DentHub.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{D3B9B933-52DB-40FB-BBD6-9703176EAFBE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DentHub.Data", "Data\DentHub.Data\DentHub.Data.csproj", "{32F2DD49-2884-4CBD-A698-3AC1076DAB4B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DentHub.Data", "Data\DentHub.Data\DentHub.Data.csproj", "{32F2DD49-2884-4CBD-A698-3AC1076DAB4B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DentHub.Data.Models", "Data\DentHub.Data.Models\DentHub.Data.Models.csproj", "{1F83EED4-9079-452C-99E9-3AD7DD582F26}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DentHub.Data.Models", "Data\DentHub.Data.Models\DentHub.Data.Models.csproj", "{1F83EED4-9079-452C-99E9-3AD7DD582F26}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{E87060A2-F074-41F0-A871-E54802F0880C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sandbox", "Tests\Sandbox\Sandbox.csproj", "{47F1DA4D-01FE-48B6-B3B5-946A53E977CB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,6 +35,10 @@ Global
 		{1F83EED4-9079-452C-99E9-3AD7DD582F26}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1F83EED4-9079-452C-99E9-3AD7DD582F26}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1F83EED4-9079-452C-99E9-3AD7DD582F26}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47F1DA4D-01FE-48B6-B3B5-946A53E977CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47F1DA4D-01FE-48B6-B3B5-946A53E977CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47F1DA4D-01FE-48B6-B3B5-946A53E977CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47F1DA4D-01FE-48B6-B3B5-946A53E977CB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -39,6 +47,7 @@ Global
 		{EA888DE0-9BA8-4605-BE4F-4FC0A1BE755E} = {348B11AA-5832-4FDC-94DF-0939198D509B}
 		{32F2DD49-2884-4CBD-A698-3AC1076DAB4B} = {D3B9B933-52DB-40FB-BBD6-9703176EAFBE}
 		{1F83EED4-9079-452C-99E9-3AD7DD582F26} = {D3B9B933-52DB-40FB-BBD6-9703176EAFBE}
+		{47F1DA4D-01FE-48B6-B3B5-946A53E977CB} = {E87060A2-F074-41F0-A871-E54802F0880C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {865B6987-B275-46EE-87E8-3A6B6AB6F2DE}
