@@ -12,12 +12,30 @@ namespace DentHub.Web.Models
         {
         }
 
-        protected override void OnModelCreating(ModelBuilder builder)
+		public DbSet<Patient> Patients;
+		public DbSet<Dentist> Dentists;
+		public DbSet<Appointment> Appointments { get; set; }
+		public DbSet<Clinic> Clinics { get; set; }
+		public DbSet<PatientFile> PatientFiles { get; set; }
+		public DbSet<PatientRecord> PatientRecords { get; set; }
+		public DbSet<Rating> Ratings { get; set; }
+		public DbSet<Specialty> Specialties { get; set; }
+
+		protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            // Customize the ASP.NET Identity model and override the defaults if needed.
-            // For example, you can rename the ASP.NET Identity table names and more.
-            // Add your customizations after calling base.OnModelCreating(builder);
-        }
-    }
+			// Customize the ASP.NET Identity model and override the defaults if needed.
+			// For example, you can rename the ASP.NET Identity table names and more.
+			// Add your customizations after calling base.OnModelCreating(builder);
+
+			builder.Entity<PatientRecord>()
+				.HasKey(pr => new { pr.PatientId, pr.PatientFileId });
+
+			builder.Entity<PatientRecord>()
+				.HasOne(pr => pr.Patient)
+				.WithMany(p => p.PatientRecords)
+				.HasForeignKey(pr => pr.PatientId);
+
+		}
+	}
 }

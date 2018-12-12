@@ -9,5 +9,12 @@ namespace DentHub.Data.Models
     // Add profile data for application users by adding properties to the DentHubUser class
     public class DentHubUser : IdentityUser
     {
-    }
+		public string FirstName { get; set; }
+
+		public string MiddleName { get; set; }
+
+		public string LastName { get; set; }
+
+		//public DateTime DateCreated { get; set; }
+	}
 }

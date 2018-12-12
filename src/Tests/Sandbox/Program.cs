@@ -51,8 +51,6 @@ namespace Sandbox
 					options.UseSqlServer(
 						configuration.GetConnectionString("DefaultConnection")));
 
-
-
 			//	services.AddSingleton<IConfiguration>(configuration);
 			//	services.AddDbContext<ApplicationDbContext>(
 			//		options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"))
