@@ -13,6 +13,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using DentHub.Web.Models;
 using DentHub.Data.Models;
+using DentHub.Data.Common;
+using DentHub.Data;
 
 namespace DentHub.Web
 {
@@ -53,6 +55,9 @@ namespace DentHub.Web
 				.AddEntityFrameworkStores<DentHubContext>();
 
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+			// Application services
+			services.AddScoped(typeof(IRepository<>), typeof(DbRepository<>));
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

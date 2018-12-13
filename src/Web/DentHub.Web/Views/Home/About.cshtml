@@ -1,7 +1,14 @@
-﻿@{
+﻿@model DentHub.Web.Models.About.AboutViewModel
+
+@{
     ViewData["Title"] = "About";
 }
 <h2>@ViewData["Title"]</h2>
 <h3>@ViewData["Message"]</h3>
 
-<p>Use this area to provide additional information.</p>
+@foreach (var specialty in Model.Specialties)
+{
+    <div>
+        @specialty.Name => @specialty.Description
+    </div>
+}

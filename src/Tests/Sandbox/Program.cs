@@ -1,4 +1,6 @@
 ﻿using CommandLine;
+using DentHub.Data;
+using DentHub.Data.Common;
 using DentHub.Web.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -40,16 +42,19 @@ namespace Sandbox
 			Console.WriteLine(db.Users.Count());
 		}
 
-		private static void ConfigureServices(ServiceCollection serviceCollection)
+		private static void ConfigureServices(ServiceCollection services)
 		{
 			var configuration = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory())
 				.AddJsonFile("appsettings.json", false, true)
 				.AddEnvironmentVariables()
 				.Build();
 
-			serviceCollection.AddDbContext<DentHubContext>(options =>
+			services.AddDbContext<DentHubContext>(options =>
 					options.UseSqlServer(
 						configuration.GetConnectionString("DefaultConnection")));
+
+			// Application services
+			services.AddScoped(typeof(IRepository<>), typeof(DbRepository<>));
 
 			//	services.AddSingleton<IConfiguration>(configuration);
 			//	services.AddDbContext<ApplicationDbContext>(
