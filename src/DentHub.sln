@@ -15,9 +15,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DentHub.Data.Models", "Data
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{E87060A2-F074-41F0-A871-E54802F0880C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sandbox", "Tests\Sandbox\Sandbox.csproj", "{47F1DA4D-01FE-48B6-B3B5-946A53E977CB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sandbox", "Tests\Sandbox\Sandbox.csproj", "{47F1DA4D-01FE-48B6-B3B5-946A53E977CB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DentHub.Data.Common", "Data\DentHub.Data.Common\DentHub.Data.Common.csproj", "{E2B97F5F-D576-40B2-8C0B-A8C780BE13C1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DentHub.Data.Common", "Data\DentHub.Data.Common\DentHub.Data.Common.csproj", "{E2B97F5F-D576-40B2-8C0B-A8C780BE13C1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{AFCF2BD4-ED38-4396-9185-1EEFE43832D7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DentHub.Common", "DentHub.Common\DentHub.Common.csproj", "{2E5955E5-BC6E-4614-AD18-ADD15756E573}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +49,10 @@ Global
 		{E2B97F5F-D576-40B2-8C0B-A8C780BE13C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E2B97F5F-D576-40B2-8C0B-A8C780BE13C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E2B97F5F-D576-40B2-8C0B-A8C780BE13C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E5955E5-BC6E-4614-AD18-ADD15756E573}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E5955E5-BC6E-4614-AD18-ADD15756E573}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E5955E5-BC6E-4614-AD18-ADD15756E573}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E5955E5-BC6E-4614-AD18-ADD15756E573}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -55,6 +63,7 @@ Global
 		{1F83EED4-9079-452C-99E9-3AD7DD582F26} = {D3B9B933-52DB-40FB-BBD6-9703176EAFBE}
 		{47F1DA4D-01FE-48B6-B3B5-946A53E977CB} = {E87060A2-F074-41F0-A871-E54802F0880C}
 		{E2B97F5F-D576-40B2-8C0B-A8C780BE13C1} = {D3B9B933-52DB-40FB-BBD6-9703176EAFBE}
+		{2E5955E5-BC6E-4614-AD18-ADD15756E573} = {AFCF2BD4-ED38-4396-9185-1EEFE43832D7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {865B6987-B275-46EE-87E8-3A6B6AB6F2DE}

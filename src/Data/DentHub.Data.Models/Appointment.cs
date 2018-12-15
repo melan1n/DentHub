@@ -7,10 +7,10 @@ namespace DentHub.Data.Models
 {
 	public class Appointment : BaseModel<int>
 	{
-		public virtual Dentist Dentist { get; set; }
+		public virtual DentHubUser Dentist { get; set; }
 		public string DentistID { get; set; }
 
-		public virtual Patient Patient { get; set; }
+		public virtual DentHubUser Patient { get; set; }
 		public string PatientId { get; set; }
 
 		public virtual Clinic Clinic { get; set; }

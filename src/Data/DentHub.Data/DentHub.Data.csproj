@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\DentHub.Common\DentHub.Common.csproj" />
     <ProjectReference Include="..\DentHub.Data.Models\DentHub.Data.Models.csproj" />
   </ItemGroup>
 

@@ -11,10 +11,10 @@ namespace DentHub.Data.Models
 
 		public string Description { get; set; }
 
-		public virtual Patient Patient { get; set; }
+		public virtual DentHubUser Patient { get; set; }
 		public string PatientId { get; set; }
 
-		public virtual Dentist CreatedBy { get; set; }
+		public virtual DentHubUser CreatedBy { get; set; }
 		public string CreatedById { get; set; }
 
 		public DateTime DateCreated { get; set; }

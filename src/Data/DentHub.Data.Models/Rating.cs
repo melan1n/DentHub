@@ -10,10 +10,10 @@ namespace DentHub.Data.Models
 		public virtual Appointment Appointment { get; set; }
 		public int ForAppointmentId { get; set; }
 
-		public virtual Dentist Dentist { get; set; }
+		public virtual DentHubUser Dentist { get; set; }
 		public string DentistId { get; set; }
 
-		public virtual Patient Patient { get; set; }
+		public virtual DentHubUser Patient { get; set; }
 		public string PatientId { get; set; }
 
 		public int RatingByDentist { get; set; }

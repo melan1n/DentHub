@@ -16,6 +16,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Data\DentHub.Data.Models\DentHub.Data.Models.csproj" />
     <ProjectReference Include="..\..\Data\DentHub.Data\DentHub.Data.csproj" />
+    <ProjectReference Include="..\..\Web\DentHub.Web\DentHub.Web.csproj" />
   </ItemGroup>
 
 </Project>

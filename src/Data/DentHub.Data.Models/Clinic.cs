@@ -7,7 +7,7 @@ namespace DentHub.Data.Models
 	{
 		public Clinic()
 		{
-			this.Dentists = new HashSet<Dentist>();
+			this.Dentists = new HashSet<DentHubUser>();
 		}
 
 		public string Name { get; set; }
@@ -34,7 +34,7 @@ namespace DentHub.Data.Models
 
 		public decimal Latitude { get; set; }
 
-		public ICollection<Dentist> Dentists { get; set; }
+		public ICollection<DentHubUser> Dentists { get; set; }
 
 	}
 }
