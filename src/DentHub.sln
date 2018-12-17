@@ -21,7 +21,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DentHub.Data.Common", "Data
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{AFCF2BD4-ED38-4396-9185-1EEFE43832D7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DentHub.Common", "DentHub.Common\DentHub.Common.csproj", "{2E5955E5-BC6E-4614-AD18-ADD15756E573}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DentHub.Common", "DentHub.Common\DentHub.Common.csproj", "{2E5955E5-BC6E-4614-AD18-ADD15756E573}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

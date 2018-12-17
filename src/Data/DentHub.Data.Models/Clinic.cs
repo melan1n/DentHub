@@ -28,11 +28,11 @@ namespace DentHub.Data.Models
 				string.IsNullOrEmpty(this.PostalCode) ? string.Empty : this.City + this.PostalCode) +
 			this.Country ?? string.Empty;
 
-		public bool IsGeoCoded { get; set; }
+		//public bool IsGeoCoded { get; set; }
 
-		public decimal Longitude { get; set; }
+		//public decimal? Longitude { get; set; }
 
-		public decimal Latitude { get; set; }
+		//public decimal? Latitude { get; set; }
 
 		public ICollection<DentHubUser> Dentists { get; set; }
 

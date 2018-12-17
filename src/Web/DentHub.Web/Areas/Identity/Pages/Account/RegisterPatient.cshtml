@@ -1,7 +1,7 @@
 ﻿@page
-@model RegisterModel
+@model RegisterPatientModel
 @{
-    ViewData["Title"] = "Register";
+    ViewData["Title"] = "Register Patient";
 }
 
 <h2>@ViewData["Title"]</h2>
@@ -9,7 +9,7 @@
 <div class="row">
     <div class="col-md-4">
         <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
-            <h4>Create a new dentist account.</h4>
+            <h4>Create a new account.</h4>
             <hr />
             <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group">
@@ -37,6 +37,11 @@
                 <input asp-for="Input.ConfirmPassword" class="form-control" />
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <label asp-for="Input.SSN"></label>
+                <input asp-for="Input.SSN" class="form-control" />
+                <span asp-validation-for="Input.SSN" class="text-danger"></span>
+            </div>
             <button type="submit" class="btn btn-default">Register</button>
         </form>
     </div>
@@ -45,3 +50,4 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
+

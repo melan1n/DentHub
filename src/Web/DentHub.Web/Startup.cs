@@ -52,6 +52,7 @@ namespace DentHub.Web
 					options.Password.RequireUppercase = false;
 				}
 				)
+				.AddRoles<IdentityRole>()
 				.AddEntityFrameworkStores<DentHubContext>();
 
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);

@@ -20,7 +20,17 @@
 else
 {
     <ul class="nav navbar-nav navbar-right">
-        <li><a asp-area="Identity" asp-page="/Account/Register">Register</a></li>
+        @*<li><a asp-area="Identity" asp-page="/Account/Register">Register</a></li>*@
+        <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                Register
+                <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+                <li><a asp-area="Identity" asp-page="/Account/Register">As a dentist</a></li>
+                <li><a asp-area="Identity" asp-page="/Account/RegisterPatient">As a patient</a></li>
+            </ul>
+        </li>
         <li><a asp-area="Identity" asp-page="/Account/Login">Login</a></li>
     </ul>
 }

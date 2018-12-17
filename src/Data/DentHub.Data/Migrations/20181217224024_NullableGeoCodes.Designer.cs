@@ -4,14 +4,16 @@ using DentHub.Web.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DentHub.Data.Migrations
 {
     [DbContext(typeof(DentHubContext))]
-    partial class DentHubContextModelSnapshot : ModelSnapshot
+    [Migration("20181217224024_NullableGeoCodes")]
+    partial class NullableGeoCodes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -61,6 +63,12 @@ namespace DentHub.Data.Migrations
                     b.Property<string>("City");
 
                     b.Property<string>("Country");
+
+                    b.Property<bool>("IsGeoCoded");
+
+                    b.Property<decimal>("Latitude");
+
+                    b.Property<decimal>("Longitude");
 
                     b.Property<string>("Name");
 

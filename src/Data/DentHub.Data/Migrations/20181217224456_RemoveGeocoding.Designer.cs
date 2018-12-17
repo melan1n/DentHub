@@ -4,14 +4,16 @@ using DentHub.Web.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DentHub.Data.Migrations
 {
     [DbContext(typeof(DentHubContext))]
-    partial class DentHubContextModelSnapshot : ModelSnapshot
+    [Migration("20181217224456_RemoveGeocoding")]
+    partial class RemoveGeocoding
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

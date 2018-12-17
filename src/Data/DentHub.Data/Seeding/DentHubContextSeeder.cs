@@ -49,6 +49,9 @@ namespace DentHub.Data.Seeding
 		{
 			SeedRole(GlobalConstants.AdministratorRoleName, roleManager);
 			SeedRole(GlobalConstants.UserRoleName, roleManager);
+			SeedRole(GlobalConstants.DentistRoleName, roleManager);
+			SeedRole(GlobalConstants.PatientRoleName, roleManager);
+
 		}
 
 		private static void SeedRole(string roleName, RoleManager<IdentityRole> roleManager)

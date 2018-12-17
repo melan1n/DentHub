@@ -8,6 +8,10 @@ namespace DentHub.Common
 
 		public const string UserRoleName = "User";
 
+		public const string DentistRoleName = "Dentist";
+
+		public const string PatientRoleName = "Patient";
+
 		public const string AdminUserName = "admin@denthub.com";
 	}
 }
