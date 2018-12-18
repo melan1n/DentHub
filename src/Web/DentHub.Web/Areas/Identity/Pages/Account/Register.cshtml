@@ -1,5 +1,10 @@
 ﻿@page
 @model RegisterModel
+
+@using System.Linq
+@using DentHub.Web.Controllers
+@using DentHub.Data.Models
+
 @{
     ViewData["Title"] = "Register";
 }
@@ -36,6 +41,28 @@
                 <label asp-for="Input.ConfirmPassword"></label>
                 <input asp-for="Input.ConfirmPassword" class="form-control" />
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.Clinic"></label>
+                <div>
+                    <select asp-for="Input.Clinic" asp-items="@(new SelectList((IList<Clinic>)this.ViewData["ClinicList"], "Id", "Name"))" class="form-control">
+                        <option selected="selected" value="">Please select</option>
+                    </select>
+                    <div>
+                        <span asp-validation-for="Input.Clinic" class="text-danger" />
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.Specialty"></label>
+                <div>
+                    <select asp-for="Input.Specialty" asp-items="@(new SelectList((IList<Specialty>)this.ViewData["SpecialtyList"], "Id", "Name"))" class="form-control">
+                        <option selected="selected" value="">Please select</option>
+                    </select>
+                    <div>
+                        <span asp-validation-for="Input.Specialty" class="text-danger" />
+                    </div>
+                </div>
             </div>
             <button type="submit" class="btn btn-default">Register</button>
         </form>
