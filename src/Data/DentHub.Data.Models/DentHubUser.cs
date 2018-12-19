@@ -24,8 +24,6 @@ namespace DentHub.Data.Models
 
 		public string LastName { get; set; }
 
-		public UserType UserType { get; set; }
-
 		// Dentist-specific properties
 		public Specialty Specialty { get; set; }
 
