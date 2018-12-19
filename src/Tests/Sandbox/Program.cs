@@ -29,7 +29,8 @@ namespace Sandbox
 			using (var serviceScope = serviceProvider.CreateScope())
 			{
 				var dbContext = serviceScope.ServiceProvider.GetRequiredService<DentHubContext>();
-				//var userManager = serviceScope.ServiceProvider.GetService<UserManager<DentHubUser>>();
+				var userManager = serviceScope.ServiceProvider.GetService<UserManager<DentHubUser>>();
+				//var signInManager = serviceScope.ServiceProvider.GetRequiredService<SignInManager<DentHubUser>();
 				dbContext.Database.Migrate();
 				DentHubContextSeeder.Seed(dbContext, serviceScope.ServiceProvider);
 			}
@@ -65,29 +66,28 @@ namespace Sandbox
 			//			configuration.GetConnectionString("DefaultConnection")));
 
 			services.AddScoped<DbContext, DentHubContext>();
+			services.AddTransient<UserManager<DentHubUser>>();
 			services.AddTransient<IUserStore<IdentityUser>, UserStore<IdentityUser>>();
 			services.AddTransient<IPasswordHasher<DentHubUser>, PasswordHasher<DentHubUser>>();
-			services.AddTransient<UserManager<DentHubUser>>(); 
-
-			// Application services
-			services.AddScoped(typeof(IRepository<>), typeof(DbRepository<>));
-
-			
+			services.AddTransient<SignInManager<DentHubUser>>();
+		
+		// Application services
+		services.AddScoped(typeof(IRepository<>), typeof(DbRepository<>));
 
 			services
-				.AddIdentity<DentHubUser, IdentityRole>(options =>
+				.AddIdentity<DentHubUser, IdentityRole>(
+				options =>
 				{
+					options.Password.RequiredLength = 6;
 					options.Password.RequireDigit = false;
 					options.Password.RequireLowercase = false;
-					options.Password.RequireUppercase = false;
 					options.Password.RequiredUniqueChars = 0;
 					options.Password.RequireNonAlphanumeric = false;
-					options.Password.RequiredLength = 6;
-				})
-				.AddEntityFrameworkStores<DentHubContext>()
-				.AddUserStore<UserStore>()
-				.AddRoleStore<RoleStore<IdentityRole>>()
-				.AddDefaultTokenProviders();
+					options.Password.RequireUppercase = false;
+				}
+				)
+				.AddRoles<IdentityRole>()
+				.AddEntityFrameworkStores<DentHubContext>();
 
 			//services.AddScoped(typeof(IDeletableEntityRepository<>), typeof(EfDeletableEntityRepository<>));
 			//services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));

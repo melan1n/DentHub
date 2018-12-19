@@ -19,7 +19,6 @@ namespace DentHub.Web.Areas.Administration.Controllers
 		private readonly IRepository<Clinic> _clinicRepository;
 		private readonly IRepository<DentHubUser> _dentistRepository;
 
-
 		public ClinicController(IRepository<Clinic> clinicRepository,
 			IRepository<DentHubUser> dentistRepository)
 		{
@@ -46,6 +45,7 @@ namespace DentHub.Web.Areas.Administration.Controllers
 									.Select(
 					c => new ClinicViewModel
 					{
+						Id = c.Id,
 						City = c.City,
 						Country = c.Country,
 						Name = c.Name,
@@ -54,6 +54,7 @@ namespace DentHub.Web.Areas.Administration.Controllers
 						WorkingHours = c.WorkingHours,
 						Dentists = this._dentistRepository
 									.All()
+									.Where(d => d.ClinicId == c.Id)
 									.Select(
 						d => new DentistViewModel
 						{

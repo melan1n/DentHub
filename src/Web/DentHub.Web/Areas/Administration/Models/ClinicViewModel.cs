@@ -12,6 +12,8 @@ namespace DentHub.Web.Areas.Administration.Models
 			this.Dentists = new HashSet<DentistViewModel>();
 		}
 
+		public int Id { get; set; }
+
 		public string Name { get; set; }
 
 		public string Street { get; set; }
