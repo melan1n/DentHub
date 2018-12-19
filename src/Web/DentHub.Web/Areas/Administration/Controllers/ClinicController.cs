@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
+using System.Threading;
 using System.Threading.Tasks;
 using DentHub.Data;
 using DentHub.Data.Common;
@@ -24,11 +26,20 @@ namespace DentHub.Web.Areas.Administration.Controllers
 			this._clinicRepository = clinicRepository;
 			this._dentistRepository = dentistRepository;
 		}
-
-		[Authorize(Roles = "Administrator,Patient")]
+       
+		[Authorize(Roles = "Administrator,Dentist")]
 		public IActionResult All()
 		{
-			var clinicsViewModel = new ClinicsViewModel();
+            //var xx = HttpContext.User;
+
+            //var userIdentity = (ClaimsIdentity)User.Identity;
+            //var claims = userIdentity.Claims;
+            //var roleClaimType = userIdentity.RoleClaimType;
+            //var roles = claims.Where(c => c.Type == ClaimTypes.Role).ToList();
+
+            //var x = User.IsInRole("Dentist");
+
+            var clinicsViewModel = new ClinicsViewModel();
 
 			clinicsViewModel.Clinics = this._clinicRepository
 									.All()

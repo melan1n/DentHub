@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using DentHub.Data.Models;
@@ -92,8 +93,10 @@ namespace DentHub.Web.Areas.Identity.Pages.Account
 				if (result.Succeeded)
 				{
 					var resultRole = await _userManager.AddToRoleAsync(user, "Patient");
+                    var resultClaimRole = await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim(ClaimTypes.Role, "Patient"));
 
-					_logger.LogInformation("User created a new account with password.");
+
+                    _logger.LogInformation("User created a new account with password.");
 
 					var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 					var callbackUrl = Url.Page(

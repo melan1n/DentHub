@@ -6,8 +6,6 @@ namespace DentHub.Common
 	{
 		public const string AdministratorRoleName = "Administrator";
 
-		public const string UserRoleName = "User";
-
 		public const string DentistRoleName = "Dentist";
 
 		public const string PatientRoleName = "Patient";

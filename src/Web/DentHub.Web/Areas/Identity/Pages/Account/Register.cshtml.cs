@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Security.Claims;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using DentHub.Data;
@@ -75,15 +76,15 @@ namespace DentHub.Web.Areas.Identity.Pages.Account
 			[Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
 			public string ConfirmPassword { get; set; }
 
-			[Required]
-			[Display(Name = "Clinic")]
-			public string Clinic { get; set; }
+            [Required]
+            [Display(Name = "Clinic")]
+            public string Clinic { get; set; }
 
-			[Required]
-			[Display(Name = "Specialty")]
-			public string Specialty { get; set; }
+            [Required]
+            [Display(Name = "Specialty")]
+            public string Specialty { get; set; }
 
-		}
+        }
 
 		public void OnGet(string returnUrl = null)
 		{
@@ -97,30 +98,31 @@ namespace DentHub.Web.Areas.Identity.Pages.Account
 			returnUrl = returnUrl ?? Url.Content("~/");
 			if (ModelState.IsValid)
 			{
-				var clinic = this._clinicRepository
-								.All()
-								.FirstOrDefault(c => c.Id == int.Parse(Input.Clinic));
+                var clinic = this._clinicRepository
+                                .All()
+                                .FirstOrDefault(c => c.Id == int.Parse(Input.Clinic));
 
-				var specialty = this._specialtyRepository
-								.All()
-								.FirstOrDefault(s => s.Id == int.Parse(Input.Specialty));
+                var specialty = this._specialtyRepository
+                                .All()
+                                .FirstOrDefault(s => s.Id == int.Parse(Input.Specialty));
 
-				var user = new DentHubUser
+                var user = new DentHubUser
 				{
 					UserName = Input.Email,
 					Email = Input.Email,
 					FirstName = Input.FirstName,
 					LastName = Input.LastName,
-					ClinicId = clinic.Id,
-					SpecialtyId = specialty.Id,
-				};
+                    ClinicId = clinic.Id,
+                    SpecialtyId = specialty.Id,
+                };
 
 				var result = await _userManager.CreateAsync(user, Input.Password);
 				if (result.Succeeded)
 				{
-					var resultRole = await _userManager.AddToRoleAsync(user, "Dentist");
+                    var resultRole = await _userManager.AddToRoleAsync(user, "Dentist");
+                    var resultClaimRole = await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim(ClaimTypes.Role, "Dentist"));
 
-					_logger.LogInformation("User created a new account with password.");
+                    _logger.LogInformation("User created a new account with password.");
 
 					var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 					var callbackUrl = Url.Page(
