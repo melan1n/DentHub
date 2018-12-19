@@ -68,5 +68,35 @@ namespace DentHub.Web.Areas.Administration.Controllers
 
 			return View(clinicsViewModel);
 		}
+
+		[Authorize(Roles = "Administrator")]
+		public IActionResult Create()
+		{
+			return View();
+		}
+
+		[HttpPost]
+		public IActionResult Create(ClinicInputModel model)
+		{
+			if (model != null)
+			{
+				var newClinic = new Clinic
+				{
+					Name = model.Name,
+					Street = model.Street,
+					City = model.City,
+					PostalCode = model.PostalCode,
+					Country = model.Country,
+					WorkingHours = model.WorkingHours,
+				};
+
+				var result = _clinicRepository.AddAsync(newClinic);
+				if (result.IsCompletedSuccessfully)
+				{
+					_clinicRepository.SaveChangesAsync();
+				}
+			}
+			return RedirectToAction("All");
+		}
 	}
 }
