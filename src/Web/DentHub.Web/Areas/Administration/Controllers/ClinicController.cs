@@ -25,20 +25,20 @@ namespace DentHub.Web.Areas.Administration.Controllers
 			this._clinicRepository = clinicRepository;
 			this._dentistRepository = dentistRepository;
 		}
-       
-		//[Authorize(Roles = "Administrator,Dentist")]
+
+		[Authorize(Roles = "Administrator,Dentist")]
 		public IActionResult All()
 		{
-            //var xx = HttpContext.User;
+			//var xx = HttpContext.User;
 
-            //var userIdentity = (ClaimsIdentity)User.Identity;
-            //var claims = userIdentity.Claims;
-            //var roleClaimType = userIdentity.RoleClaimType;
-            //var roles = claims.Where(c => c.Type == ClaimTypes.Role).ToList();
+			//var userIdentity = (ClaimsIdentity)User.Identity;
+			//var claims = userIdentity.Claims;
+			//var roleClaimType = userIdentity.RoleClaimType;
+			//var roles = claims.Where(c => c.Type == ClaimTypes.Role).ToList();
 
-            //var x = User.IsInRole("Dentist");
+			//var x = User.IsInRole("Dentist");
 
-            var clinicsViewModel = new ClinicsViewModel();
+			var clinicsViewModel = new ClinicsViewModel();
 
 			clinicsViewModel.Clinics = this._clinicRepository
 									.All()
@@ -69,49 +69,48 @@ namespace DentHub.Web.Areas.Administration.Controllers
 			return View(clinicsViewModel);
 		}
 
-		//[Authorize(Roles = "Administrator")]
+		[Authorize(Roles = "Administrator")]
 		public IActionResult Create()
 		{
-            ClinicInputModel model = new ClinicInputModel()
-            {
-                Name = "kokoloco"
-            };
-
-            return View(model);
+			return View();
 		}
 
+		[Authorize(Roles = "Administrator")]
 		[HttpPost]
-        public async Task<IActionResult> Create(ClinicInputModel model)
-        //public async Task<IActionResult> Create([FromBody] string content)
+		public async Task<IActionResult> Create(ClinicInputModel model)
+		//public async Task<IActionResult> Create([FromBody] string content)
 		{
-            if (ModelState.IsValid)
+			if (ModelState.IsValid)
 			{
-                var newClinic = new Clinic
-                {
-                    Name = model.Name,
-                    Street = model.Street,
-                    City = model.City,
-                    PostalCode = model.PostalCode,
-                    Country = model.Country,
-                    WorkingHours = model.WorkingHours,
-                };
+				var newClinic = new Clinic
+				{
+					Name = model.Name,
+					Street = model.Street,
+					City = model.City,
+					PostalCode = model.PostalCode,
+					Country = model.Country,
+					WorkingHours = model.WorkingHours,
+				};
 
-                //var newClinic = new Clinic
-                //{
-                //    Name = "opa",
-                //    Street = "tropa",
-                //    City = "assd",
-                //    PostalCode = "assd",
-                //    Country = "assd",
-                //    WorkingHours = "assd",
-                //};
+				var result = _clinicRepository.AddAsync(newClinic);
+				await result;
 
-                var result = _clinicRepository.AddAsync(newClinic);
-                await result;
-
-                await _clinicRepository.SaveChangesAsync();
-                
+				await _clinicRepository.SaveChangesAsync();
 			}
+
+			return RedirectToAction("All");
+		}
+
+		[Authorize(Roles = "Administrator")]
+		public IActionResult Delete(int id)
+		{
+			var clinic = _clinicRepository
+						.All()
+						.FirstOrDefault(c => c.Id == id);
+
+			this._clinicRepository.Delete(clinic);
+			_clinicRepository.SaveChangesAsync().GetAwaiter().GetResult();
+
 			return RedirectToAction("All");
 		}
 	}

@@ -19,24 +19,25 @@
 <body>
     <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <div class="navbar-header">
+            <div class="navbar-header navbar-brand">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">DentHub</a>
+                @Html.ActionLink("DentHub", "Index", new { area = "", controller = "Home" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
+                    <li> @Html.ActionLink("Home", "Index", new { area = "", controller = "Home" }) </li>
+                    <li> @Html.ActionLink("About", "About", new { area = "", controller = "Home" }) </li>
+                    <li> @Html.ActionLink("Contact", "Contact", new { area = "", controller = "Home" }) </li>
                 </ul>
                 <partial name="_LoginPartial" />
             </div>
         </div>
+        
     </nav>
 
     <partial name="_CookieConsentPartial" />

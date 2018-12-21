@@ -4,25 +4,15 @@
     ViewData["Title"] = "Create";
 }
 
-<h2>View</h2>
+<h2>Create a new clinic</h2>
 
-<h4>Create a new clinic</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form action="/Administration/Clinic/create" method="post">
-            <label for="Name">Name</label>
-            <input type="text" name="Name" />
-
-            <label for="Rate">Rate</label>
-            <input type="text" name="Rate" />
-
-            <label for="Rating">Rating</label>
-            <input type="text" name="Rating" />
-
-            <div class="form-group">
-                <label for="Name">Name</label>
-                <input type="text" name="Name" class="control-label"/>
+             <div class="form-group">
+                <label for="Name" class="control-label">Name</label>
+                <input type="text" name="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -31,7 +21,7 @@
                 <span asp-validation-for="Street" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label for="City" >City</label>
+                <label for="City">City</label>
                 <input type="text" name="City" class="form-control" />
                 <span asp-validation-for="City" class="text-danger"></span>
             </div>

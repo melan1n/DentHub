@@ -12,6 +12,8 @@ namespace DentHub.Web.Areas.Administration.Models
 			this.Clinics = new HashSet<ClinicViewModel>(); 
 		}
 
+		public int Id { get; set; }
+
 		public IEnumerable<ClinicViewModel> Clinics;
 
 
