@@ -10,41 +10,48 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <form action="/Administration/Clinic/create" method="post">
+            <label for="Name">Name</label>
+            <input type="text" name="Name" />
+
+            <label for="Rate">Rate</label>
+            <input type="text" name="Rate" />
+
+            <label for="Rating">Rating</label>
+            <input type="text" name="Rating" />
+
             <div class="form-group">
-                <label asp-for="Name" class="control-label">Name</label>
-                <input asp-for="Name" class="form-control" />
+                <label for="Name">Name</label>
+                <input type="text" name="Name" class="control-label"/>
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Street" class="control-label">Street</label>
-                <input asp-for="Street" class="form-control" />
+                <label for="Street" class="control-label">Street</label>
+                <input type="text" name="Street" class="form-control" />
                 <span asp-validation-for="Street" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="City" class="control-label">City</label>
-                <input asp-for="City" class="form-control" />
+                <label for="City" >City</label>
+                <input type="text" name="City" class="form-control" />
                 <span asp-validation-for="City" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="PostalCode" class="control-label">Postal Code</label>
-                <input asp-for="PostalCode" class="form-control" />
+                <label for="PostalCode" class="control-label">Postal Code</label>
+                <input type="text" name="PostalCode" class="form-control" />
                 <span asp-validation-for="PostalCode" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Country" class="control-label">Country</label>
-                <input asp-for="Country" class="form-control" />
+                <label for="Country" class="control-label">Country</label>
+                <input type="text" name="Country" class="form-control" />
                 <span asp-validation-for="Country" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="WorkingHours" class="control-label">Working Hours</label>
-                <input asp-for="WorkingHours" class="form-control" />
+                <label for="WorkingHours" class="control-label">Working Hours</label>
+                <input type="text" name="WorkingHours" class="form-control" />
                 <span asp-validation-for="WorkingHours" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-default" />
-            </div>
+
+            <input type="submit" name="submit" />
         </form>
     </div>
 </div>

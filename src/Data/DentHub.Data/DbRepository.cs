@@ -42,12 +42,12 @@ namespace DentHub.Data
 			this.context.Dispose();
 		}
 
-		public Task<int> SaveChangesAsync()
-		{
-			return this.SaveChangesAsync();
-		}
+        public Task<int> SaveChangesAsync()
+        {
+            return context.SaveChangesAsync();
+        }
 
-		public void Update(TEntity entity)
+        public void Update(TEntity entity)
 		{
 			throw new NotImplementedException();
 		}

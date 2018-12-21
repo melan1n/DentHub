@@ -26,7 +26,7 @@ namespace DentHub.Web.Areas.Administration.Controllers
 			this._dentistRepository = dentistRepository;
 		}
        
-		[Authorize(Roles = "Administrator,Dentist")]
+		//[Authorize(Roles = "Administrator,Dentist")]
 		public IActionResult All()
 		{
             //var xx = HttpContext.User;
@@ -69,32 +69,48 @@ namespace DentHub.Web.Areas.Administration.Controllers
 			return View(clinicsViewModel);
 		}
 
-		[Authorize(Roles = "Administrator")]
+		//[Authorize(Roles = "Administrator")]
 		public IActionResult Create()
 		{
-			return View();
+            ClinicInputModel model = new ClinicInputModel()
+            {
+                Name = "kokoloco"
+            };
+
+            return View(model);
 		}
 
 		[HttpPost]
-		public IActionResult Create(ClinicInputModel model)
+        public async Task<IActionResult> Create(ClinicInputModel model)
+        //public async Task<IActionResult> Create([FromBody] string content)
 		{
-			if (model != null)
+            if (ModelState.IsValid)
 			{
-				var newClinic = new Clinic
-				{
-					Name = model.Name,
-					Street = model.Street,
-					City = model.City,
-					PostalCode = model.PostalCode,
-					Country = model.Country,
-					WorkingHours = model.WorkingHours,
-				};
+                var newClinic = new Clinic
+                {
+                    Name = model.Name,
+                    Street = model.Street,
+                    City = model.City,
+                    PostalCode = model.PostalCode,
+                    Country = model.Country,
+                    WorkingHours = model.WorkingHours,
+                };
 
-				var result = _clinicRepository.AddAsync(newClinic);
-				if (result.IsCompletedSuccessfully)
-				{
-					_clinicRepository.SaveChangesAsync();
-				}
+                //var newClinic = new Clinic
+                //{
+                //    Name = "opa",
+                //    Street = "tropa",
+                //    City = "assd",
+                //    PostalCode = "assd",
+                //    Country = "assd",
+                //    WorkingHours = "assd",
+                //};
+
+                var result = _clinicRepository.AddAsync(newClinic);
+                await result;
+
+                await _clinicRepository.SaveChangesAsync();
+                
 			}
 			return RedirectToAction("All");
 		}
