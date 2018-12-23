@@ -13,7 +13,7 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Id)
+                @*@Html.DisplayNameFor(model => model.Id)*@
             </th>
             <th></th>
         </tr>
@@ -25,9 +25,9 @@
                 @dentist.FirstName @dentist.LastName - @dentist.Specialty - @dentist.ClinicName 
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                @Html.ActionLink("Edit", "Edit", new {  id= dentist.Id }) |
+                @Html.ActionLink("Details", "Details", new { id=dentist.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id= dentist.Id })
             </td>
         </tr>
 }

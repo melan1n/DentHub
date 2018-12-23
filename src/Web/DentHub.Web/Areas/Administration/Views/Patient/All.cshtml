@@ -1,0 +1,35 @@
+﻿@model DentHub.Web.Areas.Administration.Models.PatientsViewModel
+
+@{
+    ViewData["Title"] = "View";
+}
+
+<h2>All Patients</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @*@Html.DisplayNameFor(model => model.Id)*@
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var patient in Model.Patients) {
+        <tr>
+            <td>
+                @patient.FirstName @patient.LastName - @patient.UserName 
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new {  id= patient.Id }) |
+                @Html.ActionLink("Details", "Details", new { id=patient.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id= patient.Id })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -12,7 +12,7 @@ namespace DentHub.Web.Models
         {
         }
 
-		public DbSet<DentHubUser> DentHubUsers;
+		public DbSet<DentHubUser> DentHubUsers { get; set; }
 		public DbSet<Appointment> Appointments { get; set; }
 		public DbSet<Clinic> Clinics { get; set; }
 		public DbSet<PatientFile> PatientFiles { get; set; }
