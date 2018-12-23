@@ -7,29 +7,29 @@
 <ul class="nav navbar-nav">
     @if (this.SignInManager.IsSignedIn(this.User) && this.User.IsInRole("Administrator"))
     {
-        <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-        <li><a asp-area="" asp-controller="Clinic" asp-action="All">Clinics</a></li>
-        <li><a asp-area="" asp-controller="Dentist" asp-action="All">Dentists</a></li>
-        <li><a asp-area="" asp-controller="Patient" asp-action="All">Patients</a></li>
+        <li><a asp-area="Administration" asp-controller="Clinic" asp-action="All">Clinics</a></li>
+        <li><a asp-area="Administration" asp-controller="Dentist" asp-action="All">Dentists</a></li>
+        <li><a asp-area="Administration" asp-controller="Patient" asp-action="All">Patients</a></li>
         <li><a asp-area="" asp-controller="Rating" asp-action="All">Ratings</a></li>
     }
     else if (this.SignInManager.IsSignedIn(this.User) && this.User.IsInRole("Dentist"))
     {
-        <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
         <li><a asp-area="" asp-controller="Patient" asp-action="DentistPatients">Patients</a></li>
+        <li><a asp-area="Administration" asp-controller="Dentist" asp-action="All">Dentists</a></li>
         <li><a asp-area="" asp-controller="Appointment" asp-action="DentistAppointments">Appointments</a></li>
     }
     else if (this.SignInManager.IsSignedIn(this.User) && this.User.IsInRole("Patient"))
     {
-        <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
         <li><a asp-area="" asp-controller="Home" asp-action="Specialties">Dental Specialties</a></li>
+        <li><a asp-area="Administration" asp-controller="Dentist" asp-action="All">Dentists</a></li>
         <li><a asp-area="" asp-controller="Appointment" asp-action="DentistAppointments">Appointments</a></li>
         <li><a asp-area="" asp-controller="PatientRecord" asp-action="PatientFiles">Files</a></li>
     }
     else
     {
-        <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-        <li><a asp-area="" asp-controller="Home" asp-action="Specialties">Dental Specialties</a></li>
+        <li><a asp-area="Administration" asp-controller="clinic" asp-action="All">Dental Specialties</a></li>
+        <li><a asp-area="Administration" asp-controller="Clinic" asp-action="All">Clinics</a></li>
+        <li><a asp-area="Administration" asp-controller="Dentist" asp-action="All">Dentists</a></li>
         <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
     }
 </ul>

@@ -26,7 +26,6 @@ namespace DentHub.Web.Areas.Administration.Controllers
 			this._dentistRepository = dentistRepository;
 		}
 
-		[Authorize(Roles = "Administrator,Dentist")]
 		public IActionResult All()
 		{
 			//var xx = HttpContext.User;

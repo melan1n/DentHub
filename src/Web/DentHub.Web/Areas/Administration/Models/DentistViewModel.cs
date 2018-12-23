@@ -1,4 +1,6 @@
-﻿namespace DentHub.Web.Areas.Administration.Models
+﻿using DentHub.Data.Models;
+
+namespace DentHub.Web.Areas.Administration.Models
 {
 	public class DentistViewModel
 	{
@@ -9,6 +11,8 @@
 		public string LastName { get; set; }
 
 		// Dentist-specific properties
+		public string ClinicName { get; set; }
+
 		public string Specialty { get; set; }
 
 		public string ImageUrl { get; set; }
