@@ -1,47 +1,53 @@
 ﻿@model DentHub.Web.Areas.Administration.Models.ClinicViewModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Edit";
 }
 
-<h2>Create a new clinic</h2>
+<h2>Edit @Model.Name</h2>
+
 
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form action="/Administration/Clinic/create" method="post">
-             <div class="form-group">
+        <form action="/Administration/Clinic/EditAsync" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div>
+                <input type="hidden" id="Id" name="Id" value="@Model.Id">
+            </div>
+            <div class="form-group">
                 <label for="Name" class="control-label">Name</label>
-                <input type="text" name="Name" class="form-control" />
+                <input type="text" name="Name" value="@Model.Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label for="Street" class="control-label">Street</label>
-                <input type="text" name="Street" class="form-control" />
+                <input type="text" name="Street" value="@Model.Street" class="form-control" />
                 <span asp-validation-for="Street" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label for="City">City</label>
-                <input type="text" name="City" class="form-control" />
+                <label for="City" class="control-label">City</label>
+                <input type="text" name="City" value="@Model.City" class="form-control" />
                 <span asp-validation-for="City" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label for="PostalCode" class="control-label">Postal Code</label>
-                <input type="text" name="PostalCode" class="form-control" />
+                <input type="text" name="PostalCode" value="@Model.PostalCode" class="form-control" />
                 <span asp-validation-for="PostalCode" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label for="Country" class="control-label">Country</label>
-                <input type="text" name="Country" class="form-control" />
+                <input type="text" name="Country" value="@Model.Country" class="form-control" />
                 <span asp-validation-for="Country" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label for="WorkingHours" class="control-label">Working Hours</label>
-                <input type="text" name="WorkingHours" class="form-control" />
+                <input type="text" name="WorkingHours" value="@Model.WorkingHours" class="form-control" />
                 <span asp-validation-for="WorkingHours" class="text-danger"></span>
             </div>
-
-            <input type="submit" name="submit" />
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
         </form>
     </div>
 </div>

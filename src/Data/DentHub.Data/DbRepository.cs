@@ -49,7 +49,15 @@ namespace DentHub.Data
 
         public void Update(TEntity entity)
 		{
-			throw new NotImplementedException();
+			var entry = this.context.Entry(entity);
+			if (entry.State == EntityState.Detached)
+			{
+				this.dbSet.Attach(entity);
+			}
+
+			entry.State = EntityState.Modified;
+			//this.context.Update<TEntity>(entity);
+			//context.SaveChangesAsync();
 		}
 	}
 }
