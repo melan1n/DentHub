@@ -25,7 +25,7 @@ namespace DentHub.Web.Controllers
 			return View();
 		}
 
-		public IActionResult About()
+		public IActionResult Specialties()
 		{
 			var specialties = this.specialtyRepository.All()
 				.OrderBy(x => x.Name)
@@ -45,7 +45,7 @@ namespace DentHub.Web.Controllers
 
 		public IActionResult Contact()
 		{
-			ViewData["Message"] = "Your contact page.";
+			ViewData["Message"] = "Our address is:";
 
 			return View();
 		}
