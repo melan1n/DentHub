@@ -10,8 +10,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace DentHub.Web.Areas.Administration.Controllers
 {
 	[Area("Administration")]
-    public class DentistController : Controller
-    {
+	public class DentistController : Controller
+	{
 		private readonly IRepository<DentHubUser> _userRepository;
 		private readonly IRepository<Specialty> _specialtyRepository;
 		private readonly IRepository<Clinic> _clinicRepository;
@@ -28,16 +28,16 @@ namespace DentHub.Web.Areas.Administration.Controllers
 		public IActionResult All()
 		{
 			var dentistsViewModel = new DentistsViewModel();
-			GetAllDentists(dentistsViewModel);
+			GetAllActiveDentists(dentistsViewModel);
 
 			return View(dentistsViewModel);
 		}
 
-		private void GetAllDentists(DentistsViewModel dentistsViewModel)
+		private void GetAllActiveDentists(DentistsViewModel dentistsViewModel)
 		{
 			dentistsViewModel.Dentists = this._userRepository
 												.All()
-												.Where(u => u.Specialty != null)
+												.Where(u => u.Specialty != null && u.IsActive)
 
 												.Select(
 								d => new DentistViewModel
@@ -75,6 +75,22 @@ namespace DentHub.Web.Areas.Administration.Controllers
 			};
 
 			return View(dentistViewModel);
+		}
+
+		public async Task<IActionResult> Deactivate(string id)
+		{
+			var dentist = this._userRepository
+				.All()
+				.FirstOrDefault(d => d.Id == id);
+
+
+			dentist.IsActive = false;
+
+			this._userRepository.Update(dentist);
+
+			await _userRepository.SaveChangesAsync();
+
+			return RedirectToAction("All");
 		}
 	}
 }

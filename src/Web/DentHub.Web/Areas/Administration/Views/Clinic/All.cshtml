@@ -21,8 +21,8 @@
                 @Html.ActionLink("Details", "Details", new { id = clinic.Id }) |
             </td>
             <td class="delete-section">
-                <a class="delete-link" href="@Url.Action("Delete", new {id = clinic.Id})">Delete</a>
-                <div class="btn btn-primary delete-confirm" style="display:none" data-delete-id="@clinic.Id">Confirm Delete</div>
+                <a class="delete-link" href="@Url.Action("Deactivate", new {id = clinic.Id})">Deactivate</a>
+                <div class="btn btn-primary delete-confirm" style="display:none" data-delete-id="@clinic.Id">Confirm Deactivate</div>
             </td>
         </tr>
 
@@ -66,8 +66,8 @@
             var deleteItem = function () {
                 removeEvents();
                 confirmButton.hide();
-                $.post(
-                    '@Url.Action("Delete")',
+                $.get(
+                    '@Url.Action("Deactivate")',
                     AddAntiForgeryToken({ id: confirmButton.attr('data-delete-id') }))
                    .done(function () {
                        var parentRow = deleteLink.parents("tr:first");

@@ -19,10 +19,11 @@ namespace DentHub.Data.Models
 			this.UserName = userName;
 		}
 
-
 		public string FirstName { get; set; }
 
 		public string LastName { get; set; }
+
+		public bool IsActive { get; set; } = true;
 
 		// Dentist-specific properties
 		public Specialty Specialty { get; set; }

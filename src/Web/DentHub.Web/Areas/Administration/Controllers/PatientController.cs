@@ -31,7 +31,7 @@ namespace DentHub.Web.Areas.Administration.Controllers
 		{
 			patientsViewModel.Patients = this._userRepository
 												.All()
-												.Where(u => u.SSN != null)
+												.Where(u => u.SSN != null && u.IsActive)
 												.Select(
 								p => new PatientViewModel
 								{
@@ -59,6 +59,22 @@ namespace DentHub.Web.Areas.Administration.Controllers
 			};
 
 			return View(patientViewModel);
+		}
+
+		public async Task<IActionResult> Deactivate(string id)
+		{
+			var patient = this._userRepository
+				.All()
+				.FirstOrDefault(p => p.Id == id);
+
+
+			patient.IsActive = false;
+
+			this._userRepository.Update(patient);
+
+			await _userRepository.SaveChangesAsync();
+
+			return RedirectToAction("All");
 		}
 	}
 }

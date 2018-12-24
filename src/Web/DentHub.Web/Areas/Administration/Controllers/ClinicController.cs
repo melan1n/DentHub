@@ -38,15 +38,16 @@ namespace DentHub.Web.Areas.Administration.Controllers
 			//var x = User.IsInRole("Dentist");
 
 			var clinicsViewModel = new ClinicsViewModel();
-			GetAllClinics(clinicsViewModel);
+			GetAllActiveClinics(clinicsViewModel);
 
 			return View(clinicsViewModel);
 		}
 
-		private void GetAllClinics(ClinicsViewModel clinicsViewModel)
+		private void GetAllActiveClinics(ClinicsViewModel clinicsViewModel)
 		{
 			clinicsViewModel.Clinics = this._clinicRepository
 												.All()
+												.Where(c => c.IsActive && c.Dentists.Any(d => d.IsActive))
 												.Select(
 								c => new ClinicViewModel
 								{
@@ -59,7 +60,7 @@ namespace DentHub.Web.Areas.Administration.Controllers
 									WorkingHours = c.WorkingHours,
 									Dentists = this._dentistRepository
 												.All()
-												.Where(d => d.ClinicId == c.Id)
+												.Where(d => d.IsActive && d.ClinicId == c.Id)
 												.Select(
 									d => new DentistViewModel
 									{
@@ -105,12 +106,34 @@ namespace DentHub.Web.Areas.Administration.Controllers
 		}
 
 		[Authorize(Roles = "Administrator")]
-		public IActionResult Delete(int id)
+		public async Task<IActionResult> Deactivate(int id)
 		{
 			Clinic clinic = GetClinic(id);
 
-			this._clinicRepository.Delete(clinic);
-			_clinicRepository.SaveChangesAsync().GetAwaiter().GetResult();
+			if (clinic != null)
+			{
+				var clinicDentists = _dentistRepository
+							.All()
+							.Where(d => d.Clinic == clinic)
+							.Select(d => d)
+							.ToArray();
+				foreach (var dentist in clinicDentists)
+				{
+					dentist.IsActive = false;
+					this._dentistRepository.Update(dentist);
+				}
+
+				await _dentistRepository.SaveChangesAsync();
+				
+				clinic.IsActive = false;
+
+				this._clinicRepository.Update(clinic);
+
+				await _clinicRepository.SaveChangesAsync();
+			}
+		
+			//this._clinicRepository.Delete(clinic);
+			//_clinicRepository.SaveChangesAsync().GetAwaiter().GetResult();
 
 			return RedirectToAction("All");
 		}
