@@ -44,7 +44,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Input.Clinic"></label>
-               <div>
+                <div>
                     <select asp-for="Input.Clinic" asp-items="@(new SelectList((IList<Clinic>)this.ViewData["ClinicList"], "Id", "Name"))" class="form-control">
                         <option selected="selected" value="">Please select</option>
                     </select>
@@ -63,6 +63,11 @@
                         <span asp-validation-for="Input.Specialty" class="text-danger" />
                     </div>
                 </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.ImageUrl"></label>
+                <input asp-for="Input.ImageUrl" class="form-control" />
+                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
             <button type="submit" class="btn btn-default">Register</button>
         </form>

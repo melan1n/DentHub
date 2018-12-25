@@ -43,6 +43,11 @@ namespace DentHub.Web.Controllers
 			return View(viewModel);
 		}
 
+		public IActionResult Guidelines()
+		{
+			return View();
+		}
+
 		public IActionResult Contact()
 		{
 			ViewData["Message"] = "Our address is:";

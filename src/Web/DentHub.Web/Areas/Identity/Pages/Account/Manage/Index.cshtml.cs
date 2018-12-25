@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using DentHub.Data.Common;
 using DentHub.Data.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -15,17 +16,26 @@ namespace DentHub.Web.Areas.Identity.Pages.Account.Manage
     public partial class IndexModel : PageModel
     {
         private readonly UserManager<DentHubUser> _userManager;
+		private readonly IRepository<DentHubUser> _userRepository;
         private readonly SignInManager<DentHubUser> _signInManager;
         private readonly IEmailSender _emailSender;
+		private readonly IRepository<Specialty> _specialtyRepository;
+		private readonly IRepository<Clinic> _clinicRepository;
 
-        public IndexModel(
+		public IndexModel(
             UserManager<DentHubUser> userManager,
+			IRepository<DentHubUser> userRepository,
             SignInManager<DentHubUser> signInManager,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+			IRepository<Specialty> specialtyRepository,
+			IRepository<Clinic> clinicRepository)
         {
             _userManager = userManager;
+			_userRepository = userRepository;
             _signInManager = signInManager;
             _emailSender = emailSender;
+			_specialtyRepository = specialtyRepository;
+			_clinicRepository = clinicRepository;
         }
 
         public string Username { get; set; }
@@ -47,11 +57,25 @@ namespace DentHub.Web.Areas.Identity.Pages.Account.Manage
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
-        }
+			
+			[Required]
+			[Display(Name = "Clinic")]
+			public int Clinic { get; set; }
+
+			[Required]
+			[Display(Name = "Specialty")]
+			public int Specialty { get; set; }
+
+			[Display(Name = "Image")]
+			public string ImageUrl { get; set; }
+		}
 
         public async Task<IActionResult> OnGetAsync()
         {
-            var user = await _userManager.GetUserAsync(User);
+			this.ViewData["ClinicList"] = _clinicRepository.All().ToList();
+			this.ViewData["SpecialtyList"] = _specialtyRepository.All().ToList();
+
+			var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
@@ -61,13 +85,24 @@ namespace DentHub.Web.Areas.Identity.Pages.Account.Manage
             var email = await _userManager.GetEmailAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
 
-            Username = userName;
+			Username = userName;
 
             Input = new InputModel
             {
                 Email = email,
-                PhoneNumber = phoneNumber
-            };
+                PhoneNumber = phoneNumber,
+			};
+
+			if (this.User.IsInRole("Dentist"))
+			{
+				var specialtyId = _specialtyRepository.All().FirstOrDefault(s => s.Id == user.SpecialtyId).Id;
+				var clinicId = user.Clinic.Id;
+				var imageUrl = user.ImageUrl;
+
+				Input.Specialty = specialtyId;
+				Input.Clinic = clinicId;
+				Input.ImageUrl = imageUrl;
+			}
 
             IsEmailConfirmed = await _userManager.IsEmailConfirmedAsync(user);
 
@@ -76,12 +111,23 @@ namespace DentHub.Web.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
+			var user = await _userManager.GetUserAsync(User);
+
+			if (!ModelState.IsValid)
             {
-                return Page();
+				if (this.User.IsInRole("Dentist"))
+				{
+					Input.Clinic = (int)user.ClinicId;
+					Input.Specialty = (int)user.SpecialtyId;
+					Input.ImageUrl = user.ImageUrl;
+
+					this.ViewData["ClinicList"] = _clinicRepository.All().ToList();
+					this.ViewData["SpecialtyList"] = _specialtyRepository.All().ToList();
+				}
+								 
+				return Page();
             }
 
-            var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
@@ -109,7 +155,36 @@ namespace DentHub.Web.Areas.Identity.Pages.Account.Manage
                 }
             }
 
-            await _signInManager.RefreshSignInAsync(user);
+			var userFromRepository = _userRepository
+				.All()
+				.FirstOrDefault(u => u.Id == user.Id);
+
+			var specialtyId = user.SpecialtyId;
+			if (Input.Specialty != specialtyId)
+			{
+				userFromRepository.Specialty = _specialtyRepository
+					.All()
+					.FirstOrDefault(s => s.Id == Input.Specialty);
+			}
+
+			var clinicId = user.ClinicId;
+			if (Input.Clinic != clinicId)
+			{
+				userFromRepository.Clinic = _clinicRepository
+					.All()
+					.FirstOrDefault(c => c.Id == Input.Clinic);
+			}
+
+			var imageUrl = user.ImageUrl;
+			if (Input.ImageUrl != imageUrl)
+			{
+				userFromRepository.ImageUrl = Input.ImageUrl;
+			}
+
+			_userRepository.Update(userFromRepository);
+			await _userRepository.SaveChangesAsync();
+
+			await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";
             return RedirectToPage();
         }

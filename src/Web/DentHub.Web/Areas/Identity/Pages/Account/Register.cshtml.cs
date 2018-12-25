@@ -84,7 +84,11 @@ namespace DentHub.Web.Areas.Identity.Pages.Account
             [Display(Name = "Specialty")]
             public string Specialty { get; set; }
 
-        }
+			[Display(Name = "Image")]
+			public string ImageUrl { get; set; }
+
+
+		}
 
 		public void OnGet(string returnUrl = null)
 		{
@@ -114,6 +118,7 @@ namespace DentHub.Web.Areas.Identity.Pages.Account
 					LastName = Input.LastName,
                     ClinicId = clinic.Id,
                     SpecialtyId = specialty.Id,
+					ImageUrl = Input.ImageUrl
                 };
 
 				var result = await _userManager.CreateAsync(user, Input.Password);
