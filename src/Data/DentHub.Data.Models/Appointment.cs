@@ -16,7 +16,9 @@ namespace DentHub.Data.Models
 		public virtual Clinic Clinic { get; set; }
 		public int ClinicId { get; set; }
 
-		public DateTime Time { get; set; }
+		public DateTime TimeStart { get; set; }
+
+		public DateTime TimeEnd { get; set; }
 
 		public double Duration { get; set; }
 

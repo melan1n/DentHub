@@ -10,21 +10,15 @@
 <table class="table">
     @foreach (var clinic in Model.Clinics)
     {
-        <tr class=" text-danger">
-            <td>
-                @clinic.Name -- @clinic.Street @clinic.City @clinic.PostalCode -- Working hours: @clinic.WorkingHours
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = clinic.Id }) |
-            </td>
-            <td>
-                @Html.ActionLink("Details", "Details", new { id = clinic.Id }) |
-            </td>
-            <td class="delete-section">
-                <a class="delete-link" href="@Url.Action("Deactivate", new {id = clinic.Id})">Deactivate</a>
-                <div class="btn btn-primary delete-confirm" style="display:none" data-delete-id="@clinic.Id">Confirm Deactivate</div>
-            </td>
-        </tr>
+    <tr class=" text-danger">
+        <td>
+            @clinic.Name -- @clinic.Street @clinic.City @clinic.PostalCode -- Working hours: @clinic.WorkingHours
+        </td>
+        <td>
+            @Html.ActionLink("Details", "Details", new { id = clinic.Id }) 
+        </td>
+        @await  Html.PartialAsync("_ClinicActionsPartial.cshtml", clinic)
+    </tr>
 
         @*@foreach (var dentist in clinic.Dentists)
             {
@@ -40,14 +34,8 @@
             }*@
     }
 </table>
+@await Html.PartialAsync("_ClinicsPartial.cshtml")
 
-<div>
-    @Html.ActionLink("Create New", "Create", new {})
-</div>
-@*<div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-    <a asp-action="Index">Back to List</a>
-</div>*@
 
 @section scripts{
     <script type="text/javascript">

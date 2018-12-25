@@ -79,6 +79,35 @@ namespace DentHub.Web.Areas.Administration.Controllers
 			return View();
 		}
 
+		public IActionResult Details(int id)
+		{
+			var clinic = GetClinic(id);
+
+			var clinicViewModel = new ClinicViewModel
+			{
+				Id = clinic.Id,
+				City = clinic.City,
+				Country = clinic.Country,
+				Name = clinic.Name,
+				PostalCode = clinic.PostalCode,
+				Street = clinic.Street,
+				WorkingHours = clinic.WorkingHours,
+				Dentists = this._dentistRepository
+												.All()
+												.Where(d => d.IsActive && d.ClinicId == clinic.Id)
+												.Select(
+									d => new DentistViewModel
+									{
+										FirstName = d.FirstName,
+										LastName = d.LastName,
+										Specialty = d.Specialty.Name,
+										ImageUrl = d.ImageUrl,
+									}).ToList(),
+			};
+
+			return View(clinicViewModel);
+		}
+
 		[Authorize(Roles = "Administrator")]
 		[HttpPost]
 		public async Task<IActionResult> Create(ClinicViewModel model)

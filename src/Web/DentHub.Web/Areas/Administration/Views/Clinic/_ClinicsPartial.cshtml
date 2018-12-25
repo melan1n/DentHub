@@ -1,0 +1,12 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using DentHub.Data.Models
+
+@inject SignInManager<DentHubUser> SignInManager
+@inject UserManager<DentHubUser> UserManager
+
+@if (this.SignInManager.IsSignedIn(this.User) && this.User.IsInRole("Administrator"))
+{
+    @*<p> +<a asp-area="Administration" asp-controller="Clinic" asp-action="Create">Add New Clinic</a></p>*@
+    <p>+@Html.ActionLink("Add New Clinic", "Create", "Clinic")</p>
+}
+

@@ -1,0 +1,80 @@
+﻿@model DentHub.Web.Areas.Administration.Models.ClinicViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Id)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Id)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Street)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Street)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.City)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.City)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PostalCode)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PostalCode)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Country)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Country)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.WorkingHours)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.WorkingHours)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Addresss)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Addresss)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Dentists)
+            </dt>
+        
+            @foreach (var dentist in Model.Dentists)
+        {
+        <dd>
+            @dentist.FirstName @dentist.LastName -- @dentist.Specialty
+            @*@Html.ActionLink("Edit", "Edit", new { id = dentist.Id }) |
+            @Html.ActionLink("Details", "Details", new { id = dentist.Id }) |
+            <td class="delete-section">
+                <a class="delete-link" href="@Url.Action("Delete", new {id = dentist.Id})">Delete</a>
+                <div class="btn btn-primary delete-confirm" style="display:none" data-delete-id="@clinic.Id">Confirm Delete</div>
+            </td>*@
+            </dd>
+        }
+        
+    </dl>
+</div>
+<div>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("All Clinics", "All", "Clinic")
+</div>
