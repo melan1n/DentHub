@@ -1,0 +1,12 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using DentHub.Data.Models
+
+@inject SignInManager<DentHubUser> SignInManager
+@inject UserManager<DentHubUser> UserManager
+
+@if (this.SignInManager.IsSignedIn(this.User) && this.User.IsInRole("Dentist"))
+{
+   <p> +<a asp-controller="Appointment" asp-action="CreateOffering">Offer an Appointment</a></p>
+    @*<p>+@Html.ActionLink("Offer an Appointment", "CreateOffering", "Appointment")</p>*@
+}
+

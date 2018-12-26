@@ -1,22 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace DentHub.Web.Models.Appointment
 {
-	public class AppointmentInputModel
+	public class AppointmentViewModel
 	{
-		[Required]
-		[Display(Name = "Appointment Start")]
+		public int Id { get; set; }
+
+		public string DentistName { get; set; }
+
+		public string PatientName { get; set; }
+
+		public string ClinicName { get; set; }
+
 		public DateTime TimeStart { get; set; }
 
-		[Required]
-		[Display(Name = "Appointmetnt End")]
 		public DateTime TimeEnd { get; set; }
 
-		[Range(0.25, 8.00)] 
 		public double Duration => (this.TimeEnd - this.TimeStart).Hours;
+
+		public string Status { get; set; }
 	}
 }

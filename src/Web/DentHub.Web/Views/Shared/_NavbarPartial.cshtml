@@ -16,13 +16,13 @@
     {
         <li><a asp-area="" asp-controller="Patient" asp-action="DentistPatients">Patients</a></li>
         <li><a asp-area="Administration" asp-controller="Dentist" asp-action="All">Dentists</a></li>
-        <li><a asp-area="" asp-controller="Appointment" asp-action="DentistAppointments">Appointments</a></li>
+        <li><a asp-area="" asp-controller="Appointment" asp-action="Index">Appointments</a></li>
     }
     else if (this.SignInManager.IsSignedIn(this.User) && this.User.IsInRole("Patient"))
     {
         <li><a asp-area="" asp-controller="Home" asp-action="Specialties">Dental Specialties</a></li>
         <li><a asp-area="Administration" asp-controller="Dentist" asp-action="All">Dentists</a></li>
-        <li><a asp-area="" asp-controller="Appointment" asp-action="DentistAppointments">Appointments</a></li>
+        <li><a asp-area="" asp-controller="Appointment" asp-action="Index">Appointments</a></li>
         <li><a asp-area="" asp-controller="PatientRecord" asp-action="PatientFiles">Files</a></li>
     }
     else

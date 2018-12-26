@@ -20,7 +20,7 @@ namespace DentHub.Data.Models
 
 		public DateTime TimeEnd { get; set; }
 
-		public double Duration { get; set; }
+		public double Duration => (this.TimeEnd - this.TimeStart).Hours;
 
 		public Status Status { get; set; }
 

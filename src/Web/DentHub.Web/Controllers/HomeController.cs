@@ -48,6 +48,11 @@ namespace DentHub.Web.Controllers
 			return View();
 		}
 
+		public IActionResult ScheduleAppointment()
+		{
+			return View();
+		}
+
 		public IActionResult Contact()
 		{
 			ViewData["Message"] = "Our address is:";

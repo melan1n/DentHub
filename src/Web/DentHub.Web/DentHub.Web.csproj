@@ -41,6 +41,17 @@
     <Content Update="Areas\Administration\Views\Clinic\_ClinicsPartial.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Update="Views\Appointment\_AppointmentActionsPartial.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Views\Appointment\_AppointmentsPartial.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Home\ScheduleAppointment.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
   </ItemGroup>
 
 </Project>

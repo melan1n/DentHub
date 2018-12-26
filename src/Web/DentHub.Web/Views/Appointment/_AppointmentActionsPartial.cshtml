@@ -1,0 +1,43 @@
+﻿@model DentHub.Web.Models.Appointment.AppointmentViewModel
+
+@using Microsoft.AspNetCore.Identity
+@using DentHub.Data.Models
+
+@inject SignInManager<DentHubUser> SignInManager
+@inject UserManager<DentHubUser> UserManager
+
+@if (Model.Status == "Offering")
+{
+    <td>
+        @Html.ActionLink("Book", "Book", new { id = Model.Id })
+    </td>
+    if(this.SignInManager.IsSignedIn(this.User) && this.User.IsInRole("Dentist"))
+    { 
+    <td class="delete-section">
+        <a class="delete-link" href="@Url.Action("Cancel", new { id = Model.Id })">Cancel</a>
+        <div class="btn btn-primary delete-confirm" style="display:none" data-delete-id="Model.Id">Confirm Cancellation</div>
+    </td>
+    }
+}
+
+@if (this.SignInManager.IsSignedIn(this.User) && this.User.IsInRole("Dentist"))
+{
+    if (Model.Status == "Booked")
+    {
+        <td>
+        @Html.ActionLink("Confirm", "Confirm", new { id = Model.Id })
+        </td>
+        <td class="delete-section">
+            <a class="delete-link" href="@Url.Action("Cancel", new { id = Model.Id })">Cancel</a>
+            <div class="btn btn-primary delete-confirm" style="display:none" data-delete-id="Model.Id">Confirm Cancellation</div>
+        </td>
+    }
+}
+
+@if (Model.Status == "Confirmed")
+{
+    <td>
+        @Html.ActionLink("Complete", "Complete", new { id = Model.Id })
+    </td>
+}
+
