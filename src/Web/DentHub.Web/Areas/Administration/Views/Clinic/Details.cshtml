@@ -1,5 +1,7 @@
 ﻿@model DentHub.Web.Areas.Administration.Models.ClinicViewModel
 
+@using DentHub.Web.Areas.Administration.Models
+
 @{
     ViewData["Title"] = "Details";
 }
@@ -63,18 +65,20 @@
         {
         <dd>
             @dentist.FirstName @dentist.LastName -- @dentist.Specialty
+            @await Html.PartialAsync("_DentistOfferings", new DentistViewModel { Id = dentist.Id })
+            @*@await Html.PartialAsync("_DentistOfferings", new { Id = dentist.Id })*@
             @*@Html.ActionLink("Edit", "Edit", new { id = dentist.Id }) |
-            @Html.ActionLink("Details", "Details", new { id = dentist.Id }) |
-            <td class="delete-section">
-                <a class="delete-link" href="@Url.Action("Delete", new {id = dentist.Id})">Delete</a>
-                <div class="btn btn-primary delete-confirm" style="display:none" data-delete-id="@clinic.Id">Confirm Delete</div>
-            </td>*@
-            </dd>
+        @Html.ActionLink("Details", "Details", new { id = dentist.Id }) |
+        <td class="delete-section">
+            <a class="delete-link" href="@Url.Action("Delete", new {id = dentist.Id})">Delete</a>
+            <div class="btn btn-primary delete-confirm" style="display:none" data-delete-id="@clinic.Id">Confirm Delete</div>
+        </td>*@
+        </dd>
         }
         
     </dl>
 </div>
 <div>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @await Html.PartialAsync("_ClinicDetailsPartial")  
     @Html.ActionLink("All Clinics", "All", "Clinic")
 </div>

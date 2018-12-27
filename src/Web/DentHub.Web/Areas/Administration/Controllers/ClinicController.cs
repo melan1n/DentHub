@@ -8,6 +8,7 @@ using DentHub.Data;
 using DentHub.Data.Common;
 using DentHub.Data.Models;
 using DentHub.Web.Areas.Administration.Models;
+using DentHub.Web.Models.Appointment;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,12 +19,16 @@ namespace DentHub.Web.Areas.Administration.Controllers
 	{
 		private readonly IRepository<Clinic> _clinicRepository;
 		private readonly IRepository<DentHubUser> _dentistRepository;
+		private readonly IRepository<Appointment> _appointmentRepository;
+
 
 		public ClinicController(IRepository<Clinic> clinicRepository,
-			IRepository<DentHubUser> dentistRepository)
+			IRepository<DentHubUser> dentistRepository,
+			IRepository<Appointment> appointmentRepository)
 		{
 			this._clinicRepository = clinicRepository;
 			this._dentistRepository = dentistRepository;
+			this._appointmentRepository = appointmentRepository;
 		}
 
 		public IActionResult All()
@@ -64,10 +69,23 @@ namespace DentHub.Web.Areas.Administration.Controllers
 												.Select(
 									d => new DentistViewModel
 									{
+										Id = d.Id,
 										FirstName = d.FirstName,
 										LastName = d.LastName,
 										Specialty = d.Specialty.Name,
 										ImageUrl = d.ImageUrl,
+										Offerrings = this._appointmentRepository
+													.All()
+													.Where(a => a.DentistID == d.Id)
+													.Select(
+												a => new AppointmentViewModel
+												{
+													DentistName = a.Dentist.FirstName + a.Dentist.LastName,
+													ClinicName = a.Clinic.Name,
+													TimeStart = a.TimeStart,
+													TimeEnd = a.TimeEnd,
+													Status = a.Status.ToString()
+												}).ToArray()
 									}).ToList(),
 								})
 									.ToArray();
@@ -98,6 +116,7 @@ namespace DentHub.Web.Areas.Administration.Controllers
 												.Select(
 									d => new DentistViewModel
 									{
+										Id = d.Id,
 										FirstName = d.FirstName,
 										LastName = d.LastName,
 										Specialty = d.Specialty.Name,

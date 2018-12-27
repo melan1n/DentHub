@@ -15,9 +15,7 @@
             <td>
                 @appointment.DentistName (@appointment.ClinicName) - @appointment.PatientName @appointment.TimeStart : @appointment.TimeEnd -- Status:@appointment.Status
             </td>
-            <td>
-                @Html.ActionLink("Details", "Details", new { id = appointment.Id })
-            </td>
+            
             @await Html.PartialAsync("_AppointmentActionsPartial.cshtml", appointment)
         </tr>
 

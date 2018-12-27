@@ -26,6 +26,7 @@
 
   <ItemGroup>
     <Folder Include="Areas\Administration\Data\" />
+    <Folder Include="Models\Dentist\" />
   </ItemGroup>
 
   <ItemGroup>

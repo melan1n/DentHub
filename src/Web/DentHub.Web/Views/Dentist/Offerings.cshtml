@@ -1,0 +1,32 @@
+﻿@model DentHub.Web.Models.Appointment.AppointmentsViewModel
+
+@{
+    ViewData["Title"] = "Offerings";
+}
+
+<h2>@Model.Appointments.FirstOrDefault().DentistName's Offerings</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Dentist Name    (Clinic)  - Appointment Start  : Appointment End - Status 
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var appointment in Model.Appointments) {
+        <tr>
+            <td>
+                @appointment.DentistName (@appointment.ClinicName) - @appointment.TimeStart : @appointment.TimeEnd -- Status:@appointment.Status
+            </td>
+            <td>
+                @*@Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Book", "Book", new { id = appointment.Id })*@
+                <a href="/Appointment/Book/@appointment.Id">Book</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
