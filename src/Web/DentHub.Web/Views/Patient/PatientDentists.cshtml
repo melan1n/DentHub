@@ -1,0 +1,40 @@
+﻿@model DentHub.Web.Areas.Administration.Models.PatientViewModel
+
+@{
+    ViewData["Title"] = "DentistPatients";
+}
+
+<h2>My Dentists</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Dentist Name
+            </th>
+            <th>
+                Average Rating
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var dentistRating in Model.AverageRatingByDentist) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => dentistRating.Key)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => dentistRating.Value)
+            </td>
+            
+            @*<td>
+                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            </td>*@
+        </tr>
+}
+    </tbody>
+</table>
+<h2>Average Rating: @Model.AverageRating</h2>

@@ -26,7 +26,6 @@
 
   <ItemGroup>
     <Folder Include="Areas\Administration\Data\" />
-    <Folder Include="Models\Dentist\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -51,6 +50,9 @@
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
     <Content Update="Views\Home\ScheduleAppointment.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Patient\PatientDentists.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
   </ItemGroup>

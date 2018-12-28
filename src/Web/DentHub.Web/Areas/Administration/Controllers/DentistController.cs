@@ -15,14 +15,17 @@ namespace DentHub.Web.Areas.Administration.Controllers
 		private readonly IRepository<DentHubUser> _userRepository;
 		private readonly IRepository<Specialty> _specialtyRepository;
 		private readonly IRepository<Clinic> _clinicRepository;
+		private readonly IRepository<Rating> _ratingRepository;
 
 		public DentistController(IRepository<DentHubUser> userRepository,
 			IRepository<Specialty> specialtyRepository,
-			IRepository<Clinic> clinicRepository)
+			IRepository<Clinic> clinicRepository,
+			IRepository<Rating> ratingRepository)
 		{
 			this._userRepository = userRepository;
 			this._specialtyRepository = specialtyRepository;
 			this._clinicRepository = clinicRepository;
+			this._ratingRepository = ratingRepository;
 		}
 
 		public IActionResult All()
@@ -47,7 +50,15 @@ namespace DentHub.Web.Areas.Administration.Controllers
 									LastName = d.LastName,
 									ClinicName = d.Clinic.Name,
 									Specialty = d.Specialty.Name,
-									ImageUrl = d.ImageUrl
+									ImageUrl = d.ImageUrl,
+									AverageRating = (this._ratingRepository
+											.All()
+											.Where(r => r.DentistId == d.Id && r.RatingByPatient > 0)
+											.Count() > 0 ?
+											this._ratingRepository
+											.All()
+											.Where(r => r.DentistId == d.Id && r.RatingByPatient > 0)
+											.Average(r => r.RatingByPatient).ToString() : "N/A"),
 								})
 									.ToArray();
 		}

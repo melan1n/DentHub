@@ -22,5 +22,9 @@ namespace DentHub.Web.Models.Appointment
 		public double Duration => (this.TimeEnd - this.TimeStart).Hours;
 
 		public string Status { get; set; }
+
+		public bool IsRatedByPatient { get; set; } = false;
+
+		public bool IsRatedByDentist { get; set; } = false;
 	}
 }

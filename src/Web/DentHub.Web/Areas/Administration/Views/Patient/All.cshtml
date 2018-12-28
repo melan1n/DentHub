@@ -19,7 +19,7 @@
 @foreach (var patient in Model.Patients) {
         <tr>
             <td>
-                @patient.FirstName @patient.LastName - @patient.UserName 
+                @patient.FirstName @patient.LastName - @patient.UserName - @patient.AverageRating
             </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new {  id= patient.Id }) |

@@ -37,10 +37,39 @@
     }
 }
 
-@if (Model.Status == "Confirmed")
+@if (Model.Status == "Confirmed" && this.SignInManager.IsSignedIn(this.User))
 {
-    <td>
-        @Html.ActionLink("Complete", "Complete", new { id = Model.Id })
-    </td>
+    if (DateTime.Now > Model.TimeEnd)
+    {
+        <td>
+            @Html.ActionLink("Complete", "Complete", new { id = Model.Id })
+        </td>
+        if ((!Model.IsRatedByPatient && this.User.IsInRole("Patient"))
+            || ((!Model.IsRatedByDentist) && this.User.IsInRole("Dentist")))
+        {
+            <td>
+                @Html.ActionLink("Rate", "RateAppointment", new { id = Model.Id })
+            </td>
+        }
+    }
 }
 
+@if (Model.Status.ToString() == "Completed" && this.SignInManager.IsSignedIn(this.User))
+{
+    if (!Model.IsRatedByPatient && this.User.IsInRole("Patient"))
+    {
+        <td>
+            <a href="/Rating/RateAppointment/@Model.Id">Rate</a>
+            @*@Html.ActionLink("Rate", "RateAppointment", new { id = Model.Id })*@
+        </td>
+    }
+    if (!Model.IsRatedByDentist && this.User.IsInRole("Dentist"))
+    {
+        <td>
+
+            <a href="/Rating/RateAppointment/@Model.Id">Rate</a>
+            @*@Html.ActionLink("Rate", "RateAppointment", new { id = Model.Id })*@
+        </td>
+    }
+
+}

@@ -1,9 +1,15 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace DentHub.Web.Areas.Administration.Models
 {
 	public class PatientViewModel
 	{
+		public PatientViewModel()
+		{
+			this.AverageRatingByDentist = new Dictionary<string, string>();
+		}
+
 		public string Id { get; set; }
 
 		[Display(Name = "First Name")]
@@ -19,5 +25,8 @@ namespace DentHub.Web.Areas.Administration.Models
 		[Display(Name = "Social Security Number")]
 		public string SSN { get; set; }
 
+		public string AverageRating { get; set; }
+
+		public Dictionary<string, string> AverageRatingByDentist { get; set; }
 	}
 }

@@ -60,6 +60,8 @@ namespace DentHub.Web.Controllers
 							TimeStart = a.TimeStart.Date,
 							TimeEnd = a.TimeEnd,
 							Status = a.Status.ToString(),
+							IsRatedByDentist = a.IsRatedByDentist,
+							IsRatedByPatient = a.IsRatedByPatient,
 						}).ToArray();
 				}
 				else
@@ -77,6 +79,8 @@ namespace DentHub.Web.Controllers
 								TimeStart = a.TimeStart.Date,
 								TimeEnd = a.TimeEnd,
 								Status = a.Status.ToString(),
+								IsRatedByDentist = a.IsRatedByDentist,
+								IsRatedByPatient = a.IsRatedByPatient,
 							})
 							.ToArray();
 				}
