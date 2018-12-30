@@ -22,13 +22,13 @@
 @foreach (var patientRating in Model.AverageRatingByPatient) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => patientRating.Key)
+                @Html.DisplayFor(modelItem => patientRating.Value[0])
             </td>
             <td>
-                @Html.DisplayFor(modelItem => patientRating.Value)
+                @Html.DisplayFor(modelItem => patientRating.Value[1])
             </td>
             <td>
-                @*@Html.ActionLink("+Add file", "AddFile")*@
+                @Html.ActionLink("+ Add file", "AddFile", new { id = patientRating.Key })
                 </td>
             @*<td>
                 @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |

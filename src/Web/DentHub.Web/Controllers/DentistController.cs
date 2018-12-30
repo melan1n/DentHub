@@ -13,8 +13,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DentHub.Web.Controllers
 {
-    public class DentistController : Controller
-    {
+	public class DentistController : Controller
+	{
 		private readonly UserManager<DentHubUser> _userManager;
 		private readonly IRepository<DentHubUser> _userRepository;
 		private readonly IRepository<Rating> _ratingRepository;
@@ -33,11 +33,11 @@ namespace DentHub.Web.Controllers
 		}
 
 		public IActionResult Index()
-        {
-            return View();
-        }
+		{
+			return View();
+		}
 
-		[Authorize(Roles="Patient")]
+		[Authorize(Roles = "Patient")]
 		public IActionResult Offerings(string id)
 		{
 			var appointmentsViewModel = new AppointmentsViewModel();
@@ -58,21 +58,21 @@ namespace DentHub.Web.Controllers
 
 			if (dentist != null)
 			{
-					appointmentsViewModel.Appointments = _appointmentRepository.
-						All()
-						.Where(a => a.DentistID == dentist.Id && a.Status.ToString() == "Offering")
-						.Select(a => new AppointmentViewModel
-						{
-							Id = a.Id,
-							ClinicName = a.Clinic.Name,
-							DentistName = a.Dentist.FirstName + a.Dentist.LastName,
-							PatientName = a.Patient.FirstName + a.Patient.LastName,
-							TimeStart = a.TimeStart.Date,
-							TimeEnd = a.TimeEnd,
-							Status = a.Status.ToString(),
-						}).ToArray();
-				}
+				appointmentsViewModel.Appointments = _appointmentRepository.
+					All()
+					.Where(a => a.DentistID == dentist.Id && a.Status.ToString() == "Offering")
+					.Select(a => new AppointmentViewModel
+					{
+						Id = a.Id,
+						ClinicName = a.Clinic.Name,
+						DentistName = a.Dentist.FirstName + a.Dentist.LastName,
+						PatientName = a.Patient.FirstName + a.Patient.LastName,
+						TimeStart = a.TimeStart.Date,
+						TimeEnd = a.TimeEnd,
+						Status = a.Status.ToString(),
+					}).ToArray();
 			}
+		}
 
 		public async Task<IActionResult> DentistPatients()
 		{
@@ -107,7 +107,7 @@ namespace DentHub.Web.Controllers
 				return View("NoPatients");
 			}
 
-			var averageRatingPerPatient = new Dictionary<string, string>();
+			var averageRatingPerPatient = new Dictionary<string, string[]>();
 
 			foreach (var patient in patients)
 			{
@@ -130,18 +130,22 @@ namespace DentHub.Web.Controllers
 					.Where(r => r.PatientId == patient.Id)
 					.Average(r => r.RatingByPatient);
 
-					averageRatingPerPatient[patient.FirstName + patient.LastName] = averageRating.ToString();
+					averageRatingPerPatient[patient.Id] = new string[]
+						{ patient.FirstName + patient.LastName,
+						  averageRating.ToString() };
 				}
 				else
 				{
-					averageRatingPerPatient[patient.FirstName + patient.LastName] = "N/A";
+					averageRatingPerPatient[patient.Id] = new string[]
+						{ patient.FirstName + patient.LastName,
+						  "N/A" }; 
 				}
 			}
 
 			var dentistViewModel = new DentistViewModel
 			{
 				AverageRatingByPatient = averageRatingPerPatient,
-				AverageRating = ratings.Count() > 0 ? 
+				AverageRating = ratings.Count() > 0 ?
 								ratings.Average(r => r.RatingByPatient).ToString() :
 								"N/A"
 			};

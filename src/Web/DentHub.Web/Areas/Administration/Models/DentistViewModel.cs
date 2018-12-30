@@ -12,7 +12,7 @@ namespace DentHub.Web.Areas.Administration.Models
 		{
 			this.Offerrings = new HashSet<AppointmentViewModel>();
 			this.Patients = new HashSet<PatientViewModel>();
-			this.AverageRatingByPatient = new Dictionary<string, string>();
+			this.AverageRatingByPatient = new Dictionary<string, string[]>();
 		}
 
 		public string Id { get; set; }
@@ -35,7 +35,7 @@ namespace DentHub.Web.Areas.Administration.Models
 
 		public string AverageRating { get; set; }
 
-		public Dictionary<string, string> AverageRatingByPatient { get; set; }
+		public Dictionary<string, string[]> AverageRatingByPatient { get; set; }
 		
 		public ICollection<AppointmentViewModel> Offerrings { get; set; }
 
