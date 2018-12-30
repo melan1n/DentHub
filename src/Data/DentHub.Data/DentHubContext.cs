@@ -16,7 +16,7 @@ namespace DentHub.Web.Models
 		public DbSet<Appointment> Appointments { get; set; }
 		public DbSet<Clinic> Clinics { get; set; }
 		public DbSet<PatientFile> PatientFiles { get; set; }
-		public DbSet<PatientRecord> PatientRecords { get; set; }
+		//public DbSet<PatientRecord> PatientRecords { get; set; }
 		public DbSet<Rating> Ratings { get; set; }
 		public DbSet<Specialty> Specialties { get; set; }
 
@@ -27,13 +27,17 @@ namespace DentHub.Web.Models
 			// For example, you can rename the ASP.NET Identity table names and more.
 			// Add your customizations after calling base.OnModelCreating(builder);
 
-			builder.Entity<PatientRecord>()
-				.HasKey(pr => new { pr.PatientId, pr.PatientFileId });
+			//builder.Entity<PatientRecord>()
+			//	.HasKey(pr => new { pr.PatientId, pr.PatientFileId });
 
-			builder.Entity<PatientRecord>()
-				.HasOne(pr => pr.Patient)
-				.WithMany(p => p.PatientRecords)
-				.HasForeignKey(pr => pr.PatientId);
+			//builder.Entity<PatientRecord>()
+			//	.HasOne(pr => pr.Patient)
+			//	.WithMany(p => p.PatientRecords)
+			//	.HasForeignKey(pr => pr.PatientId);
+
+			builder.Entity<PatientFile>()
+				.HasOne(f => f.Patient)
+				.WithMany(p => p.PatientFiles);
 
 		}
 	}

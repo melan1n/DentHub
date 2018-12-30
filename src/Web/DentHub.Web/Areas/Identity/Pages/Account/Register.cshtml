@@ -13,7 +13,7 @@
 
 <div class="row">
     <div class="col-md-4">
-        <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
+        <form asp-route-returnUrl="@Model.ReturnUrl" enctype="multipart/form-data" method="post">
             <h4>Create a new dentist account.</h4>
             <hr />
             <div asp-validation-summary="All" class="text-danger"></div>
@@ -66,8 +66,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="Input.ImageUrl"></label>
-                <input asp-for="Input.ImageUrl" class="form-control" />
+                <input type="hidden" asp-for="Input.ImageUrl" class="form-control" />
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.File"></label>
+                <input type="file" asp-for="Input.File" class="form-control" />
             </div>
             <button type="submit" class="btn btn-default">Register</button>
         </form>
@@ -77,3 +81,13 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
+
+
+
+
+
+
+
+
+
+

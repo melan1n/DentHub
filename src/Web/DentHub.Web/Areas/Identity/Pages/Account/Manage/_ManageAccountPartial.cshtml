@@ -9,32 +9,36 @@
 
 @if (SignInManager.IsSignedIn(this.User) && this.User.IsInRole("Dentist"))
 {
-          <div class="form-group">
-            <label asp-for="Input.Clinic"></label>
+    <div class="form-group">
+        <label asp-for="Input.Clinic"></label>
+        <div>
+            <select asp-for="Input.Clinic" asp-items="@(new SelectList((IList<Clinic>)this.ViewData["ClinicList"], "Id", "Name"))" class="form-control">
+                <option selected="selected" value=Input.Clinic></option>
+            </select>
             <div>
-                <select asp-for="Input.Clinic" asp-items="@(new SelectList((IList<Clinic>)this.ViewData["ClinicList"], "Id", "Name"))" class="form-control">
-                    <option selected="selected" value=Input.Clinic ></option>
-                </select>
-                <div>
-                    <span asp-validation-for="Input.Clinic" class="text-danger" />
-                </div>
+                <span asp-validation-for="Input.Clinic" class="text-danger" />
             </div>
         </div>
-        <div class="form-group">
-            <label asp-for="Input.Specialty"></label>
+    </div>
+    <div class="form-group">
+        <label asp-for="Input.Specialty"></label>
+        <div>
+            <select asp-for="Input.Specialty" asp-items="@(new SelectList((IList<Specialty>)this.ViewData["SpecialtyList"], "Id", "Name"))" class="form-control">
+                <option selected="selected" value="Input.Specialty"></option>*
+            </select>
             <div>
-                <select asp-for="Input.Specialty" asp-items="@(new SelectList((IList<Specialty>)this.ViewData["SpecialtyList"], "Id", "Name"))" class="form-control">
-                    <option selected="selected" value="Input.Specialty"></option>*
-                </select>
-                <div>
-                    <span asp-validation-for="Input.Specialty" class="text-danger" />
-                </div>
+                <span asp-validation-for="Input.Specialty" class="text-danger" />
             </div>
         </div>
-        <div class="form-group">
-            <label asp-for="Input.ImageUrl"></label>
-            <input asp-for="Input.ImageUrl" class="form-control" />
-            <span asp-validation-for="Input.ImageUrl" class="text-danger"></span>
-        </div>
+    </div>
+    <div class="form-group">
+        @*<label asp-for="Input.ImageUrl"></label>*@
+        <input type="hidden" asp-for="Input.ImageUrl" class="form-control" />
+        <span asp-validation-for="Input.ImageUrl" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Input.File">Image</label>
+        <input type="file" asp-for="Input.File" class="form-control" />
+    </div>
 
 }

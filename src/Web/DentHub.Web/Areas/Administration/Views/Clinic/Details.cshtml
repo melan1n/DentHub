@@ -59,26 +59,47 @@
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Dentists)
-            </dt>
-        
-            @foreach (var dentist in Model.Dentists)
-        {
-        <dd>
-            @dentist.FirstName @dentist.LastName -- @dentist.Specialty
-            @await Html.PartialAsync("_DentistOfferings", new DentistViewModel { Id = dentist.Id })
-            @*@await Html.PartialAsync("_DentistOfferings", new { Id = dentist.Id })*@
-            @*@Html.ActionLink("Edit", "Edit", new { id = dentist.Id }) |
-        @Html.ActionLink("Details", "Details", new { id = dentist.Id }) |
-        <td class="delete-section">
-            <a class="delete-link" href="@Url.Action("Delete", new {id = dentist.Id})">Delete</a>
-            <div class="btn btn-primary delete-confirm" style="display:none" data-delete-id="@clinic.Id">Confirm Delete</div>
-        </td>*@
-        </dd>
-        }
-        
+        </dt>
+
     </dl>
 </div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @*@Html.DisplayNameFor(model => model.Id)*@
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var dentist in Model.Dentists)
+        {
+            <tr>
+                <td>
+                    @dentist.FirstName @dentist.LastName -- @dentist.Specialty
+                </td>
+                <td>
+                    <img src="@dentist.ImageUrl" />
+                </td>
+                <td>
+                    @await Html.PartialAsync("_DentistOfferings", new DentistViewModel { Id = dentist.Id })
+                </td>
+            </tr>
+            @*@await Html.PartialAsync("_DentistOfferings", new { Id = dentist.Id })*@
+            @*@Html.ActionLink("Edit", "Edit", new { id = dentist.Id }) |
+            @Html.ActionLink("Details", "Details", new { id = dentist.Id }) |
+            <td class="delete-section">
+                <a class="delete-link" href="@Url.Action("Delete", new {id = dentist.Id})">Delete</a>
+                <div class="btn btn-primary delete-confirm" style="display:none" data-delete-id="@clinic.Id">Confirm Delete</div>
+            </td>*@
+
+        }
+    </tbody>
+</table>
 <div>
-    @await Html.PartialAsync("_ClinicDetailsPartial")  
+    @await Html.PartialAsync("_ClinicDetailsPartial")
     @Html.ActionLink("All Clinics", "All", "Clinic")
 </div>
+

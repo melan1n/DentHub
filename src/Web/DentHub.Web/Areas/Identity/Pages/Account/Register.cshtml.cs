@@ -17,6 +17,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 
+using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
+using System.IO;
+
 namespace DentHub.Web.Areas.Identity.Pages.Account
 {
 	[AllowAnonymous]
@@ -28,6 +32,7 @@ namespace DentHub.Web.Areas.Identity.Pages.Account
 		private readonly IEmailSender _emailSender;
 		private readonly IRepository<Clinic> _clinicRepository;
 		private readonly IRepository<Specialty> _specialtyRepository;
+		private readonly CloudinaryService _cloudinaryService;
 
 		public RegisterModel(
 			UserManager<DentHubUser> userManager,
@@ -35,7 +40,8 @@ namespace DentHub.Web.Areas.Identity.Pages.Account
 			ILogger<RegisterModel> logger,
 			IEmailSender emailSender,
 			IRepository<Clinic> clinicRepository,
-			IRepository<Specialty> specialtyRepository)
+			IRepository<Specialty> specialtyRepository,
+			CloudinaryService cloudinaryService)
 		{
 			_userManager = userManager;
 			_signInManager = signInManager;
@@ -43,6 +49,7 @@ namespace DentHub.Web.Areas.Identity.Pages.Account
 			_emailSender = emailSender;
 			_clinicRepository = clinicRepository;
 			_specialtyRepository = specialtyRepository;
+			_cloudinaryService = cloudinaryService;
 		}
 
 		[BindProperty]
@@ -76,18 +83,19 @@ namespace DentHub.Web.Areas.Identity.Pages.Account
 			[Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
 			public string ConfirmPassword { get; set; }
 
-            [Required]
-            [Display(Name = "Clinic")]
-            public string Clinic { get; set; }
+			[Required]
+			[Display(Name = "Clinic")]
+			public string Clinic { get; set; }
 
-            [Required]
-            [Display(Name = "Specialty")]
-            public string Specialty { get; set; }
+			[Required]
+			[Display(Name = "Specialty")]
+			public string Specialty { get; set; }
 
 			[Display(Name = "Image")]
 			public string ImageUrl { get; set; }
 
-
+			[Display(Name = "File")]
+			public string File { get; set; }
 		}
 
 		public void OnGet(string returnUrl = null)
@@ -110,15 +118,18 @@ namespace DentHub.Web.Areas.Identity.Pages.Account
                                 .All()
                                 .FirstOrDefault(s => s.Id == int.Parse(Input.Specialty));
 
-                var user = new DentHubUser
+				var files = HttpContext.Request.Form.Files.ToList();
+				var cloudinaryUris = this._cloudinaryService.UploadFiles(files);
+			
+				var user = new DentHubUser
 				{
 					UserName = Input.Email,
 					Email = Input.Email,
 					FirstName = Input.FirstName,
 					LastName = Input.LastName,
-                    ClinicId = clinic.Id,
-                    SpecialtyId = specialty.Id,
-					ImageUrl = Input.ImageUrl
+					ClinicId = clinic.Id,
+					SpecialtyId = specialty.Id,
+					ImageUrl = cloudinaryUris[0]
                 };
 
 				var result = await _userManager.CreateAsync(user, Input.Password);

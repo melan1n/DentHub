@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using DentHub.Data;
 using DentHub.Data.Common;
 using DentHub.Data.Models;
 using Microsoft.AspNetCore.Identity;
@@ -21,6 +22,7 @@ namespace DentHub.Web.Areas.Identity.Pages.Account.Manage
         private readonly IEmailSender _emailSender;
 		private readonly IRepository<Specialty> _specialtyRepository;
 		private readonly IRepository<Clinic> _clinicRepository;
+		private readonly CloudinaryService _cloudinaryService;
 
 		public IndexModel(
             UserManager<DentHubUser> userManager,
@@ -28,7 +30,8 @@ namespace DentHub.Web.Areas.Identity.Pages.Account.Manage
             SignInManager<DentHubUser> signInManager,
             IEmailSender emailSender,
 			IRepository<Specialty> specialtyRepository,
-			IRepository<Clinic> clinicRepository)
+			IRepository<Clinic> clinicRepository,
+			CloudinaryService cloudinaryService)
         {
             _userManager = userManager;
 			_userRepository = userRepository;
@@ -36,7 +39,8 @@ namespace DentHub.Web.Areas.Identity.Pages.Account.Manage
             _emailSender = emailSender;
 			_specialtyRepository = specialtyRepository;
 			_clinicRepository = clinicRepository;
-        }
+			_cloudinaryService = cloudinaryService;
+		}
 
         public string Username { get; set; }
 
@@ -68,6 +72,9 @@ namespace DentHub.Web.Areas.Identity.Pages.Account.Manage
 
 			[Display(Name = "Image")]
 			public string ImageUrl { get; set; }
+
+			[Display(Name = "File")]
+			public string File { get; set; }
 		}
 
         public async Task<IActionResult> OnGetAsync()
@@ -117,6 +124,8 @@ namespace DentHub.Web.Areas.Identity.Pages.Account.Manage
             {
 				if (this.User.IsInRole("Dentist"))
 				{
+					
+
 					Input.Clinic = (int)user.ClinicId;
 					Input.Specialty = (int)user.SpecialtyId;
 					Input.ImageUrl = user.ImageUrl;
@@ -174,6 +183,11 @@ namespace DentHub.Web.Areas.Identity.Pages.Account.Manage
 					.All()
 					.FirstOrDefault(c => c.Id == Input.Clinic);
 			}
+
+			var files = HttpContext.Request.Form.Files.ToList();
+			var cloudinaryUris = this._cloudinaryService.UploadFiles(files);
+
+			Input.ImageUrl = cloudinaryUris[0];
 
 			var imageUrl = user.ImageUrl;
 			if (Input.ImageUrl != imageUrl)

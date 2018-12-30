@@ -1,5 +1,4 @@
-﻿using DentHub.Data.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace DentHub.Common

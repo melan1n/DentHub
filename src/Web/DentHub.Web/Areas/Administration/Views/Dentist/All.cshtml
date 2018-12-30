@@ -16,17 +16,20 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var dentist in Model.Dentists) {
-        <tr>
-            <td>
-                @dentist.FirstName @dentist.LastName - @dentist.Specialty - @dentist.ClinicName - @dentist.AverageRating
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new {  id= dentist.Id }) |
-                @Html.ActionLink("Details", "Details", new { id=dentist.Id }) |
-                @Html.ActionLink("Deactivate", "Deactivate", new { id= dentist.Id })
-            </td>
-        </tr>
+        @foreach (var dentist in Model.Dentists)
+        {
+<tr>
+    <td>
+        @dentist.FirstName @dentist.LastName - @dentist.Specialty - @dentist.ClinicName - @dentist.AverageRating
+    </td>
+    <td>
+        <img src="@dentist.ImageUrl" />
+    </td>
+    <td>
+        @Html.ActionLink("Details", "Details", new { id = dentist.Id })
+        @Html.Partial("_DentistActionsPartial", dentist)
+    </td>
+</tr>
 }
     </tbody>
 </table>

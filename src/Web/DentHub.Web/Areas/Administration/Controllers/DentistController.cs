@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using DentHub.Data.Common;
 using DentHub.Data.Models;
 using DentHub.Web.Areas.Administration.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DentHub.Web.Areas.Administration.Controllers
@@ -88,6 +89,7 @@ namespace DentHub.Web.Areas.Administration.Controllers
 			return View(dentistViewModel);
 		}
 
+		[Authorize(Roles="Administrator")]
 		public async Task<IActionResult> Deactivate(string id)
 		{
 			var dentist = this._userRepository

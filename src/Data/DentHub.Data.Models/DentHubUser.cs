@@ -11,7 +11,8 @@ namespace DentHub.Data.Models
     {
 		public DentHubUser()
 		{
-			this.PatientRecords = new HashSet<PatientRecord>();
+			//this.PatientRecords = new HashSet<PatientRecord>();
+			this.PatientFiles = new HashSet<PatientFile>();
 		}
 
 		public DentHubUser(string userName) : base()
@@ -39,7 +40,8 @@ namespace DentHub.Data.Models
 		// Patient-specific properties
 		public string SSN { get; set; }
 
-		public virtual ICollection<PatientRecord> PatientRecords { get; set; }
+		//public virtual ICollection<PatientRecord> PatientRecords { get; set; }
 
+		public virtual ICollection<PatientFile> PatientFiles { get; set; }
 	}
 }

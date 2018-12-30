@@ -1,0 +1,18 @@
+﻿@model DentHub.Web.Areas.Administration.Models.DentistViewModel
+
+@using Microsoft.AspNetCore.Identity
+@using DentHub.Data.Models
+
+@inject SignInManager<DentHubUser> SignInManager
+@inject UserManager<DentHubUser> UserManager
+
+@{
+    ViewData["Title"] = "_DentistActionsPartial";
+}
+
+
+@if (this.SignInManager.IsSignedIn(this.User) && this.User.IsInRole("Administrator"))
+{
+    @Html.ActionLink("Deactivate", "Deactivate", new { id = Model.Id })
+    @*@Html.ActionLink("Edit", "Edit", new { id = dentist.Id }) |*@
+}
