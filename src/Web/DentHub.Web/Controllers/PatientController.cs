@@ -47,8 +47,9 @@ namespace DentHub.Web.Controllers
 						Id = a.DentistID,
 						FirstName = a.Dentist.FirstName,
 						LastName = a.Dentist.LastName,
-					}
-					).ToArray();
+					})
+					.Distinct()
+					.ToArray();
 
 			var ratings = this._ratingRepository
 					.All()
@@ -62,13 +63,30 @@ namespace DentHub.Web.Controllers
 					})
 					.ToArray();
 
+			if (ratings.Length == 0)
+			{
+				return View("NoDentists");
+			}
 			var averageRatingPerDentist = new Dictionary<string, string>();
 
 			foreach (var dentist in dentists)
 			{
-				if (ratings.Length > 0)
+				var ratingsByDentist = this._ratingRepository
+					.All()
+					.Where(r => r.PatientId == user.Id
+					&& r.DentistId == dentist.Id
+					&& r.RatingByDentist > 0)
+					.Select(r => new RatingInputModel
+					{
+						DentistId = r.DentistId,
+						PatientId = user.Id,
+						RatingByDentist = r.RatingByDentist,
+					})
+					.ToArray();
+
+				if (ratingsByDentist.Length > 0)
 				{
-					double averageRating = ratings
+					double averageRating = ratingsByDentist
 					.Where(r => r.DentistId == dentist.Id)
 					.Average(r => r.RatingByDentist);
 

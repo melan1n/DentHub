@@ -43,6 +43,10 @@ namespace DentHub.Web.Controllers
 			var appointmentsViewModel = new AppointmentsViewModel();
 			GetDentistOfferings(id, appointmentsViewModel);
 
+			if (appointmentsViewModel.Appointments.Count() == 0)
+			{
+				return View("NoAvailability");
+			}
 			return View(appointmentsViewModel);
 		}
 
@@ -82,8 +86,9 @@ namespace DentHub.Web.Controllers
 						Id = a.PatientId,
 						FirstName = a.Patient.FirstName,
 						LastName = a.Patient.LastName,
-					}
-					).ToArray();
+					})
+					.Distinct()
+					.ToArray();
 
 			var ratings = this._ratingRepository
 					.All()
@@ -97,13 +102,31 @@ namespace DentHub.Web.Controllers
 					})
 					.ToArray();
 
+			if (ratings.Length == 0)
+			{
+				return View("NoPatients");
+			}
+
 			var averageRatingPerPatient = new Dictionary<string, string>();
 
 			foreach (var patient in patients)
 			{
-				if (ratings.Length > 0)
+				var ratingsByPatient = this._ratingRepository
+					.All()
+					.Where(r => r.DentistId == user.Id
+					&& r.PatientId == patient.Id
+					&& r.RatingByPatient > 0)
+					.Select(r => new RatingInputModel
+					{
+						DentistId = user.Id,
+						PatientId = r.PatientId,
+						RatingByPatient = r.RatingByPatient,
+					})
+					.ToArray();
+
+				if (ratingsByPatient.Length > 0)
 				{
-					double averageRating = ratings
+					double averageRating = ratingsByPatient
 					.Where(r => r.PatientId == patient.Id)
 					.Average(r => r.RatingByPatient);
 
