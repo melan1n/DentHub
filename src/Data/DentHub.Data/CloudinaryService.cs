@@ -7,6 +7,8 @@ using CloudinaryDotNet;
 using System.IO;
 using Microsoft.AspNetCore.Http;
 using System.Linq;
+using DentHub.Data.Common;
+using System.Threading.Tasks;
 
 namespace DentHub.Data
 {
@@ -39,7 +41,7 @@ namespace DentHub.Data
 
 		public CloudinaryDotNet.Cloudinary Cloudinary { get; set; }
 
-		public List<string> UploadFiles(List<IFormFile> files)
+		public async Task<List<string>> UploadFilesAsync(List<IFormFile> files)
 		{
 			long size = files.Sum(f => f.Length);
 
@@ -54,7 +56,7 @@ namespace DentHub.Data
 				{
 					using (var stream = new FileStream(filePath, FileMode.Create))
 					{
-						formFile.CopyToAsync(stream);
+						await formFile.CopyToAsync(stream);
 					}
 
 					// process uploaded files to Cloudinary

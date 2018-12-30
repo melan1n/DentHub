@@ -185,9 +185,9 @@ namespace DentHub.Web.Areas.Identity.Pages.Account.Manage
 			}
 
 			var files = HttpContext.Request.Form.Files.ToList();
-			var cloudinaryUris = this._cloudinaryService.UploadFiles(files);
+			var cloudinaryUris = await this._cloudinaryService.UploadFilesAsync(files);
 
-			Input.ImageUrl = cloudinaryUris[0];
+			Input.ImageUrl = cloudinaryUris.FirstOrDefault();
 
 			var imageUrl = user.ImageUrl;
 			if (Input.ImageUrl != imageUrl)

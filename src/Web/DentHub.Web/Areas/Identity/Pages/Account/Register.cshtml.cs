@@ -119,7 +119,7 @@ namespace DentHub.Web.Areas.Identity.Pages.Account
                                 .FirstOrDefault(s => s.Id == int.Parse(Input.Specialty));
 
 				var files = HttpContext.Request.Form.Files.ToList();
-				var cloudinaryUris = this._cloudinaryService.UploadFiles(files);
+				var cloudinaryUris = await this._cloudinaryService.UploadFilesAsync(files);
 			
 				var user = new DentHubUser
 				{
@@ -129,7 +129,7 @@ namespace DentHub.Web.Areas.Identity.Pages.Account
 					LastName = Input.LastName,
 					ClinicId = clinic.Id,
 					SpecialtyId = specialty.Id,
-					ImageUrl = cloudinaryUris[0]
+					ImageUrl = cloudinaryUris.FirstOrDefault()
                 };
 
 				var result = await _userManager.CreateAsync(user, Input.Password);
