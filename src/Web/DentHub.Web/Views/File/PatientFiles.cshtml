@@ -1,0 +1,54 @@
+﻿@model DentHub.Web.Models.File.FilesViewModel
+
+@{
+    ViewData["Title"] = "PatientFiles";
+}
+
+
+<h2>@Model.PatientName's Files</h2>
+
+<partial name="_AddFilePartial" />
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                File Type
+            </th>
+            <th>
+                Description
+            </th>
+
+            <th>
+                Date Created
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var file in Model.Files) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => file.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => file.FileType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => file.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => file.DateCreated)
+            </td>
+            <td>
+                @*@Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |*@
+                @Html.ActionLink("Details", "Details", new { id=file.Id  }) @*|
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })*@
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

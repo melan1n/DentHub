@@ -1,0 +1,19 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using DentHub.Data.Models
+
+@inject SignInManager<DentHubUser> SignInManager
+@inject UserManager<DentHubUser> UserManager
+
+@{
+    ViewData["Title"] = "_AddFilePartial";
+}
+
+@if (this.SignInManager.IsSignedIn(this.User) && this.User.IsInRole("Dentist"))
+{    <p>
+        @*<a asp-action="Create">Create New</a>*@
+
+        @*@Html.ActionLink("+ Add file", "AddFile", new { id = patientRating.Key })*@
+        <a href="/File/AddFile/@Model.PatientId">+ Add File</a>
+
+    </p>
+}

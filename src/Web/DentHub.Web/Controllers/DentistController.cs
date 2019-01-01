@@ -131,13 +131,13 @@ namespace DentHub.Web.Controllers
 					.Average(r => r.RatingByPatient);
 
 					averageRatingPerPatient[patient.Id] = new string[]
-						{ patient.FirstName + patient.LastName,
+						{ $"{patient.FirstName} {patient.LastName}",
 						  averageRating.ToString() };
 				}
 				else
 				{
 					averageRatingPerPatient[patient.Id] = new string[]
-						{ patient.FirstName + patient.LastName,
+						{ $"{patient.FirstName} {patient.LastName}",
 						  "N/A" }; 
 				}
 			}
