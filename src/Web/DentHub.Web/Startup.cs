@@ -69,8 +69,10 @@ namespace DentHub.Web
 			services.AddScoped(typeof(IRepository<>), typeof(DbRepository<>));
             services.AddScoped(typeof(IClinicService), typeof(ClinicService));
             services.AddScoped(typeof(IDentistService), typeof(DentistService));
+            services.AddScoped(typeof(IPatientService), typeof(PatientService));
             services.AddScoped(typeof(IAppointmentService), typeof(AppointmentService));
             services.AddScoped(typeof(ISpecialtyService), typeof(SpecialtyService));
+            services.AddScoped(typeof(IRatingService), typeof(RatingService));
 			services.AddScoped(typeof(CloudinaryService));
 		}
 

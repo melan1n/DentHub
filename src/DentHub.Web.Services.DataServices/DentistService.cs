@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace DentHub.Web.Services.DataServices
 {
@@ -16,12 +17,38 @@ namespace DentHub.Web.Services.DataServices
             this._userRepository = userRepository;
         }
 
-        public IEnumerable<DentHubUser> GetAllActive(int clinicId)
+		public IEnumerable<DentHubUser> GetAllActiveDentists()
+		{
+			return this._userRepository
+						.All()
+						.Where(u => u.Specialty != null && u.IsActive);
+		}
+
+		public IEnumerable<DentHubUser> GetAllActiveClinicDentists(int clinicId)
         {
             return this._userRepository
                      .All()
                      .Where(d => d.IsActive && d.ClinicId == clinicId)
                      .ToArray();
         }
-    }
+
+		public DentHubUser GetDentistById(string id)
+		{
+			return this._userRepository
+				.All()
+				.Where(d => d.Specialty != null)
+				.FirstOrDefault(d => d.Id == id);
+		}
+
+		public Task SaveChangesAsync()
+		{
+			return this._userRepository.SaveChangesAsync();
+		}
+
+		public void Update(DentHubUser dentist)
+		{
+			this._userRepository.Update(dentist);
+		}
+
+	}
 }

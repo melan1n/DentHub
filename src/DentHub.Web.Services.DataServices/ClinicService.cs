@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using DentHub.Data.Common;
 using DentHub.Data.Models;
 
@@ -16,12 +17,35 @@ namespace DentHub.Web.Services.DataServices
         {
         this._clinicRepository = clinicRepository;
         }
-        public IEnumerable<Clinic> GetAllActive()
+
+		public Task AddAsync(Clinic clinic)
+		{
+			return this._clinicRepository.AddAsync(clinic);
+		}
+
+		public IEnumerable<Clinic> GetAllActive()
         {
             return this._clinicRepository
                 .All()
                 .Where(c => c.IsActive && c.Dentists.Any(d => d.IsActive))
                 .ToArray();
         }
-    }
+
+		public Clinic GetClinic(int id)
+		{
+			return this._clinicRepository
+									.All()
+									.FirstOrDefault(c => c.Id == id);
+		}
+
+		public Task SaveChangesAsync()
+		{
+			return this._clinicRepository.SaveChangesAsync();
+		}
+
+		public void Update(Clinic clinic)
+		{
+			this._clinicRepository.Update(clinic);
+		}
+	}
 }

@@ -23,5 +23,12 @@ namespace DentHub.Web.Services.DataServices
                  .Select(s => s)
                  .ToArray();
         }
-    }
+
+		public string GetSpecialtyNameById(int id)
+		{
+			return this._specialtyRepository
+				.All()
+				.FirstOrDefault(s => s.Id == id).Name;
+		}
+	}
 }

@@ -5,61 +5,52 @@ using System.Threading.Tasks;
 using DentHub.Data.Common;
 using DentHub.Data.Models;
 using DentHub.Web.Areas.Administration.Models;
+using DentHub.Web.Services.DataServices;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DentHub.Web.Areas.Administration.Controllers
 {
 	[Area("Administration")]
 	public class PatientController : Controller
-    {
-		private readonly IRepository<DentHubUser> _userRepository;
-		private readonly IRepository<Rating> _ratingRepository;
+	{
+		private readonly IPatientService _patientService;
+		private readonly IRatingService _ratingService;
 
-		public PatientController(IRepository<DentHubUser> userRepository,
-			IRepository<Rating> ratingRepository)
+		public PatientController(IPatientService patientService,
+			IRatingService ratingService)
 		{
-			this._userRepository = userRepository;
-			this._ratingRepository = ratingRepository;
+			this._patientService = patientService;
+			this._ratingService = ratingService;
 		}
 
-		public IActionResult All ()
-        {
-			var patientsViewModel = new PatientsViewModel();
-			GetAllPatients(patientsViewModel);
-
-			return View(patientsViewModel);
-		}
-
-		private void GetAllPatients(PatientsViewModel patientsViewModel)
+		public IActionResult All()
 		{
-			patientsViewModel.Patients = this._userRepository
-												.All()
-												.Where(u => u.SSN != null && u.IsActive)
-												.Select(
+			var allActivePatients = this._patientService
+								.GetAllActivePatients();
+
+			var patientsViewModel = new PatientsViewModel
+			{
+				Patients = allActivePatients
+						.Select(
 								p => new PatientViewModel
 								{
 									Id = p.Id,
 									FirstName = p.FirstName,
 									LastName = p.LastName,
 									SSN = p.SSN,
-									AverageRating = (this._ratingRepository
-											.All()
-											.Where(r => r.PatientId == p.Id && r.RatingByDentist > 0)
-											.Count() > 0 ?
-											this._ratingRepository
-											.All()
-											.Where(r => r.PatientId == p.Id && r.RatingByDentist > 0)
-											.Average(r => r.RatingByDentist).ToString() : "N/A"),
+									AverageRating = this._ratingService
+												.GetAveragePatientRating(p.Id),
 								})
-									.ToArray();
+								.ToArray()
+			};
+
+			return View(patientsViewModel);
 		}
 
 		public IActionResult Details(string id)
 		{
-			var patient = _userRepository
-				.All()
-				.Where(p => p.SSN != null)
-				.FirstOrDefault(p => p.Id == id);
+			var patient = _patientService
+					.GetPatientById(id);
 
 			var patientViewModel = new PatientViewModel
 			{
@@ -74,16 +65,14 @@ namespace DentHub.Web.Areas.Administration.Controllers
 
 		public async Task<IActionResult> Deactivate(string id)
 		{
-			var patient = this._userRepository
-				.All()
-				.FirstOrDefault(p => p.Id == id);
-
+			var patient = this._patientService
+				.GetPatientById(id);
 
 			patient.IsActive = false;
 
-			this._userRepository.Update(patient);
+			this._patientService.Update(patient);
 
-			await _userRepository.SaveChangesAsync();
+			await _patientService.SaveChangesAsync();
 
 			return RedirectToAction("All");
 		}

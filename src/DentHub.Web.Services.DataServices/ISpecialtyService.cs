@@ -8,5 +8,7 @@ namespace DentHub.Web.Services.DataServices
     public interface ISpecialtyService
     {
         IEnumerable<Specialty> GetAll();
+
+		string GetSpecialtyNameById(int id);
     }
 }

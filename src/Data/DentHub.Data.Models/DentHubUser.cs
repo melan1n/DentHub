@@ -13,6 +13,7 @@ namespace DentHub.Data.Models
 		{
 			//this.PatientRecords = new HashSet<PatientRecord>();
 			this.PatientFiles = new HashSet<PatientFile>();
+			this.IsActive = true;
 		}
 
 		public DentHubUser(string userName) : base()
@@ -24,7 +25,7 @@ namespace DentHub.Data.Models
 
 		public string LastName { get; set; }
 
-		public bool IsActive { get; set; } = true;
+		public bool IsActive { get; set; }
 
 		// Dentist-specific properties
 		public Specialty Specialty { get; set; }

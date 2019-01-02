@@ -8,6 +8,7 @@ namespace DentHub.Data.Models
 		public Clinic()
 		{
 			this.Dentists = new HashSet<DentHubUser>();
+			this.IsActive = true;
 		}
 
 		public string Name { get; set; }
@@ -28,7 +29,7 @@ namespace DentHub.Data.Models
 				string.IsNullOrEmpty(this.PostalCode) ? string.Empty : this.City + this.PostalCode) +
 			this.Country ?? string.Empty;
 
-		public bool IsActive { get; set; } = true;
+		public bool IsActive { get; set; } 
 		//public bool IsGeoCoded { get; set; }
 
 		//public decimal? Longitude { get; set; }

@@ -1,5 +1,7 @@
 ﻿@model DentHub.Web.Areas.Administration.Models.PatientViewModel
 
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
 @{
     ViewData["Title"] = "Details";
 }
@@ -27,10 +29,11 @@
         <dd>
             @Html.DisplayFor(model => model.UserName)
         </dd>
-        
+
     </dl>
 </div>
 <div>
     @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-    <a asp-action="Index">Back to List</a>
+    <a asp-area="Administration" asp-controller="Patient" asp-action="All">Back to All Patients</a>
+    @*<a href='javascript:history.go(-1)'>Back to All Patients</a>*@
 </div>

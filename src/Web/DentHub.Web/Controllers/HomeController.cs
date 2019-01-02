@@ -8,16 +8,17 @@ using DentHub.Web.Models;
 using DentHub.Data.Common;
 using DentHub.Data.Models;
 using DentHub.Web.Models.About;
+using DentHub.Web.Services.DataServices;
 
 namespace DentHub.Web.Controllers
 {
 	public class HomeController : Controller
 	{
-		private IRepository<Specialty> specialtyRepository;
+		private ISpecialtyService _specialtyService;
 
-		public HomeController(IRepository<Specialty> specialtyRepository)
+		public HomeController(ISpecialtyService specialtyService)
 		{
-			this.specialtyRepository = specialtyRepository;
+			this._specialtyService = specialtyService;
 		}
 
 		public IActionResult Index()
@@ -27,8 +28,8 @@ namespace DentHub.Web.Controllers
 
 		public IActionResult Specialties()
 		{
-			var specialties = this.specialtyRepository.All()
-				.OrderBy(x => x.Name)
+			var specialties = this._specialtyService
+				.GetAll()
 				.Select(x => new SpecialtyViewModel
 				{
 					Name = x.Name,

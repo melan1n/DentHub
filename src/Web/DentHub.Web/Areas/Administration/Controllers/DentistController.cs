@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using DentHub.Data.Common;
 using DentHub.Data.Models;
 using DentHub.Web.Areas.Administration.Models;
+using DentHub.Web.Services.DataServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,75 +14,63 @@ namespace DentHub.Web.Areas.Administration.Controllers
 	[Area("Administration")]
 	public class DentistController : Controller
 	{
-		private readonly IRepository<DentHubUser> _userRepository;
-		private readonly IRepository<Specialty> _specialtyRepository;
-		private readonly IRepository<Clinic> _clinicRepository;
-		private readonly IRepository<Rating> _ratingRepository;
+		private readonly IDentistService _dentistService;
+		private readonly ISpecialtyService _specialtyService;
+		private readonly IClinicService _clinicService;
+		private readonly IRatingService _ratingService;
 
-		public DentistController(IRepository<DentHubUser> userRepository,
-			IRepository<Specialty> specialtyRepository,
-			IRepository<Clinic> clinicRepository,
-			IRepository<Rating> ratingRepository)
+		public DentistController(IDentistService dentistService,
+			ISpecialtyService specialtyService, 
+			IClinicService clinicService,
+			IRatingService ratingService)
 		{
-			this._userRepository = userRepository;
-			this._specialtyRepository = specialtyRepository;
-			this._clinicRepository = clinicRepository;
-			this._ratingRepository = ratingRepository;
+			this._dentistService = dentistService;
+			this._specialtyService = specialtyService;
+			this._clinicService = clinicService;
+			this._ratingService = ratingService;
 		}
 
 		public IActionResult All()
 		{
-			var dentistsViewModel = new DentistsViewModel();
-			GetAllActiveDentists(dentistsViewModel);
+			var allActiveDentists = this._dentistService
+								.GetAllActiveDentists();
 
-			return View(dentistsViewModel);
-		}
-
-		private void GetAllActiveDentists(DentistsViewModel dentistsViewModel)
-		{
-			dentistsViewModel.Dentists = this._userRepository
-												.All()
-												.Where(u => u.Specialty != null && u.IsActive)
-
-												.Select(
+			var dentistsViewModel = new DentistsViewModel
+			{
+				Dentists = allActiveDentists
+						.Select(
 								d => new DentistViewModel
 								{
 									Id = d.Id,
 									FirstName = d.FirstName,
 									LastName = d.LastName,
-									ClinicName = d.Clinic.Name,
-									Specialty = d.Specialty.Name,
+									ClinicName = this._clinicService
+											.GetClinic((int)d.ClinicId).Name,
+									Specialty = this._specialtyService
+												.GetSpecialtyNameById((int)d.SpecialtyId),
 									ImageUrl = d.ImageUrl,
-									AverageRating = (this._ratingRepository
-											.All()
-											.Where(r => r.DentistId == d.Id && r.RatingByPatient > 0)
-											.Count() > 0 ?
-											this._ratingRepository
-											.All()
-											.Where(r => r.DentistId == d.Id && r.RatingByPatient > 0)
-											.Average(r => r.RatingByPatient).ToString() : "N/A"),
+									AverageRating = this._ratingService
+												.GetAverageDentistRating(d.Id),
 								})
-									.ToArray();
+								.ToArray()
+			};
+
+			return View(dentistsViewModel);
 		}
 
 		public IActionResult Details(string id)
 		{
-			var dentist = _userRepository
-				.All()
-				.Where(d => d.Specialty != null)
-				.FirstOrDefault(d => d.Id == id);
+			var dentist = this._dentistService
+						.GetDentistById(id);
 
 			var dentistViewModel = new DentistViewModel
 			{
 				FirstName = dentist.FirstName,
 				LastName = dentist.LastName,
-				Specialty = this._specialtyRepository
-								.All()
-								.FirstOrDefault(s => s.Id == dentist.SpecialtyId)
-								.Name,
-				ClinicName = this._clinicRepository
-								.All()
-								.FirstOrDefault(c => c.Id == dentist.ClinicId)
+				Specialty = this._specialtyService
+								.GetSpecialtyNameById((int)dentist.SpecialtyId),
+				ClinicName = this._clinicService
+								.GetClinic((int)dentist.ClinicId)
 								.Name,
 				ImageUrl = dentist.ImageUrl
 			};
@@ -89,19 +78,17 @@ namespace DentHub.Web.Areas.Administration.Controllers
 			return View(dentistViewModel);
 		}
 
-		[Authorize(Roles="Administrator")]
+		[Authorize(Roles = "Administrator")]
 		public async Task<IActionResult> Deactivate(string id)
 		{
-			var dentist = this._userRepository
-				.All()
-				.FirstOrDefault(d => d.Id == id);
-
+			var dentist = this._dentistService
+						.GetDentistById(id);
 
 			dentist.IsActive = false;
 
-			this._userRepository.Update(dentist);
+			this._dentistService.Update(dentist);
 
-			await _userRepository.SaveChangesAsync();
+			await _dentistService.SaveChangesAsync();
 
 			return RedirectToAction("All");
 		}

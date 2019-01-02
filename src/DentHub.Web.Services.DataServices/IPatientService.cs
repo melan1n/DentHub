@@ -1,20 +1,19 @@
 ﻿using DentHub.Data.Models;
 using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace DentHub.Web.Services.DataServices
 {
-    public interface IClinicService
-    {
-        IEnumerable<Clinic> GetAllActive();
+	public interface IPatientService
+	{
+		IEnumerable<DentHubUser> GetAllActivePatients();
 
-        Clinic GetClinic(int id);
+		DentHubUser GetPatientById(string id);
 
-		Task AddAsync(Clinic clinic);
+		void Update(DentHubUser patient);
 
 		Task SaveChangesAsync();
-
-		void Update(Clinic clinic);
 	}
 }
