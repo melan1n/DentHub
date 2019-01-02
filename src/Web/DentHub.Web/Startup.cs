@@ -15,6 +15,7 @@ using DentHub.Web.Models;
 using DentHub.Data.Models;
 using DentHub.Data.Common;
 using DentHub.Data;
+using DentHub.Web.Services.DataServices;
 
 namespace DentHub.Web
 {
@@ -57,15 +58,19 @@ namespace DentHub.Web
 
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-			services.AddAuthentication()
-				.AddFacebook(facebookOptions =>
-				{
-					facebookOptions.AppId = Configuration["Authentication:Facebook:AppId"];
-					facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
-				});
+			//services.AddAuthentication()
+			//	.AddFacebook(facebookOptions =>
+			//	{
+			//		facebookOptions.AppId = Configuration["Authentication:Facebook:AppId"];
+			//		facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
+			//	});
 
 			// Application services
 			services.AddScoped(typeof(IRepository<>), typeof(DbRepository<>));
+            services.AddScoped(typeof(IClinicService), typeof(ClinicService));
+            services.AddScoped(typeof(IDentistService), typeof(DentistService));
+            services.AddScoped(typeof(IAppointmentService), typeof(AppointmentService));
+            services.AddScoped(typeof(ISpecialtyService), typeof(SpecialtyService));
 			services.AddScoped(typeof(CloudinaryService));
 		}
 

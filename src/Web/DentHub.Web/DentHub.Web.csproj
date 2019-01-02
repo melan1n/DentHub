@@ -23,6 +23,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Data\DentHub.Data.Models\DentHub.Data.Models.csproj" />
     <ProjectReference Include="..\..\Data\DentHub.Data\DentHub.Data.csproj" />
+    <ProjectReference Include="..\..\DentHub.Web.Services.DataServices\DentHub.Web.Services.DataServices.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -55,6 +56,9 @@
     </Content>
     <Content Update="Views\Patient\PatientDentists.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Shared\_LoginPartial.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 

@@ -9,234 +9,272 @@ using DentHub.Data.Common;
 using DentHub.Data.Models;
 using DentHub.Web.Areas.Administration.Models;
 using DentHub.Web.Models.Appointment;
+using DentHub.Web.Services.DataServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DentHub.Web.Areas.Administration.Controllers
 {
-	[Area("Administration")]
-	public class ClinicController : Controller
-	{
-		private readonly IRepository<Clinic> _clinicRepository;
-		private readonly IRepository<DentHubUser> _dentistRepository;
-		private readonly IRepository<Appointment> _appointmentRepository;
+    [Area("Administration")]
+    public class ClinicController : Controller
+    {
+        private readonly IClinicService _clinicService;
+        private readonly IDentistService _dentistService;
+        private readonly IAppointmentService _appointmentService;
+        private readonly ISpecialtyService _specialtyService;
 
 
-		public ClinicController(IRepository<Clinic> clinicRepository,
-			IRepository<DentHubUser> dentistRepository,
-			IRepository<Appointment> appointmentRepository)
-		{
-			this._clinicRepository = clinicRepository;
-			this._dentistRepository = dentistRepository;
-			this._appointmentRepository = appointmentRepository;
-		}
+        public ClinicController(IClinicService clinicService,
+            IDentistService dentistService,
+            IAppointmentService appointmentService,
+            ISpecialtyService specialtyService)
+        {
+            this._clinicService = clinicService;
+            this._dentistService = dentistService;
+            this._appointmentService = appointmentService;
+            this._specialtyService = specialtyService;
+        }
 
-		public IActionResult All()
-		{
-			//var xx = HttpContext.User;
+        public IActionResult All()
+        {
+            var allActiveClinics = this._clinicService.GetAllActive();
 
-			//var userIdentity = (ClaimsIdentity)User.Identity;
-			//var claims = userIdentity.Claims;
-			//var roleClaimType = userIdentity.RoleClaimType;
-			//var roles = claims.Where(c => c.Type == ClaimTypes.Role).ToList();
+            var clinicsViewModel = new ClinicsViewModel
+            {
+                Clinics = allActiveClinics
+                .Select(c => new ClinicViewModel
+                {
+                    Id = c.Id,
+                    City = c.City,
+                    Country = c.Country,
+                    Name = c.Name,
+                    PostalCode = c.PostalCode,
+                    Street = c.Street,
+                    WorkingHours = c.WorkingHours,
+                    Dentists = this._dentistService
+                                    .GetAllActive(c.Id)
+                                     .Select(
+                                    d => new DentistViewModel
+                                    {
+                                        Id = d.Id,
+                                        FirstName = d.FirstName,
+                                        LastName = d.LastName,
+                                        Specialty = this._specialtyService
+                                                    .GetAll()
+                                                    .FirstOrDefault(s => s.Id == d.SpecialtyId).Name,
+                                        ImageUrl = d.ImageUrl,
+                                        Offerrings = this._appointmentService
+                                                    .GetAllDentistAppointments(d.Id)
+                                                    .Select(
+                                                a => new AppointmentViewModel
+                                                {
+                                                    DentistName = a.Dentist.FirstName + a.Dentist.LastName,
+                                                    ClinicName = a.Clinic.Name,
+                                                    TimeStart = a.TimeStart,
+                                                    TimeEnd = a.TimeEnd,
+                                                    Status = a.Status.ToString()
+                                                }).ToArray()
+                                    }).ToList(),
+                })
+                .ToArray()
+            };
 
-			//var x = User.IsInRole("Dentist");
+            return View(clinicsViewModel);
 
-			var clinicsViewModel = new ClinicsViewModel();
-			GetAllActiveClinics(clinicsViewModel);
+        }
 
-			return View(clinicsViewModel);
-		}
 
-		private void GetAllActiveClinics(ClinicsViewModel clinicsViewModel)
-		{
-			clinicsViewModel.Clinics = this._clinicRepository
-												.All()
-												.Where(c => c.IsActive && c.Dentists.Any(d => d.IsActive))
-												.Select(
-								c => new ClinicViewModel
-								{
-									Id = c.Id,
-									City = c.City,
-									Country = c.Country,
-									Name = c.Name,
-									PostalCode = c.PostalCode,
-									Street = c.Street,
-									WorkingHours = c.WorkingHours,
-									Dentists = this._dentistRepository
-												.All()
-												.Where(d => d.IsActive && d.ClinicId == c.Id)
-												.Select(
-									d => new DentistViewModel
-									{
-										Id = d.Id,
-										FirstName = d.FirstName,
-										LastName = d.LastName,
-										Specialty = d.Specialty.Name,
-										ImageUrl = d.ImageUrl,
-										Offerrings = this._appointmentRepository
-													.All()
-													.Where(a => a.DentistID == d.Id)
-													.Select(
-												a => new AppointmentViewModel
-												{
-													DentistName = a.Dentist.FirstName + a.Dentist.LastName,
-													ClinicName = a.Clinic.Name,
-													TimeStart = a.TimeStart,
-													TimeEnd = a.TimeEnd,
-													Status = a.Status.ToString()
-												}).ToArray()
-									}).ToList(),
-								})
-									.ToArray();
-		}
+        //// Delete after exposing Data services
+        //private void GetAllActiveClinics(ClinicsViewModel clinicsViewModel)
+        //{
 
-		[Authorize(Roles = "Administrator")]
-		public IActionResult Create()
-		{
-			return View();
-		}
+        //	clinicsViewModel.Clinics = this._clinicRepository
+        //										.All()
+        //										.Where(c => c.IsActive && c.Dentists.Any(d => d.IsActive))
+        //										.Select(
+        //						c => new ClinicViewModel
+        //						{
+        //							Id = c.Id,
+        //							City = c.City,
+        //							Country = c.Country,
+        //							Name = c.Name,
+        //							PostalCode = c.PostalCode,
+        //							Street = c.Street,
+        //							WorkingHours = c.WorkingHours,
+        //							Dentists = this._dentistRepository
+        //										.All()
+        //										.Where(d => d.IsActive && d.ClinicId == c.Id)
+        //										.Select(
+        //							d => new DentistViewModel
+        //							{
+        //								Id = d.Id,
+        //								FirstName = d.FirstName,
+        //								LastName = d.LastName,
+        //								Specialty = d.Specialty.Name,
+        //								ImageUrl = d.ImageUrl,
+        //								Offerrings = this._appointmentRepository
+        //											.All()
+        //											.Where(a => a.DentistID == d.Id)
+        //											.Select(
+        //										a => new AppointmentViewModel
+        //										{
+        //											DentistName = a.Dentist.FirstName + a.Dentist.LastName,
+        //											ClinicName = a.Clinic.Name,
+        //											TimeStart = a.TimeStart,
+        //											TimeEnd = a.TimeEnd,
+        //											Status = a.Status.ToString()
+        //										}).ToArray()
+        //							}).ToList(),
+        //						})
+        //							.ToArray();
+        //}
 
-		public IActionResult Details(int id)
-		{
-			var clinic = GetClinic(id);
+        [Authorize(Roles = "Administrator")]
+        public IActionResult Create()
+        {
+            return View();
+        }
 
-			var clinicViewModel = new ClinicViewModel
-			{
-				Id = clinic.Id,
-				City = clinic.City,
-				Country = clinic.Country,
-				Name = clinic.Name,
-				PostalCode = clinic.PostalCode,
-				Street = clinic.Street,
-				WorkingHours = clinic.WorkingHours,
-				Dentists = this._dentistRepository
-												.All()
-												.Where(d => d.IsActive && d.ClinicId == clinic.Id)
-												.Select(
-									d => new DentistViewModel
-									{
-										Id = d.Id,
-										FirstName = d.FirstName,
-										LastName = d.LastName,
-										Specialty = d.Specialty.Name,
-										ImageUrl = d.ImageUrl,
-									}).ToList(),
-			};
+        //public IActionResult Details(int id)
+        //{
+        //    var clinic = GetClinic(id);
 
-			return View(clinicViewModel);
-		}
+        //    var clinicViewModel = new ClinicViewModel
+        //    {
+        //        Id = clinic.Id,
+        //        City = clinic.City,
+        //        Country = clinic.Country,
+        //        Name = clinic.Name,
+        //        PostalCode = clinic.PostalCode,
+        //        Street = clinic.Street,
+        //        WorkingHours = clinic.WorkingHours,
+        //        Dentists = this._dentistRepository
+        //                                        .All()
+        //                                        .Where(d => d.IsActive && d.ClinicId == clinic.Id)
+        //                                        .Select(
+        //                            d => new DentistViewModel
+        //                            {
+        //                                Id = d.Id,
+        //                                FirstName = d.FirstName,
+        //                                LastName = d.LastName,
+        //                                Specialty = d.Specialty.Name,
+        //                                ImageUrl = d.ImageUrl,
+        //                            }).ToList(),
+        //    };
 
-		[Authorize(Roles = "Administrator")]
-		[HttpPost]
-		public async Task<IActionResult> Create(ClinicViewModel model)
-		//public async Task<IActionResult> Create([FromBody] string content)
-		{
-			if (ModelState.IsValid)
-			{
-				var newClinic = new Clinic
-				{
-					Name = model.Name,
-					Street = model.Street,
-					City = model.City,
-					PostalCode = model.PostalCode,
-					Country = model.Country,
-					WorkingHours = model.WorkingHours,
-				};
+        //    return View(clinicViewModel);
+        //}
 
-				var result = _clinicRepository.AddAsync(newClinic);
-				await result;
+        //[Authorize(Roles = "Administrator")]
+        //[HttpPost]
+        //public async Task<IActionResult> Create(ClinicViewModel model)
+        ////public async Task<IActionResult> Create([FromBody] string content)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        var newClinic = new Clinic
+        //        {
+        //            Name = model.Name,
+        //            Street = model.Street,
+        //            City = model.City,
+        //            PostalCode = model.PostalCode,
+        //            Country = model.Country,
+        //            WorkingHours = model.WorkingHours,
+        //        };
 
-				await _clinicRepository.SaveChangesAsync();
-			}
+        //        var result = _clinicRepository.AddAsync(newClinic);
+        //        await result;
 
-			return RedirectToAction("All");
-		}
+        //        await _clinicRepository.SaveChangesAsync();
+        //    }
 
-		[Authorize(Roles = "Administrator")]
-		public async Task<IActionResult> Deactivate(int id)
-		{
-			Clinic clinic = GetClinic(id);
+        //    return RedirectToAction("All");
+        //}
 
-			if (clinic != null)
-			{
-				var clinicDentists = _dentistRepository
-							.All()
-							.Where(d => d.Clinic == clinic)
-							.Select(d => d)
-							.ToArray();
-				foreach (var dentist in clinicDentists)
-				{
-					dentist.IsActive = false;
-					this._dentistRepository.Update(dentist);
-				}
+        //[Authorize(Roles = "Administrator")]
+        //public async Task<IActionResult> Deactivate(int id)
+        //{
+        //    Clinic clinic = GetClinic(id);
 
-				await _dentistRepository.SaveChangesAsync();
-				
-				clinic.IsActive = false;
+        //    if (clinic != null)
+        //    {
+        //        var clinicDentists = _dentistRepository
+        //                    .All()
+        //                    .Where(d => d.Clinic == clinic)
+        //                    .Select(d => d)
+        //                    .ToArray();
+        //        foreach (var dentist in clinicDentists)
+        //        {
+        //            dentist.IsActive = false;
+        //            this._dentistRepository.Update(dentist);
+        //        }
 
-				this._clinicRepository.Update(clinic);
+        //        await _dentistRepository.SaveChangesAsync();
 
-				await _clinicRepository.SaveChangesAsync();
-			}
-		
-			//this._clinicRepository.Delete(clinic);
-			//_clinicRepository.SaveChangesAsync().GetAwaiter().GetResult();
+        //        clinic.IsActive = false;
 
-			return RedirectToAction("All");
-		}
+        //        this._clinicRepository.Update(clinic);
 
-		private Clinic GetClinic(int id)
-		{
-			return this._clinicRepository
-									.All()
-									.FirstOrDefault(c => c.Id == id);
-		}
+        //        await _clinicRepository.SaveChangesAsync();
+        //    }
 
-		[Authorize(Roles = "Administrator")]
-		public IActionResult Edit(int id)
-		{
-			Clinic clinic = GetClinic(id);
+        //    //this._clinicRepository.Delete(clinic);
+        //    //_clinicRepository.SaveChangesAsync().GetAwaiter().GetResult();
 
-			var clinicViewModel = new ClinicViewModel
-			{
-				Id = clinic.Id,
-				Name = clinic.Name,
-				Street = clinic.Street,
-				City = clinic.City,
-				Country = clinic.Country,
-				PostalCode = clinic.PostalCode,
-				WorkingHours = clinic.WorkingHours
-			};
+        //    return RedirectToAction("All");
+        //}
 
-			return View("Edit", clinicViewModel);
-		}
+        //private Clinic GetClinic(int id)
+        //{
+        //    return this._clinicRepository
+        //                            .All()
+        //                            .FirstOrDefault(c => c.Id == id);
+        //}
 
-		[Authorize(Roles = "Administrator")]
-		[HttpPost]
-		public async Task<IActionResult> EditAsync(int id, ClinicViewModel model)
-		{
-			if (ModelState.IsValid)
-			{
-				var clinic = GetClinic(id);
+        //[Authorize(Roles = "Administrator")]
+        //public IActionResult Edit(int id)
+        //{
+        //    Clinic clinic = GetClinic(id);
 
-				clinic.Name = model.Name;
-				clinic.Street = model.Street;
-				clinic.City = model.City;
-				clinic.Country = model.Country;
-				clinic.WorkingHours = model.WorkingHours;
-				clinic.PostalCode = model.PostalCode;
+        //    var clinicViewModel = new ClinicViewModel
+        //    {
+        //        Id = clinic.Id,
+        //        Name = clinic.Name,
+        //        Street = clinic.Street,
+        //        City = clinic.City,
+        //        Country = clinic.Country,
+        //        PostalCode = clinic.PostalCode,
+        //        WorkingHours = clinic.WorkingHours
+        //    };
 
-				this._clinicRepository.Update(clinic);
+        //    return View("Edit", clinicViewModel);
+        //}
 
-				await _clinicRepository.SaveChangesAsync();
-			}
+        //[Authorize(Roles = "Administrator")]
+        //[HttpPost]
+        //public async Task<IActionResult> EditAsync(int id, ClinicViewModel model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        var clinic = GetClinic(id);
 
-			//var clinicsViewModel = new ClinicsViewModel();
+        //        clinic.Name = model.Name;
+        //        clinic.Street = model.Street;
+        //        clinic.City = model.City;
+        //        clinic.Country = model.Country;
+        //        clinic.WorkingHours = model.WorkingHours;
+        //        clinic.PostalCode = model.PostalCode;
 
-			//GetAllClinics(clinicsViewModel);
+        //        this._clinicRepository.Update(clinic);
 
-			return RedirectToAction("All");
-		}
-	}
+        //        await _clinicRepository.SaveChangesAsync();
+        //    }
+
+        //    //var clinicsViewModel = new ClinicsViewModel();
+
+        //    //GetAllClinics(clinicsViewModel);
+
+        //    return RedirectToAction("All");
+        //}
+    }
 }

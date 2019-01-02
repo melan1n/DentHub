@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Data\DentHub.Data.Models\DentHub.Data.Models.csproj" />
+    <ProjectReference Include="..\DentHub.Common\DentHub.Common.csproj" />
+  </ItemGroup>
+
+</Project>
