@@ -12,7 +12,9 @@ namespace DentHub.Web.Services.DataServices
 
 		DentHubUser GetPatientById(string id);
 
-		void Update(DentHubUser patient);
+        IEnumerable<DentHubUser> GetAllDentistPatients(string dentistId);
+
+        void Update(DentHubUser patient);
 
 		Task SaveChangesAsync();
 	}

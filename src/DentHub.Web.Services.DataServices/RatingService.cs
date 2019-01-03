@@ -51,5 +51,22 @@ namespace DentHub.Web.Services.DataServices
 
 			return "Not Rated";
 		}
-	}
+
+        public IEnumerable<Rating> GetAllRatingsForDentist(string dentistId)
+        {
+            return this._ratingRepository
+                    .All()
+                    .Where(r => r.DentistId == dentistId
+                    && r.RatingByPatient > 0);
+        }
+
+        public IEnumerable<Rating> GetAllRatingsForDentistByPatient(string dentistId, string patientId)
+        {
+            return this._ratingRepository
+                   .All()
+                   .Where(r => r.DentistId == dentistId
+                   && r.PatientId == patientId
+                   && r.RatingByPatient > 0);
+        }
+    }
 }

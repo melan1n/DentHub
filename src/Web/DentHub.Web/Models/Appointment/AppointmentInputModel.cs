@@ -10,13 +10,15 @@ namespace DentHub.Web.Models.Appointment
 	{
 		[Required]
 		[Display(Name = "Appointment Start")]
-		public DateTime TimeStart { get; set; }
+        [DataType(DataType.DateTime)]
+        public DateTime TimeStart { get; set; }
 
 		[Required]
 		[Display(Name = "Appointmetnt End")]
-		public DateTime TimeEnd { get; set; }
+        [DataType(DataType.DateTime)]
+        public DateTime TimeEnd { get; set; }
 
-		[Range(0.25, 8.00)] 
-		public double Duration => (this.TimeEnd - this.TimeStart).Hours;
+		[Range(15, 8*60)] 
+		public int Duration => (this.TimeEnd - this.TimeStart).Minutes;
 	}
 }

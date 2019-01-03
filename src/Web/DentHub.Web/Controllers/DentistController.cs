@@ -18,23 +18,23 @@ namespace DentHub.Web.Controllers
 	{
 		private readonly UserManager<DentHubUser> _userManager;
 		private readonly IDentistService _dentistService;
-		//private readonly IPatientService _patientService;
-		private readonly IRepository<Rating> _ratingRepository;
+		private readonly IPatientService _patientService;
+        private readonly IRatingService _ratingService;
 		private readonly IAppointmentService _appointmentService;
 		private readonly IClinicService _clinicService;
 			   
 		public DentistController(UserManager<DentHubUser> userManager,
 			IDentistService dentistService,
-			//IPatientService patientService,
+			IPatientService patientService,
 			IAppointmentService appointmentService,
-			IRepository<Rating> ratingRepository,
+			IRatingService ratingService,
 			IClinicService clinicService)
 		{
 			this._userManager = userManager;
 			this._dentistService = dentistService;
-			//this._patientService = patientService;
+			this._patientService = patientService;
 			this._appointmentService = appointmentService;
-			this._ratingRepository = ratingRepository;
+			this._ratingService = ratingService;
 			this._clinicService = clinicService;
 		}
 
@@ -74,83 +74,93 @@ namespace DentHub.Web.Controllers
 			return View(appointmentsViewModel);
 		}
 
-		//public async Task<IActionResult> DentistPatients()
-		//{
-		//	var user = await this._userManager.GetUserAsync(User);
+        public async Task<IActionResult> DentistPatients()
+        {
+            var user = await this._userManager.GetUserAsync(User);
 
-		//	var patients = this._appointmentRepository
-		//			.All()
-		//			.Where(a => a.DentistID == user.Id)
-		//			.Select(a => new PatientViewModel
-		//			{
-		//				Id = a.PatientId,
-		//				FirstName = a.Patient.FirstName,
-		//				LastName = a.Patient.LastName,
-		//			})
-		//			.Distinct()
-		//			.ToArray();
+            //var allDentistAppointments = this._appointmentService
+            //    .GetAllDentistAppointments(user.Id);
 
-		//	var ratings = this._ratingRepository
-		//			.All()
-		//			.Where(r => r.DentistId == user.Id
-		//			&& r.RatingByPatient > 0)
-		//			.Select(r => new RatingInputModel
-		//			{
-		//				DentistId = user.Id,
-		//				PatientId = r.PatientId,
-		//				RatingByPatient = r.RatingByPatient,
-		//			})
-		//			.ToArray();
+            var patients = this._patientService
+                .GetAllDentistPatients(user.Id)
+                .Select(a => new PatientViewModel
+                {
+                    Id = a.Id,
+                    FirstName = a.FirstName,
+                    LastName = a.LastName,
+                })
+                .ToArray();
 
-		//	if (ratings.Length == 0)
-		//	{
-		//		return View("NoPatients");
-		//	}
+            //var patients = this._appointmentService
+            //        .GetAllDentistAppointments(user.Id)
+            //        .Distinct(a => a.PatientId)
+            //        .Select(a => new PatientViewModel
+            //        {
+            //            Id = a.PatientId,
+            //            FirstName = this._patientService.GetPatientById(a.PatientId).FirstName,
+            //            LastName = this._patientService.GetPatientById(a.PatientId).LastName,
+            //        })
+            //        .ToArray();
 
-		//	var averageRatingPerPatient = new Dictionary<string, string[]>();
+            var ratings = this._ratingService
+                    .GetAllRatingsForDentist(user.Id)                                   
+                    .Select(r => new RatingInputModel
+                    {
+                        DentistId = user.Id,
+                        PatientId = r.PatientId,
+                        RatingByPatient = r.RatingByPatient,
+                    })
+                    .ToArray();
 
-		//	foreach (var patient in patients)
-		//	{
-		//		var ratingsByPatient = this._ratingRepository
-		//			.All()
-		//			.Where(r => r.DentistId == user.Id
-		//			&& r.PatientId == patient.Id
-		//			&& r.RatingByPatient > 0)
-		//			.Select(r => new RatingInputModel
-		//			{
-		//				DentistId = user.Id,
-		//				PatientId = r.PatientId,
-		//				RatingByPatient = r.RatingByPatient,
-		//			})
-		//			.ToArray();
+            if (ratings.Length == 0 && patients.Length == 0)
+            {
+                return View("NoPatients");
+            }
 
-		//		if (ratingsByPatient.Length > 0)
-		//		{
-		//			double averageRating = ratingsByPatient
-		//			.Where(r => r.PatientId == patient.Id)
-		//			.Average(r => r.RatingByPatient);
+            var averageRatingForDentistPerPatient = new Dictionary<string, string[]>();
 
-		//			averageRatingPerPatient[patient.Id] = new string[]
-		//				{ $"{patient.FirstName} {patient.LastName}",
-		//				  averageRating.ToString() };
-		//		}
-		//		else
-		//		{
-		//			averageRatingPerPatient[patient.Id] = new string[]
-		//				{ $"{patient.FirstName} {patient.LastName}",
-		//				  "N/A" };
-		//		}
-		//	}
+            foreach (var patient in patients)
+            {
+                var ratingsByPatient = this._ratingService
+                    .GetAllRatingsForDentistByPatient(user.Id, patient.Id)
+                    .Select(r => new RatingInputModel
+                    {
+                        DentistId = user.Id,
+                        PatientId = r.PatientId,
+                        RatingByPatient = r.RatingByPatient,
+                    })
+                    .ToArray();
 
-		//	var dentistViewModel = new DentistViewModel
-		//	{
-		//		AverageRatingByPatient = averageRatingPerPatient,
-		//		AverageRating = ratings.Count() > 0 ?
-		//						ratings.Average(r => r.RatingByPatient).ToString() :
-		//						"N/A"
-		//	};
+                if (ratingsByPatient.Length > 0)
+                {
+                    //double averageRating = ratingsByPatient
+                    //.Where(r => r.PatientId == patient.Id)
+                    //.Average(r => r.RatingByPatient);
 
-		//	return View(dentistViewModel);
-		//}
-	}
+                    double averageRating = ratingsByPatient
+                        .Average(r => r.RatingByPatient);
+
+                    averageRatingForDentistPerPatient[patient.Id] = new string[]
+                        { $"{patient.FirstName} {patient.LastName}",
+                          averageRating.ToString() };
+                }
+                else
+                {
+                    averageRatingForDentistPerPatient[patient.Id] = new string[]
+                        { $"{patient.FirstName} {patient.LastName}",
+                          "Not Rated" };
+                }
+            }
+
+            var dentistViewModel = new DentistViewModel
+            {
+                AverageRatingByPatient = averageRatingForDentistPerPatient,
+                AverageRating = ratings.Count() > 0 ?
+                                ratings.Average(r => r.RatingByPatient).ToString() :
+                                "Not Rated"
+            };
+
+            return View(dentistViewModel);
+        }
+    }
 }
