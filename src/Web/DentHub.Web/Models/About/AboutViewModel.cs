@@ -8,5 +8,7 @@ namespace DentHub.Web.Models.About
 	public class AboutViewModel
 	{
 		public IEnumerable<SpecialtyViewModel>  Specialties { get; set; }
+
+		//DUMMY CHANGE
 	}
 }
