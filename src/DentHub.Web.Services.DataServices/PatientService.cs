@@ -53,12 +53,18 @@ namespace DentHub.Web.Services.DataServices
 
 		public string GetPatientFullName(string patientId)
 		{
-			var patient = this._userRepository
-				.All()
-				.FirstOrDefault(d => d.Id == patientId);
 
-			return patient.FirstName + " " + patient.LastName;
-		}
+            if (patientId != null)
+            {
+                var patient = this._userRepository
+                .All()
+                .FirstOrDefault(d => d.Id == patientId);
+
+                return $"{patient.FirstName} {patient.LastName}";
+            }
+
+            return "Not Appointed";
+        }
 
 		public Task SaveChangesAsync()
 		{

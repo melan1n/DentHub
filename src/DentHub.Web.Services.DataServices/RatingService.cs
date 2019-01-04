@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace DentHub.Web.Services.DataServices
 {
@@ -86,5 +87,26 @@ namespace DentHub.Web.Services.DataServices
 				   && r.RatingByDentist > 0);
 		}
 
-	}
+        public Task AddAsync(Rating rating)
+        {
+            return this._ratingRepository.AddAsync(rating);
+        }
+
+        public Task SaveChangesAsync()
+        {
+            return this._ratingRepository.SaveChangesAsync();
+        }
+
+        public void Update(Rating rating)
+        {
+            this._ratingRepository.Update(rating);
+        }
+
+        public Rating GetRatingForAppointment(int appointmentId)
+        {
+            return this._ratingRepository
+                .All()
+                .FirstOrDefault(r => r.Appointment.Id == appointmentId);
+        }
+    }
 }
