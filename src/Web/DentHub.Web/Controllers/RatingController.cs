@@ -19,16 +19,19 @@ namespace DentHub.Web.Controllers
 		private readonly IRatingService _ratingService;
 		private readonly UserManager<DentHubUser> _userManager;
 		private readonly IDentistService _dentistService;
+		private readonly IPatientService _patientService;
 
 		public RatingController(IDentistService dentistService,
 			UserManager<DentHubUser> userManager,
-			IRatingService _ratingService,
-            IAppointmentService appointmentService)
+			IRatingService ratingService,
+            IAppointmentService appointmentService,
+			IPatientService patientService)
 		{
 			this._userManager = userManager;
 			this._dentistService = dentistService;
             this._appointmentService = appointmentService;
-			this._ratingService = _ratingService;
+			this._ratingService = ratingService;
+			this._patientService = patientService;
 		}
 
 		public IActionResult Index()
@@ -46,7 +49,7 @@ namespace DentHub.Web.Controllers
 			{
 				DentistId = appointment.DentistID,
 				PatientId = appointment.PatientId,
-				ForAppointmentId = id,
+				AppointmentId = id,
 			};
 
 			return View(ratingInputModel);
@@ -56,7 +59,13 @@ namespace DentHub.Web.Controllers
         [Authorize(Roles = "Patient,Dentist")]
         public async Task<IActionResult> RateAppointment(int appointmentId, int rating)
         {
-            var ratingRecord = this._ratingService
+			if (!ModelState.IsValid || rating < 1 || rating > 10)
+			{
+				this.ViewBag.ErrorMessage = "Rating should be a whole number between 1 and 10. Please provide a valid number.";
+				return View();
+			}
+
+			var ratingRecord = this._ratingService
                    .GetRatingForAppointment(appointmentId);
 
             var appointment = this._appointmentService
@@ -64,12 +73,9 @@ namespace DentHub.Web.Controllers
 
             var dentist = this._dentistService
                     .GetAppointmentDentist(appointmentId);
-            
-                
 
-            var patient = this._userRepository
-                        .All()
-                        .FirstOrDefault(u => u.Id == appointment.PatientId);
+			var patient = this._patientService
+					.GetAppointmentPatient(appointmentId);
 
             if (ratingRecord == null)
             {
@@ -80,15 +86,11 @@ namespace DentHub.Web.Controllers
                     PatientId = patient.Id,
                 };
 
-                await this._ratingRepository.AddAsync(ratingRecord);
-                await this._ratingRepository.SaveChangesAsync();
+                await this._ratingService.AddAsync(ratingRecord);
+                await this._ratingService.SaveChangesAsync();
             }
 
-            if (!ModelState.IsValid)
-            {
-                this.ViewBag["Error"] = "Rating should be a whole number between 1 and 10. Please provide a valid number.";
-                return View(ViewBag);
-            }
+            
 
             if (User.IsInRole("Dentist"))
             {
@@ -105,10 +107,10 @@ namespace DentHub.Web.Controllers
             //appointment.Status = Status.Completed;
 
             this._appointmentService.Update(appointment);
-            this._ratingRepository.Update(ratingRecord);
+            this._ratingService.Update(ratingRecord);
 
             await this._appointmentService.SaveChangesAsync();
-            await this._ratingRepository.SaveChangesAsync();
+            await this._ratingService.SaveChangesAsync();
 
             return RedirectToAction("../Appointment/Index");
         }

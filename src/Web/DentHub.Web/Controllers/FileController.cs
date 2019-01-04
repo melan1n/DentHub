@@ -6,6 +6,7 @@ using DentHub.Data;
 using DentHub.Data.Common;
 using DentHub.Data.Models;
 using DentHub.Web.Models.File;
+using DentHub.Web.Services.DataServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -15,24 +16,23 @@ namespace DentHub.Web.Controllers
 	public class FileController : Controller
 	{
 		private readonly UserManager<DentHubUser> _userManager;
-		private readonly IRepository<DentHubUser> _userRepository;
-		private readonly IRepository<PatientFile> _fileRepository;
+		private readonly IPatientService _patientService;
+		private readonly IPatientFileService _patientFileService;
 		private readonly CloudinaryService _cloudinaryService;
 
 		public FileController(UserManager<DentHubUser> userManager,
-			IRepository<DentHubUser> userRepository,
-			IRepository<PatientFile> fileRepository,
+			IPatientService patientService,
+			IPatientFileService patientFileService,
 			CloudinaryService cloudinaryService)
 		{
 			this._userManager = userManager;
-			this._userRepository = userRepository;
-			this._fileRepository = fileRepository;
+			this._patientService = patientService;
+			this._patientFileService = patientFileService;
 			this._cloudinaryService = cloudinaryService;
 		}
 
 		public IActionResult Index()
 		{
-
 			return View();
 		}
 
@@ -71,11 +71,10 @@ namespace DentHub.Web.Controllers
 				FileUrl = cloudinaryUris.FirstOrDefault()
 			};
 
-			await this._fileRepository.AddAsync(patientFile);
-			await this._fileRepository.SaveChangesAsync();
+			await this._patientFileService.AddAsync(patientFile);
+			await this._patientFileService.SaveChangesAsync();
 
 			return RedirectToAction("DentistPatients", "Dentist");
-			
 		}
 
 		[Authorize(Roles = "Dentist,Patient")]
@@ -87,34 +86,31 @@ namespace DentHub.Web.Controllers
 
 			if (User.IsInRole("Patient"))
 			{
-				patient = this._userRepository
-			   .All()
-			   .FirstOrDefault(p => p.Id == user.Id);
+				patient = this._patientService
+					.GetPatientById(user.Id);
 			}
 			else
 			{
-				patient = this._userRepository
-					.All()
-					.FirstOrDefault(p => p.Id == id);
+				patient = this._patientService
+					.GetPatientById(id);
 			}
 
 			var patientFiles = new FilesViewModel
 			{
 				PatientId = patient.Id,
-				PatientName = $"{patient.FirstName} {patient.LastName}",
-				Files = this._fileRepository
-				.All()
-				.Where(f => f.PatientId == patient.Id)
-				.Select(f => new FileInputModel
-				{
-					Id = f.Id, 
-					DateCreated = f.DateCreated,
-					FileType = f.FileType.ToString(),
-					Description = f.Description,
-					Name = f.Name,
-					PatientId = patient.Id,
-					
-				}).ToArray()
+				PatientName = this._patientService.GetPatientFullName(patient.Id),
+				Files = this._patientFileService
+						.GetPatientFiles(patient.Id)
+						.Select(f => new FileInputModel
+						{
+							Id = f.Id,
+							DateCreated = f.DateCreated,
+							FileType = f.FileType.ToString(),
+							Description = f.Description,
+							Name = f.Name,
+							PatientId = patient.Id,
+
+						}).ToArray()
 			};
 
 			return View("PatientFiles", patientFiles);
@@ -125,10 +121,8 @@ namespace DentHub.Web.Controllers
 		{
 			var fileInputModel = new FileInputModel
 			{
-				FileUrl = this._fileRepository
-				.All()
-				.FirstOrDefault(f => f.Id == id)
-				.FileUrl
+				FileUrl = this._patientFileService
+					.GetFileUrl(id),
 			};
 
 			return View(fileInputModel);

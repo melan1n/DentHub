@@ -9,7 +9,7 @@ namespace DentHub.Web.Models.Rating
 	public class RatingInputModel
 	{
 		
-		public int ForAppointmentId { get; set; }
+		public int AppointmentId { get; set; }
 
 		public string DentistId { get; set; }
 

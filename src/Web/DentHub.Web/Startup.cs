@@ -73,6 +73,7 @@ namespace DentHub.Web
             services.AddScoped(typeof(IAppointmentService), typeof(AppointmentService));
             services.AddScoped(typeof(ISpecialtyService), typeof(SpecialtyService));
             services.AddScoped(typeof(IRatingService), typeof(RatingService));
+            services.AddScoped(typeof(IPatientFileService), typeof(PatientFileService));
 			services.AddScoped(typeof(CloudinaryService));
 		}
 

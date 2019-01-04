@@ -81,11 +81,11 @@ namespace DentHub.Web.Services.DataServices
 
         public DentHubUser GetAppointmentDentist(int appointmentId)
         {
-            this._userRepository
-                .All()
-                .FirstOrDefault(d => d.Id == this._appointmentService
-                                    .GetAppointmentById(appointmentId)
-                                    .DentistId);
+            return this._userRepository
+						.All()
+						.FirstOrDefault(d => d.Id == this._appointmentService
+												.GetAppointmentById(appointmentId)
+												.DentistID);
         }
     }
 }

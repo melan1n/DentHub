@@ -181,11 +181,9 @@ namespace DentHub.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("AppointmentId");
+                    b.Property<int>("AppointmentId");
 
                     b.Property<string>("DentistId");
-
-                    b.Property<int>("ForAppointmentId");
 
                     b.Property<string>("PatientId");
 
@@ -371,7 +369,8 @@ namespace DentHub.Data.Migrations
                 {
                     b.HasOne("DentHub.Data.Models.Appointment", "Appointment")
                         .WithMany()
-                        .HasForeignKey("AppointmentId");
+                        .HasForeignKey("AppointmentId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("DentHub.Data.Models.DentHubUser", "Dentist")
                         .WithMany()

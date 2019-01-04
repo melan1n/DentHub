@@ -204,6 +204,7 @@ namespace DentHub.Web.Controllers
 				Id = appointment.Id,
 				TimeStart = appointment.TimeStart,
 				TimeEnd = appointment.TimeEnd,
+				Duration = (appointment.TimeEnd - appointment.TimeStart).Minutes,
 				Status = appointment.Status.ToString(),
 			};
 

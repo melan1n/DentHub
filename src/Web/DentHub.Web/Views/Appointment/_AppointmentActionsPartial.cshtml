@@ -8,9 +8,12 @@
 
 @if (Model.Status == "Offering")
 {
-    <td>
-        @Html.ActionLink("Book", "Book", new { id = Model.Id })
-    </td>
+    if (this.SignInManager.IsSignedIn(this.User) && this.User.IsInRole("Patient"))
+    {
+        <td>
+            @Html.ActionLink("Book", "Book", new { id = Model.Id })
+        </td>
+    }
     if (this.SignInManager.IsSignedIn(this.User) && this.User.IsInRole("Dentist"))
     {
         <td class="delete-section">
@@ -28,8 +31,8 @@
     if (Model.Status == "Booked")
     {
         @*<td>
-            @Html.ActionLink("Confirm", "Confirm", new { id = Model.Id })
-        </td>*@
+                @Html.ActionLink("Confirm", "Confirm", new { id = Model.Id })
+            </td>*@
         <td class="delete-section">
             <a class="delete-link" href="@Url.Action("Cancel", new { id = Model.Id })">Cancel</a>
             @*<div class="btn btn-primary delete-confirm" style="display:none" data-delete-id="Model.Id">Confirm Cancellation</div>*@
@@ -42,34 +45,35 @@
     if (DateTime.Now > Model.TimeEnd)
     {
         @*<td>
-            @Html.ActionLink("Complete", "Complete", new { id = Model.Id })
-        </td>*@
+                @Html.ActionLink("Complete", "Complete", new { id = Model.Id })
+            </td>*@
         if ((!Model.IsRatedByPatient && this.User.IsInRole("Patient"))
             || ((!Model.IsRatedByDentist) && this.User.IsInRole("Dentist")))
         {
             <td>
-                @Html.ActionLink("Rate", "RateAppointment", new { id = Model.Id })
+                @*@Html.ActionLink("Rate", "RateAppointment", new { id = Model.Id })*@
+                <a asp-controller="Rating" asp-action="RateAppointment" asp-route-id="@Model.Id">Rate</a>
             </td>
         }
     }
 }
 
 @*@if (Model.Status.ToString() == "Completed" && this.SignInManager.IsSignedIn(this.User))
-{
-    if (!Model.IsRatedByPatient && this.User.IsInRole("Patient"))
     {
-        <td>
-            <a href="/Rating/RateAppointment/@Model.Id">Rate</a>
-            @Html.ActionLink("Rate", "RateAppointment", new { id = Model.Id })
-        </td>
-    }
-    if (!Model.IsRatedByDentist && this.User.IsInRole("Dentist"))
-    {
-        <td>
+        if (!Model.IsRatedByPatient && this.User.IsInRole("Patient"))
+        {
+            <td>
+                <a href="/Rating/RateAppointment/@Model.Id">Rate</a>
+                @Html.ActionLink("Rate", "RateAppointment", new { id = Model.Id })
+            </td>
+        }
+        if (!Model.IsRatedByDentist && this.User.IsInRole("Dentist"))
+        {
+            <td>
 
-            <a href="/Rating/RateAppointment/@Model.Id">Rate</a>
-            @Html.ActionLink("Rate", "RateAppointment", new { id = Model.Id })
-        </td>
-    }
+                <a href="/Rating/RateAppointment/@Model.Id">Rate</a>
+                @Html.ActionLink("Rate", "RateAppointment", new { id = Model.Id })
+            </td>
+        }
 
-}*@
+    }*@

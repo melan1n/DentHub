@@ -16,7 +16,9 @@ namespace DentHub.Web.Services.DataServices
 
 		IEnumerable<DentHubUser> GetAllDentistPatients(string dentistId);
 
-        void Update(DentHubUser patient);
+		DentHubUser GetAppointmentPatient(int appointmentId);
+
+		void Update(DentHubUser patient);
 
 		Task SaveChangesAsync();
 	}

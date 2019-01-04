@@ -75,5 +75,14 @@ namespace DentHub.Web.Services.DataServices
 		{
 			this._userRepository.Update(patient); 
 		}
+
+		public DentHubUser GetAppointmentPatient(int appointmentId)
+		{
+			return this._userRepository
+						.All()
+						.FirstOrDefault(d => d.Id == this._appointmentService
+												.GetAppointmentById(appointmentId)
+												.PatientId);
+		}
 	}
 }
