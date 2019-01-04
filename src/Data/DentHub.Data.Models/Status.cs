@@ -4,7 +4,7 @@
 	{
 		Offering = 1,
 		Booked = 2,
-		Confirmed = 3,
-		Completed = 4,
+		//Confirmed = 3,
+		//Completed = 4,
 	}
 }

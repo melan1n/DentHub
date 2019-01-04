@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using DentHub.Data.Common;
@@ -78,31 +79,17 @@ namespace DentHub.Web.Controllers
         {
             var user = await this._userManager.GetUserAsync(User);
 
-            //var allDentistAppointments = this._appointmentService
-            //    .GetAllDentistAppointments(user.Id);
-
             var patients = this._patientService
                 .GetAllDentistPatients(user.Id)
-                .Select(a => new PatientViewModel
+                .Select(p => new PatientViewModel
                 {
-                    Id = a.Id,
-                    FirstName = a.FirstName,
-                    LastName = a.LastName,
+                    Id = p.Id,
+                    FirstName = p.FirstName,
+                    LastName = p.LastName,
                 })
                 .ToArray();
 
-            //var patients = this._appointmentService
-            //        .GetAllDentistAppointments(user.Id)
-            //        .Distinct(a => a.PatientId)
-            //        .Select(a => new PatientViewModel
-            //        {
-            //            Id = a.PatientId,
-            //            FirstName = this._patientService.GetPatientById(a.PatientId).FirstName,
-            //            LastName = this._patientService.GetPatientById(a.PatientId).LastName,
-            //        })
-            //        .ToArray();
-
-            var ratings = this._ratingService
+           var ratings = this._ratingService
                     .GetAllRatingsForDentist(user.Id)                                   
                     .Select(r => new RatingInputModel
                     {
@@ -133,16 +120,12 @@ namespace DentHub.Web.Controllers
 
                 if (ratingsByPatient.Length > 0)
                 {
-                    //double averageRating = ratingsByPatient
-                    //.Where(r => r.PatientId == patient.Id)
-                    //.Average(r => r.RatingByPatient);
-
                     double averageRating = ratingsByPatient
                         .Average(r => r.RatingByPatient);
 
                     averageRatingForDentistPerPatient[patient.Id] = new string[]
                         { $"{patient.FirstName} {patient.LastName}",
-                          averageRating.ToString() };
+                          averageRating.ToString("0.00", CultureInfo.InvariantCulture) };
                 }
                 else
                 {
@@ -156,7 +139,7 @@ namespace DentHub.Web.Controllers
             {
                 AverageRatingByPatient = averageRatingForDentistPerPatient,
                 AverageRating = ratings.Count() > 0 ?
-                                ratings.Average(r => r.RatingByPatient).ToString() :
+                                ratings.Average(r => r.RatingByPatient).ToString("0.00", CultureInfo.InvariantCulture) :
                                 "Not Rated"
             };
 

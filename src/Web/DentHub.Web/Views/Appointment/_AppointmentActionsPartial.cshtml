@@ -27,23 +27,23 @@
     </td>
     if (Model.Status == "Booked")
     {
-        <td>
+        @*<td>
             @Html.ActionLink("Confirm", "Confirm", new { id = Model.Id })
-        </td>
+        </td>*@
         <td class="delete-section">
             <a class="delete-link" href="@Url.Action("Cancel", new { id = Model.Id })">Cancel</a>
-            <div class="btn btn-primary delete-confirm" style="display:none" data-delete-id="Model.Id">Confirm Cancellation</div>
+            @*<div class="btn btn-primary delete-confirm" style="display:none" data-delete-id="Model.Id">Confirm Cancellation</div>*@
         </td>
     }
 }
 
-@if (Model.Status == "Confirmed" && this.SignInManager.IsSignedIn(this.User))
+@if (Model.Status == "Booked" && this.SignInManager.IsSignedIn(this.User))
 {
     if (DateTime.Now > Model.TimeEnd)
     {
-        <td>
+        @*<td>
             @Html.ActionLink("Complete", "Complete", new { id = Model.Id })
-        </td>
+        </td>*@
         if ((!Model.IsRatedByPatient && this.User.IsInRole("Patient"))
             || ((!Model.IsRatedByDentist) && this.User.IsInRole("Dentist")))
         {
@@ -54,13 +54,13 @@
     }
 }
 
-@if (Model.Status.ToString() == "Completed" && this.SignInManager.IsSignedIn(this.User))
+@*@if (Model.Status.ToString() == "Completed" && this.SignInManager.IsSignedIn(this.User))
 {
     if (!Model.IsRatedByPatient && this.User.IsInRole("Patient"))
     {
         <td>
             <a href="/Rating/RateAppointment/@Model.Id">Rate</a>
-            @*@Html.ActionLink("Rate", "RateAppointment", new { id = Model.Id })*@
+            @Html.ActionLink("Rate", "RateAppointment", new { id = Model.Id })
         </td>
     }
     if (!Model.IsRatedByDentist && this.User.IsInRole("Dentist"))
@@ -68,8 +68,8 @@
         <td>
 
             <a href="/Rating/RateAppointment/@Model.Id">Rate</a>
-            @*@Html.ActionLink("Rate", "RateAppointment", new { id = Model.Id })*@
+            @Html.ActionLink("Rate", "RateAppointment", new { id = Model.Id })
         </td>
     }
 
-}
+}*@

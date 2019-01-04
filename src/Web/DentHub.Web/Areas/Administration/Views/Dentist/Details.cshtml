@@ -1,10 +1,12 @@
 ﻿@model DentHub.Web.Areas.Administration.Models.DentistViewModel
 
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
 @{
     ViewData["Title"] = "Details";
 }
 
-<h2>Detail</h2>
+@*<h2>Detail</h2>*@
 
 <div>
     <hr />
@@ -42,6 +44,6 @@
     </dl>
 </div>
 <div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-    <a asp-action="Index">Back to List</a>
+    @*@Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |*@
+    <a asp-area="Administration" asp-controller="Dentist" asp-action="All">Back to All Dentists</a>
 </div>

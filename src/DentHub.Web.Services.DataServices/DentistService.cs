@@ -11,10 +11,13 @@ namespace DentHub.Web.Services.DataServices
     public class DentistService : IDentistService
     {
         private readonly IRepository<DentHubUser> _userRepository;
+        private readonly IAppointmentService _appointmentService;
         
-        public DentistService(IRepository<DentHubUser> userRepository)
+        public DentistService(IRepository<DentHubUser> userRepository,
+			IAppointmentService appointmentService)
         {
             this._userRepository = userRepository;
+			this._appointmentService = appointmentService;
         }
 
 		public IEnumerable<DentHubUser> GetAllActiveDentists()
@@ -50,5 +53,30 @@ namespace DentHub.Web.Services.DataServices
 			this._userRepository.Update(dentist);
 		}
 
+		public IEnumerable<DentHubUser> GetAllPatientDentists(string patientId)
+		{
+			var patientDentistIds = this._appointmentService
+				.GetAllPatientAppointments(patientId)
+				.Select(a => a.DentistID)
+				.Distinct()
+				.ToArray();
+
+			var dentists = this._userRepository
+				.All()
+				.Where(d => patientDentistIds.Contains(d.Id))
+				.ToArray();
+
+			return dentists;
+
+		}
+
+		public string GetDentistFullName(string dentistId)
+		{
+			var dentist = this._userRepository
+				.All()
+				.FirstOrDefault(d => d.Id == dentistId);
+
+			return dentist.FirstName + " " + dentist.LastName;
+		}
 	}
 }

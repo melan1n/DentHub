@@ -2,11 +2,24 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace DentHub.Web.Services.DataServices
 {
     public interface IAppointmentService
     {
-        IEnumerable<Appointment> GetAllDentistAppointments(string dentistId);
-    }
+		Appointment GetAppointmentById(int id);
+
+		IEnumerable<Appointment> GetAllDentistAppointments(string dentistId);
+
+		IEnumerable<Appointment> GetAllPatientAppointments(string patientId);
+
+		Task AddAsync(Appointment appointment);
+
+		void Update(Appointment appointment);
+
+		void Delete(Appointment appointment);
+
+		Task SaveChangesAsync();
+	}
 }

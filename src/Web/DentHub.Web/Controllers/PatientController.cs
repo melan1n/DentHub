@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using DentHub.Data.Common;
 using DentHub.Data.Models;
 using DentHub.Web.Areas.Administration.Models;
 using DentHub.Web.Models.Rating;
+using DentHub.Web.Services.DataServices;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,20 +16,20 @@ namespace DentHub.Web.Controllers
 	public class PatientController : Controller
 	{
 		private readonly UserManager<DentHubUser> _userManager;
-		private readonly IRepository<DentHubUser> _userRepository;
-		private readonly IRepository<Rating> _ratingRepository;
+		private readonly IDentistService _dentistService;
+		private readonly IRatingService _ratingService;
 		private readonly IRepository<Appointment> _appointmentRepository;
 
 
 		public PatientController(UserManager<DentHubUser> userManager,
-			IRepository<DentHubUser> userRepository,
+			IDentistService dentistService,
 			IRepository<Appointment> appointmentRepository,
-			IRepository<Rating> ratingRepository)
+			IRatingService ratingService)
 		{
 			this._userManager = userManager;
-			this._userRepository = userRepository;
+			this._dentistService = dentistService;
 			this._appointmentRepository = appointmentRepository;
-			this._ratingRepository = ratingRepository;
+			this._ratingService = ratingService;
 		}
 
 		public IActionResult Index()
@@ -39,22 +41,19 @@ namespace DentHub.Web.Controllers
 		{
 			var user = await this._userManager.GetUserAsync(User);
 
-			var dentists = this._appointmentRepository
-					.All()
-					.Where(a => a.PatientId == user.Id)
-					.Select(a => new DentistViewModel
-					{
-						Id = a.DentistID,
-						FirstName = a.Dentist.FirstName,
-						LastName = a.Dentist.LastName,
-					})
-					.Distinct()
-					.ToArray();
+			var dentists = this._dentistService
+				.GetAllPatientDentists(user.Id)
+				.Select(d => new DentistViewModel
+				{
+					Id = d.Id,
+					FirstName = d.FirstName,
+					LastName = d.LastName,
+				})
+				.ToArray();
 
-			var ratings = this._ratingRepository
-					.All()
-					.Where(r => r.PatientId == user.Id 
-					&& r.RatingByDentist > 0)
+				
+			var ratings = this._ratingService
+					.GetAllRatingsForPatient(user.Id)
 					.Select(r => new RatingInputModel
 					{
 						DentistId = r.DentistId,
@@ -63,19 +62,16 @@ namespace DentHub.Web.Controllers
 					})
 					.ToArray();
 
-			if (ratings.Length == 0)
+			if (ratings.Length == 0 && dentists.Length == 0)
 			{
 				return View("NoDentists");
 			}
-			var averageRatingPerDentist = new Dictionary<string, string>();
+			var averageRatingForPatientPerDentist = new Dictionary<string, string>();
 
 			foreach (var dentist in dentists)
 			{
-				var ratingsByDentist = this._ratingRepository
-					.All()
-					.Where(r => r.PatientId == user.Id
-					&& r.DentistId == dentist.Id
-					&& r.RatingByDentist > 0)
+				var ratingsByDentist = this._ratingService
+					.GetAllRatingsForPatientByDentist(user.Id, dentist.Id)
 					.Select(r => new RatingInputModel
 					{
 						DentistId = r.DentistId,
@@ -87,23 +83,24 @@ namespace DentHub.Web.Controllers
 				if (ratingsByDentist.Length > 0)
 				{
 					double averageRating = ratingsByDentist
-					.Where(r => r.DentistId == dentist.Id)
-					.Average(r => r.RatingByDentist);
+						.Average(r => r.RatingByDentist);
 
-					averageRatingPerDentist[dentist.FirstName + dentist.LastName] = averageRating.ToString();
+					averageRatingForPatientPerDentist[dentist.FirstName + " " + dentist.LastName] = 
+						averageRating.ToString("0.00", CultureInfo.InvariantCulture);
 				}
 				else
 				{
-					averageRatingPerDentist[dentist.FirstName + dentist.LastName] = "N/A";
+					averageRatingForPatientPerDentist[dentist.FirstName + " " + dentist.LastName] = 
+						"Not Rated";
 				}				
 			}
 
 			var patientViewModel = new PatientViewModel
 			{
-				AverageRatingByDentist = averageRatingPerDentist,
+				AverageRatingByDentist = averageRatingForPatientPerDentist,
 				AverageRating = ratings.Count() > 0 ?
-								ratings.Average(r => r.RatingByDentist).ToString() :
-								"N/A"
+								ratings.Average(r => r.RatingByDentist).ToString("0.00", CultureInfo.InvariantCulture) :
+								"Not Rated"
 			};
 
 			return View(patientViewModel);

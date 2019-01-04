@@ -3759,7 +3759,8 @@ jQuery.extend( {
 	when: function( singleValue ) {
 		var
 
-			// count of uncompleted subordinates
+			// count of un
+d subordinates
 			remaining = arguments.length,
 
 			// count of unprocessed arguments

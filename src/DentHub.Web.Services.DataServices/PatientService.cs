@@ -51,7 +51,16 @@ namespace DentHub.Web.Services.DataServices
             return patients;
         }
 
-        public Task SaveChangesAsync()
+		public string GetPatientFullName(string patientId)
+		{
+			var patient = this._userRepository
+				.All()
+				.FirstOrDefault(d => d.Id == patientId);
+
+			return patient.FirstName + " " + patient.LastName;
+		}
+
+		public Task SaveChangesAsync()
 		{
 			return this._userRepository.SaveChangesAsync();
 		}

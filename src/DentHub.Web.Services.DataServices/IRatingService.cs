@@ -14,5 +14,9 @@ namespace DentHub.Web.Services.DataServices
         IEnumerable<Rating> GetAllRatingsForDentist(string dentistId);
 
         IEnumerable<Rating> GetAllRatingsForDentistByPatient(string dentistId, string patientId);
-    }
+
+		IEnumerable<Rating> GetAllRatingsForPatient(string patientId);
+
+		IEnumerable<Rating> GetAllRatingsForPatientByDentist(string patientId, string dentistId);
+	}
 }
