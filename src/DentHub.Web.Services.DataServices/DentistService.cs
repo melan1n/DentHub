@@ -76,7 +76,16 @@ namespace DentHub.Web.Services.DataServices
 				.All()
 				.FirstOrDefault(d => d.Id == dentistId);
 
-			return dentist.FirstName + " " + dentist.LastName;
+			return $"{dentist.FirstName} {dentist.LastName}";
 		}
-	}
+
+        public DentHubUser GetAppointmentDentist(int appointmentId)
+        {
+            this._userRepository
+                .All()
+                .FirstOrDefault(d => d.Id == this._appointmentService
+                                    .GetAppointmentById(appointmentId)
+                                    .DentistId);
+        }
+    }
 }

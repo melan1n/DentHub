@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using DentHub.Data.Common;
 using DentHub.Data.Models;
 using DentHub.Web.Models.Rating;
+using DentHub.Web.Services.DataServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -14,20 +15,20 @@ namespace DentHub.Web.Controllers
     public class RatingController : Controller
     {
 
-		private readonly IRepository<Appointment> _appointmentRepository;
-		private readonly IRepository<Rating> _ratingRepository;
+		private readonly IAppointmentService _appointmentService;
+		private readonly IRatingService _ratingService;
 		private readonly UserManager<DentHubUser> _userManager;
-		private readonly IRepository<DentHubUser> _userRepository;
+		private readonly IDentistService _dentistService;
 
-		public RatingController(IRepository<DentHubUser> userRepository,
+		public RatingController(IDentistService dentistService,
 			UserManager<DentHubUser> userManager,
-			IRepository<Rating> _ratingRepository,
-			IRepository<Appointment> appointmentRepository)
+			IRatingService _ratingService,
+            IAppointmentService appointmentService)
 		{
 			this._userManager = userManager;
-			this._userRepository = userRepository;
-			this._appointmentRepository = appointmentRepository;
-			this._ratingRepository = _ratingRepository;
+			this._dentistService = dentistService;
+            this._appointmentService = appointmentService;
+			this._ratingService = _ratingService;
 		}
 
 		public IActionResult Index()
@@ -38,11 +39,10 @@ namespace DentHub.Web.Controllers
 		[Authorize(Roles = "Patient,Dentist")]
 		public IActionResult RateAppointment(int id)
 		{
-			var appointment = this._appointmentRepository
-					.All()
-					.FirstOrDefault(a => a.Id == id);
+            var appointment = this._appointmentService
+                    .GetAppointmentById(id);
 
-			var ratingInputModel = new RatingInputModel
+            var ratingInputModel = new RatingInputModel
 			{
 				DentistId = appointment.DentistID,
 				PatientId = appointment.PatientId,
@@ -52,60 +52,65 @@ namespace DentHub.Web.Controllers
 			return View(ratingInputModel);
 		}
 
-		[HttpPost]
-		[Authorize(Roles="Patient,Dentist")]
-		public async Task<IActionResult> RateAppointment(int id, int rating)
-		{
-			var ratingRecord = this._ratingRepository
-					.All()
-					.FirstOrDefault(r => r.Appointment.Id == id);
+        [HttpPost]
+        [Authorize(Roles = "Patient,Dentist")]
+        public async Task<IActionResult> RateAppointment(int appointmentId, int rating)
+        {
+            var ratingRecord = this._ratingService
+                   .GetRatingForAppointment(appointmentId);
 
-			var appointment = this._appointmentRepository
-					.All()
-					.FirstOrDefault(a => a.Id == id);
+            var appointment = this._appointmentService
+                    .GetAppointmentById(appointmentId);
 
-			var dentist = this._userRepository
-						.All()
-						.FirstOrDefault(u => u.Id == appointment.DentistID);
+            var dentist = this._dentistService
+                    .GetAppointmentDentist(appointmentId);
+            
+                
 
-			var patient = this._userRepository
-						.All()
-						.FirstOrDefault(u => u.Id == appointment.PatientId);
+            var patient = this._userRepository
+                        .All()
+                        .FirstOrDefault(u => u.Id == appointment.PatientId);
 
-			if (ratingRecord == null)
-			{
-				ratingRecord = new Rating
-				{
-					Appointment = appointment,
-					DentistId = dentist.Id,
-					PatientId = patient.Id,
-				};
+            if (ratingRecord == null)
+            {
+                ratingRecord = new Rating
+                {
+                    Appointment = appointment,
+                    DentistId = dentist.Id,
+                    PatientId = patient.Id,
+                };
 
-				await this._ratingRepository.AddAsync(ratingRecord);
-				await this._ratingRepository.SaveChangesAsync();
-			}
+                await this._ratingRepository.AddAsync(ratingRecord);
+                await this._ratingRepository.SaveChangesAsync();
+            }
 
-			if (User.IsInRole("Dentist"))
-			{
-				ratingRecord.RatingByDentist = rating;
-				ratingRecord.Appointment.IsRatedByDentist = true;
-			}
-			else if (User.IsInRole("Patient"))
-			{
-				ratingRecord.RatingByPatient = rating;
-				ratingRecord.Appointment.IsRatedByPatient = true;
-			}
+            if (!ModelState.IsValid)
+            {
+                this.ViewBag["Error"] = "Rating should be a whole number between 1 and 10. Please provide a valid number.";
+                return View(ViewBag);
+            }
 
-			// Uncomment if you revive status "Completed"
-			//appointment.Status = Status.Completed;
+            if (User.IsInRole("Dentist"))
+            {
+                ratingRecord.RatingByDentist = rating;
+                ratingRecord.Appointment.IsRatedByDentist = true;
+            }
+            else if (User.IsInRole("Patient"))
+            {
+                ratingRecord.RatingByPatient = rating;
+                ratingRecord.Appointment.IsRatedByPatient = true;
+            }
 
-			this._appointmentRepository.Update(appointment);
-			this._ratingRepository.Update(ratingRecord);
+            // Uncomment if you revive status "Completed"
+            //appointment.Status = Status.Completed;
 
-			await this._appointmentRepository.SaveChangesAsync();
-			await this._ratingRepository.SaveChangesAsync();
+            this._appointmentService.Update(appointment);
+            this._ratingRepository.Update(ratingRecord);
 
-			return RedirectToAction("../Appointment/Index");
-		}
+            await this._appointmentService.SaveChangesAsync();
+            await this._ratingRepository.SaveChangesAsync();
+
+            return RedirectToAction("../Appointment/Index");
+        }
     }
 }

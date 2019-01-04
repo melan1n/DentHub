@@ -18,7 +18,7 @@ namespace DentHub.Web.Models.Appointment
 		[DataType(DataType.DateTime)]
 		public DateTime TimeEnd { get; set; }
 
-		[Range(15, 8 * 60)]
-		public int Duration => (this.TimeEnd - this.TimeStart).Minutes;
+		//[Range(15, 8 * 60)]
+		//public int Duration => (this.TimeEnd - this.TimeStart).Minutes;
 	}
 }

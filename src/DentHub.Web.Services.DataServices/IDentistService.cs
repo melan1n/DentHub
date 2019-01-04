@@ -18,7 +18,9 @@ namespace DentHub.Web.Services.DataServices
 
 		string GetDentistFullName(string dentistId);
 
-		void Update(DentHubUser dentist);
+        DentHubUser GetAppointmentDentist(int appointmentId);
+
+        void Update(DentHubUser dentist);
 
 		Task SaveChangesAsync();
 	}

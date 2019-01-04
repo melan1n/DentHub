@@ -20,9 +20,9 @@ namespace DentHub.Data.Models
 
 		public DateTime TimeEnd { get; set; }
 
-		public int Duration => (this.TimeEnd - this.TimeStart).Minutes;
+        //public int Duration => (this.TimeEnd - this.TimeStart).Minutes;
 
-		public Status Status { get; set; }
+        public Status Status { get; set; }
 
 		//public string Name => this.Clinic.Name + this.Dentist.LastName + this.Time;
 

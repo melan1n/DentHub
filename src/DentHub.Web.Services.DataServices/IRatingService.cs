@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace DentHub.Web.Services.DataServices
 {
@@ -18,5 +19,13 @@ namespace DentHub.Web.Services.DataServices
 		IEnumerable<Rating> GetAllRatingsForPatient(string patientId);
 
 		IEnumerable<Rating> GetAllRatingsForPatientByDentist(string patientId, string dentistId);
-	}
+
+        Rating GetRatingForAppointment(int appointmentId);
+
+        Task AddAsync(Rating rating);
+
+        Task SaveChangesAsync();
+
+        void Update(Rating rating);
+    }
 }
