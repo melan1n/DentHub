@@ -106,11 +106,9 @@ namespace DentHub.Web.Controllers
         {
             var user = await _userManager.GetUserAsync(User);
 
-            if (!ModelState.IsValid)
+			if (!ModelState.IsValid)
             {
-                //ViewData["ErrorMessage"] = "Appointments should last between 15 minutes and 8 hours.";
-                ViewBag.ErrorMessage = "Appointment start should be after at least one hour but not later than in 1 year. Appointment duration should be between 15 minutes and 8 hours. Please input a valid start and end.";
-                //ModelState.AddModelError("", "Appointments should last between 15 minutes and 8 hours.");
+                 ViewBag.ErrorMessage = "Appointment start should be after at least one hour but not later than in 1 year. Appointment duration should be between 15 minutes and 8 hours. Please input a valid start and end.";
                 return View("CreateOffering");
             }
 
@@ -119,7 +117,6 @@ namespace DentHub.Web.Controllers
 			if (duration < 15 || duration > 8 * 60)
 			{
 				ViewBag.ErrorMessage = "Appointments should last between 15 minutes and 8 hours. Please input a valid start and end.";
-				//ModelState.AddModelError("", "Appointments should last between 15 minutes and 8 hours.");
 				return View("CreateOffering");
 			}
 
@@ -128,14 +125,12 @@ namespace DentHub.Web.Controllers
 			if (minutesFromNow < 60 || minutesFromNow > 365*24*80)
 			{
 				ViewBag.ErrorMessage = "Appointment start should be after at least one hour but not later than in 1 year. Please input a valid start and end.";
-				//ModelState.AddModelError("", "Appointments should last between 15 minutes and 8 hours.");
 				return View("CreateOffering");
 			}
 
 			if (this._appointmentService.DuplicateOfferingExists(user, appointmentInputModel.TimeStart, appointmentInputModel.TimeEnd))
 			{
 				ViewBag.ErrorMessage = "Your new offering's time overlaps with an existing offering. Please input a valid start and end or cancel your other offering before you proceed to create the new one.";
-				//ModelState.AddModelError("", "Appointments should last between 15 minutes and 8 hours.");
 				return View("CreateOffering");
 			}
 
@@ -151,7 +146,7 @@ namespace DentHub.Web.Controllers
 			var user = await _userManager.GetUserAsync(User);
 
 			await this._appointmentService
-				.BookAppointment(id, user);
+				.BookAppointmentAsync(id, user);
 
 			return RedirectToAction("Index");
 		}
@@ -177,15 +172,40 @@ namespace DentHub.Web.Controllers
 		[Authorize(Roles = "Dentist")]
 		public IActionResult Details(int id)
 		{
-			var appointment = this._appointmentService
-						.GetAppointmentById(id);
+			Appointment appointment;
+			try
+			{
+				appointment = this._appointmentService
+										.GetAppointmentById(id);
+			}
+			catch (Exception)
+			{
+				ViewBag.ErrorMessage = "No such appointment exists.";
+				return View("ErrorMessage");
+			}
 
-			var patient = this._patientService
+			string patientName = "Not Appointed";
+
+			DentHubUser patient;
+			if (appointment.Status == Status.Booked)
+			{
+				try
+				{
+					patient = this._patientService
 						.GetPatientById(appointment.PatientId);
+				}
+				catch (Exception)
+				{
+					ViewBag.ErrorMessage = "No such patient exists.";
+					return View("ErrorMessage");
+				}
 
+				patientName = this._patientService.GetPatientFullName(patient.Id);
+			}
+			
 			var appointmentViewModel = new AppointmentViewModel
 			{
-				PatientName = this._patientService.GetPatientFullName(patient.Id),
+				PatientName = patientName,
 				Id = appointment.Id,
 				TimeStart = appointment.TimeStart,
 				TimeEnd = appointment.TimeEnd,
@@ -200,7 +220,7 @@ namespace DentHub.Web.Controllers
 		public IActionResult Cancel(int id)
 		{
 			this._appointmentService
-				.CancelAppointment(id);
+				.CancelAppointmentAsync(id);
 
 			return RedirectToAction("Index");
 		}

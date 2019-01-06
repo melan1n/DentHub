@@ -12,6 +12,9 @@ namespace DentHub.Web.Services.DataServices
 
 		string GetFileUrl(int fileId);
 
+		Task CreateFileAsync(string name, FileType fileType, string patientId, 
+			string fileUri, string description, string createdById, DateTime dateCreated);
+
 		Task AddAsync(PatientFile file);
 
 		Task SaveChangesAsync();

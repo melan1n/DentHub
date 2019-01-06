@@ -22,6 +22,24 @@ namespace DentHub.Web.Services.DataServices
 			return this._patientFileRepository.AddAsync(file);
 		}
 
+		public async Task CreateFileAsync(string name, FileType fileType, string patientId, 
+			string fileUri, string description, string createdById, DateTime dateCreated)
+		{
+			var patientFile = new PatientFile
+			{
+				CreatedById = createdById,
+				DateCreated = dateCreated,
+				Description = description,
+				FileType = fileType,
+				Name = name,
+				PatientId = patientId,
+				FileUrl = fileUri,
+			};
+
+			await this.AddAsync(patientFile);
+			await this.SaveChangesAsync(); ;
+		}
+
 		public string GetFileUrl(int fileId)
 		{
 			return this._patientFileRepository

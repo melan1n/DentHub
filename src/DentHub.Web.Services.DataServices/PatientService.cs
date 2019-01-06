@@ -29,10 +29,17 @@ namespace DentHub.Web.Services.DataServices
 
 		public DentHubUser GetPatientById(string id)
 		{
-			return  this._userRepository
+			var patient = this._userRepository
 				.All()
 				.Where(p => p.SSN != null)
 				.FirstOrDefault(p => p.Id == id);
+
+			if (patient == null)
+			{
+				throw new ArgumentException("No such patient exists");
+			}
+
+			return patient;
 		}
 
         public IEnumerable<DentHubUser> GetAllDentistPatients(string dentistId)

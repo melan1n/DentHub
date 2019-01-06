@@ -57,6 +57,9 @@
     <Content Update="Views\Patient\PatientDentists.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
+    <Content Update="Views\Shared\ErrorMessage.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Views\Shared\_LoginPartial.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

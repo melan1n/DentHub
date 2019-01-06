@@ -60,19 +60,16 @@ namespace DentHub.Web.Controllers
 			var files = HttpContext.Request.Form.Files.ToList();
 			var cloudinaryUris = await this._cloudinaryService.UploadFilesAsync(files);
 
-			var patientFile = new PatientFile
-			{
-				CreatedById = fileInputModel.CreatedById,
-				DateCreated = fileInputModel.DateCreated,
-				Description = fileInputModel.Description,
-				FileType = (FileType)Enum.Parse(typeof(FileType), fileInputModel.FileType),
-				Name = fileInputModel.Name,
-				PatientId = fileInputModel.PatientId,
-				FileUrl = cloudinaryUris.FirstOrDefault()
-			};
+			var createdById = fileInputModel.CreatedById;
+			var dateCreated = fileInputModel.DateCreated;
+			var description = fileInputModel.Description;
+			var fileType = (FileType)Enum.Parse(typeof(FileType), fileInputModel.FileType);
+			var name = fileInputModel.Name;
+			var patientId = fileInputModel.PatientId;
+			var fileUri = cloudinaryUris.FirstOrDefault();
 
-			await this._patientFileService.AddAsync(patientFile);
-			await this._patientFileService.SaveChangesAsync();
+			await this._patientFileService
+				.CreateFileAsync(name, fileType, patientId, fileUri, description, createdById, dateCreated);
 
 			return RedirectToAction("DentistPatients", "Dentist");
 		}

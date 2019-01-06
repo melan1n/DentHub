@@ -25,7 +25,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DentHub.Common", "DentHub.C
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{4012E921-F3DD-41B2-A457-3B5BECE6F38F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DentHub.Web.Services.DataServices", "DentHub.Web.Services.DataServices\DentHub.Web.Services.DataServices.csproj", "{0F797B3C-9217-4503-8336-3FD5BF63815D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DentHub.Web.Services.DataServices", "DentHub.Web.Services.DataServices\DentHub.Web.Services.DataServices.csproj", "{0F797B3C-9217-4503-8336-3FD5BF63815D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DentHub.Web.Services.DataServices.Tests", "Tests\DentHub.Web.Services.DataServices.Tests\DentHub.Web.Services.DataServices.Tests.csproj", "{B8A01EC3-A02B-4DB0-A7DE-FD3BE1E63321}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -61,6 +63,10 @@ Global
 		{0F797B3C-9217-4503-8336-3FD5BF63815D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0F797B3C-9217-4503-8336-3FD5BF63815D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0F797B3C-9217-4503-8336-3FD5BF63815D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8A01EC3-A02B-4DB0-A7DE-FD3BE1E63321}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8A01EC3-A02B-4DB0-A7DE-FD3BE1E63321}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8A01EC3-A02B-4DB0-A7DE-FD3BE1E63321}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8A01EC3-A02B-4DB0-A7DE-FD3BE1E63321}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -73,6 +79,7 @@ Global
 		{E2B97F5F-D576-40B2-8C0B-A8C780BE13C1} = {D3B9B933-52DB-40FB-BBD6-9703176EAFBE}
 		{2E5955E5-BC6E-4614-AD18-ADD15756E573} = {AFCF2BD4-ED38-4396-9185-1EEFE43832D7}
 		{0F797B3C-9217-4503-8336-3FD5BF63815D} = {4012E921-F3DD-41B2-A457-3B5BECE6F38F}
+		{B8A01EC3-A02B-4DB0-A7DE-FD3BE1E63321} = {E87060A2-F074-41F0-A871-E54802F0880C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {865B6987-B275-46EE-87E8-3A6B6AB6F2DE}
