@@ -48,7 +48,9 @@ namespace DentHub.Web.Controllers
 			{
 				if (this.User.IsInRole("Dentist"))
 				{
-					appointmentsViewModel.Appointments = _appointmentService
+					try
+					{
+						appointmentsViewModel.Appointments = _appointmentService
 						.GetAllDentistAppointments(user.Id)
 						.Where(a => (a.Status.ToString() == "Booked"
 										|| (a.Status.ToString() == "Offering" &&
@@ -58,7 +60,7 @@ namespace DentHub.Web.Controllers
 						{
 							Id = a.Id,
 							ClinicName = this._clinicService
-									.GetClinic(a.ClinicId).Name,
+									.GetClinicById(a.ClinicId).Name,
 							DentistName = this._dentistService.GetDentistFullName(a.DentistID),
 							PatientName = this._patientService.GetPatientFullName(a.PatientId),
 							TimeStart = a.TimeStart,
@@ -67,10 +69,19 @@ namespace DentHub.Web.Controllers
 							IsRatedByDentist = a.IsRatedByDentist,
 							IsRatedByPatient = a.IsRatedByPatient,
 						}).ToArray();
+					}
+					catch (Exception)
+					{
+						ViewBag.ErrorMessage = "Appointments not found.";
+						return View("ErrorMessage");
+					}
+					
 				}
 				else
 				{
-					appointmentsViewModel.Appointments = _appointmentService
+					try
+					{
+						appointmentsViewModel.Appointments = _appointmentService
 							.GetAllPatientAppointments(user.Id)
 							.Where(a => a.Status.ToString() == "Booked")
 							.OrderByDescending(a => a.TimeStart)
@@ -78,7 +89,7 @@ namespace DentHub.Web.Controllers
 							{
 								Id = a.Id,
 								ClinicName = this._clinicService
-									.GetClinic(a.ClinicId).Name,
+									.GetClinicById(a.ClinicId).Name,
 								DentistName = this._dentistService.GetDentistFullName(a.DentistID),
 								PatientName = this._patientService.GetPatientFullName(a.PatientId),
 								TimeStart = a.TimeStart.Date,
@@ -88,6 +99,12 @@ namespace DentHub.Web.Controllers
 								IsRatedByPatient = a.IsRatedByPatient,
 							})
 							.ToArray();
+					}
+					catch (Exception)
+					{
+						ViewBag.ErrorMessage = "Appointments not found.";
+						return View("ErrorMessage");
+					}
 				}
 			}
 

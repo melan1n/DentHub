@@ -136,8 +136,18 @@ namespace DentHub.Web.Areas.Administration.Controllers
 
 		public IActionResult Details(int id)
 		{
-			var clinic = this._clinicService.GetClinic(id);
+			Clinic clinic;
 
+			try
+			{
+				clinic = this._clinicService.GetClinicById(id);
+			}
+			catch (Exception)
+			{
+				ViewBag.ErrorMessage = "Clinic not found.";
+				return View("ErrorMessage");
+			}
+			
 			var clinicViewModel = new ClinicViewModel
 			{
 				Id = clinic.Id,
@@ -191,7 +201,16 @@ namespace DentHub.Web.Areas.Administration.Controllers
 		[Authorize(Roles = "Administrator")]
 		public async Task<IActionResult> Deactivate(int id)
 		{
-			Clinic clinic = this._clinicService.GetClinic(id);
+			Clinic clinic;
+			try
+			{
+				clinic = this._clinicService.GetClinicById(id);
+			}
+			catch (Exception)
+			{
+				ViewBag.ErrorMessage = "Clinic not found.";
+				return View("ErrorMessage");
+			}
 
 			if (clinic != null)
 			{
@@ -221,7 +240,17 @@ namespace DentHub.Web.Areas.Administration.Controllers
 		[Authorize(Roles = "Administrator")]
 		public IActionResult Edit(int id)
 		{
-			Clinic clinic = this._clinicService.GetClinic(id);
+			Clinic clinic;
+			try
+			{
+				clinic = this._clinicService.GetClinicById(id);
+			}
+			catch (Exception)
+			{
+				ViewBag.ErrorMessage = "Clinic not found.";
+				return View("ErrorMessage");
+			}
+			
 
 			var clinicViewModel = new ClinicViewModel
 			{
@@ -243,7 +272,16 @@ namespace DentHub.Web.Areas.Administration.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				var clinic = this._clinicService.GetClinic(id);
+				Clinic clinic;
+				try
+				{
+					clinic = this._clinicService.GetClinicById(id);
+				}
+				catch (Exception)
+				{
+					ViewBag.ErrorMessage = "Clinic not found.";
+					return View("ErrorMessage");
+				}
 
 				clinic.Name = model.Name;
 				clinic.Street = model.Street;
@@ -256,10 +294,6 @@ namespace DentHub.Web.Areas.Administration.Controllers
 
 				await _clinicService.SaveChangesAsync();
 			}
-
-			//var clinicsViewModel = new ClinicsViewModel();
-
-			//GetAllClinics(clinicsViewModel);
 
 			return RedirectToAction("All");
 		}

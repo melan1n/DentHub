@@ -31,11 +31,16 @@ namespace DentHub.Web.Services.DataServices
                 .ToArray();
         }
 
-		public Clinic GetClinic(int id)
+		public Clinic GetClinicById(int id)
 		{
-			return this._clinicRepository
+			var clinic = this._clinicRepository
 									.All()
 									.FirstOrDefault(c => c.Id == id);
+			if (clinic == null)
+			{
+				throw new ArgumentException("No such clinic exists");
+			}
+			return clinic;
 		}
 
 		public Task SaveChangesAsync()

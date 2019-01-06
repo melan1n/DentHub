@@ -9,7 +9,7 @@ namespace DentHub.Web.Services.DataServices
     {
         IEnumerable<Clinic> GetAllActive();
 
-        Clinic GetClinic(int id);
+        Clinic GetClinicById(int id);
 
 		Task AddAsync(Clinic clinic);
 

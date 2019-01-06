@@ -45,7 +45,7 @@ namespace DentHub.Web.Areas.Administration.Controllers
 									FirstName = d.FirstName,
 									LastName = d.LastName,
 									ClinicName = this._clinicService
-											.GetClinic((int)d.ClinicId).Name,
+											.GetClinicById((int)d.ClinicId).Name,
 									Specialty = this._specialtyService
 												.GetSpecialtyNameById((int)d.SpecialtyId),
 									ImageUrl = d.ImageUrl,
@@ -70,7 +70,7 @@ namespace DentHub.Web.Areas.Administration.Controllers
 				Specialty = this._specialtyService
 								.GetSpecialtyNameById((int)dentist.SpecialtyId),
 				ClinicName = this._clinicService
-								.GetClinic((int)dentist.ClinicId)
+								.GetClinicById((int)dentist.ClinicId)
 								.Name,
 				ImageUrl = dentist.ImageUrl
 			};

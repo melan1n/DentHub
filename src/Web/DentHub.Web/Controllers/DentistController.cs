@@ -56,7 +56,7 @@ namespace DentHub.Web.Controllers
 							{
 								Id = a.Id,
 								ClinicName = this._clinicService
-										.GetClinic(a.ClinicId)
+										.GetClinicById(a.ClinicId)
 										.Name,
 								DentistName = $"{this._dentistService.GetDentistById(a.DentistID).FirstName} " +
 											$"{this._dentistService.GetDentistById(a.DentistID).LastName}",
