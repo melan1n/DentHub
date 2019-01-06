@@ -14,6 +14,14 @@ namespace DentHub.Web.Services.DataServices
 
 		IEnumerable<Appointment> GetAllPatientAppointments(string patientId);
 
+		bool DuplicateOfferingExists(DentHubUser user, DateTime timeStart, DateTime timeEnd);
+
+		Task CreateAppointment(DentHubUser user, DateTime timeStart, DateTime timeEnd);
+
+		Task BookAppointment(int id, DentHubUser user);
+
+		void CancelAppointment(int id);
+
 		Task AddAsync(Appointment appointment);
 
 		void Update(Appointment appointment);

@@ -6,57 +6,63 @@
 @inject SignInManager<DentHubUser> SignInManager
 @inject UserManager<DentHubUser> UserManager
 
-@if (Model.Status == "Offering")
+<td>
+    @Html.ActionLink("Details", "Details", new { id = Model.Id })
+</td>
+
+@if (this.SignInManager.IsSignedIn(this.User) && this.User.IsInRole("Dentist"))
 {
-    if (this.SignInManager.IsSignedIn(this.User) && this.User.IsInRole("Patient"))
-    {
-        <td>
-            @Html.ActionLink("Book", "Book", new { id = Model.Id })
-        </td>
-    }
-    if (this.SignInManager.IsSignedIn(this.User) && this.User.IsInRole("Dentist"))
+    if (DateTime.Now < Model.TimeStart)
     {
         <td class="delete-section">
             <a class="delete-link" href="@Url.Action("Cancel", new { id = Model.Id })">Cancel</a>
             <div class="btn btn-primary delete-confirm" style="display:none" data-delete-id="Model.Id">Confirm Cancellation</div>
         </td>
     }
-}
-
-@if (this.SignInManager.IsSignedIn(this.User) && this.User.IsInRole("Dentist"))
-{
-    <td>
-        @Html.ActionLink("Details", "Details", new { id = Model.Id })
-    </td>
-    if (Model.Status == "Booked")
+    if (Model.Status == "Booked" && !Model.IsRatedByDentist  && DateTime.Now > Model.TimeEnd)
     {
-        @*<td>
-                @Html.ActionLink("Confirm", "Confirm", new { id = Model.Id })
-            </td>*@
-        <td class="delete-section">
-            <a class="delete-link" href="@Url.Action("Cancel", new { id = Model.Id })">Cancel</a>
-            @*<div class="btn btn-primary delete-confirm" style="display:none" data-delete-id="Model.Id">Confirm Cancellation</div>*@
+        <td>
+            <a asp-controller="Rating" asp-action="RateAppointment" asp-route-id="@Model.Id">Rate</a>
         </td>
     }
 }
 
-@if (Model.Status == "Booked" && this.SignInManager.IsSignedIn(this.User))
+@if (this.SignInManager.IsSignedIn(this.User) && this.User.IsInRole("Patient"))
+{
+    if (Model.Status == "Offering" && DateTime.Now < Model.TimeStart)
+    {
+        <td>
+            @Html.ActionLink("Book", "Book", new { id = Model.Id })
+        </td>
+    }
+    if (Model.Status == "Booked" && !Model.IsRatedByPatient && DateTime.Now > Model.TimeEnd)
+    {
+        <td>
+            @*@Html.ActionLink("Rate", "RateAppointment", new { id = Model.Id })*@
+            <a asp-controller="Rating" asp-action="RateAppointment" asp-route-id="@Model.Id">Rate</a>
+        </td>
+    }
+}
+
+
+
+@*@if (Model.Status == "Booked" && this.SignInManager.IsSignedIn(this.User))
 {
     if (DateTime.Now > Model.TimeEnd)
     {
-        @*<td>
+        <td>
                 @Html.ActionLink("Complete", "Complete", new { id = Model.Id })
-            </td>*@
+            </td>
         if ((!Model.IsRatedByPatient && this.User.IsInRole("Patient"))
             || ((!Model.IsRatedByDentist) && this.User.IsInRole("Dentist")))
         {
             <td>
-                @*@Html.ActionLink("Rate", "RateAppointment", new { id = Model.Id })*@
+                @Html.ActionLink("Rate", "RateAppointment", new { id = Model.Id })
                 <a asp-controller="Rating" asp-action="RateAppointment" asp-route-id="@Model.Id">Rate</a>
             </td>
         }
     }
-}
+}*@
 
 @*@if (Model.Status.ToString() == "Completed" && this.SignInManager.IsSignedIn(this.User))
     {

@@ -59,5 +59,60 @@ namespace DentHub.Web.Services.DataServices
 		{
 			this._appointmentRepository.Delete(appointment);
 		}
+
+		public async Task BookAppointment(int id, DentHubUser user)
+		{
+			var appointment = GetAppointmentById(id);
+
+			if (appointment != null)
+			{
+				appointment.Patient = user;
+				appointment.Status = Status.Booked;
+			}
+
+			this.Update(appointment);
+			await this.SaveChangesAsync();
+		}
+
+		public async void CancelAppointment(int id)
+		{
+			var appointment = this.GetAppointmentById(id);
+
+			this.Delete(appointment);
+			await this.SaveChangesAsync();
+		}
+
+		public bool DuplicateOfferingExists(DentHubUser user, DateTime timeStart, DateTime timeEnd)
+		{
+			var offerings = GetAllDentistAppointments(user.Id)
+							.Where(a => a.Status.ToString() == "Offering");
+
+			foreach (var offering in offerings)
+			{
+				if ((timeStart > offering.TimeStart && timeStart < offering.TimeEnd)
+					|| (timeEnd > offering.TimeStart && timeEnd < offering.TimeEnd))
+				{
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		public async Task CreateAppointment(DentHubUser user, DateTime timeStart, DateTime timeEnd)
+		{
+			var appointment = new Appointment
+			{
+				ClinicId = (int)user.ClinicId,
+				Dentist = user,
+				DentistID = user.Id,
+				Status = Status.Offering,
+				TimeStart = timeStart,
+				TimeEnd = timeEnd,
+			};
+
+			await this.AddAsync(appointment);
+			await this.SaveChangesAsync();
+		}
 	}
 }

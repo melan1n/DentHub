@@ -40,61 +40,58 @@ namespace DentHub.Web.Controllers
         [Authorize(Roles = "Dentist,Patient")]
         public IActionResult Index()
         {
-            var appointmentsViewModel = new AppointmentsViewModel();
-            GetMyAppointments(appointmentsViewModel);
+			var user = _userManager.GetUserAsync(User).GetAwaiter().GetResult();
+
+			var appointmentsViewModel = new AppointmentsViewModel();
+
+			if (user != null)
+			{
+				if (this.User.IsInRole("Dentist"))
+				{
+					appointmentsViewModel.Appointments = _appointmentService
+						.GetAllDentistAppointments(user.Id)
+						.Where(a => (a.Status.ToString() == "Booked"
+										|| (a.Status.ToString() == "Offering" &&
+											DateTime.Now < a.TimeStart)))
+						.OrderByDescending(a => a.TimeStart)
+						.Select(a => new AppointmentViewModel
+						{
+							Id = a.Id,
+							ClinicName = this._clinicService
+									.GetClinic(a.ClinicId).Name,
+							DentistName = this._dentistService.GetDentistFullName(a.DentistID),
+							PatientName = this._patientService.GetPatientFullName(a.PatientId),
+							TimeStart = a.TimeStart,
+							TimeEnd = a.TimeEnd,
+							Status = a.Status.ToString(),
+							IsRatedByDentist = a.IsRatedByDentist,
+							IsRatedByPatient = a.IsRatedByPatient,
+						}).ToArray();
+				}
+				else
+				{
+					appointmentsViewModel.Appointments = _appointmentService
+							.GetAllPatientAppointments(user.Id)
+							.Where(a => a.Status.ToString() == "Booked")
+							.OrderByDescending(a => a.TimeStart)
+							.Select(a => new AppointmentViewModel
+							{
+								Id = a.Id,
+								ClinicName = this._clinicService
+									.GetClinic(a.ClinicId).Name,
+								DentistName = this._dentistService.GetDentistFullName(a.DentistID),
+								PatientName = this._patientService.GetPatientFullName(a.PatientId),
+								TimeStart = a.TimeStart.Date,
+								TimeEnd = a.TimeEnd,
+								Status = a.Status.ToString(),
+								IsRatedByDentist = a.IsRatedByDentist,
+								IsRatedByPatient = a.IsRatedByPatient,
+							})
+							.ToArray();
+				}
+			}
 
             return View(appointmentsViewModel);
-        }
-
-        private void GetMyAppointments(AppointmentsViewModel appointmentsViewModel)
-        {
-            var user = _userManager.GetUserAsync(User).GetAwaiter().GetResult();
-
-            if (user != null)
-            {
-                if (this.User.IsInRole("Dentist"))
-                {
-                    appointmentsViewModel.Appointments = _appointmentService
-                        .GetAllDentistAppointments(user.Id)
-                        //.Where(a => a.Status.ToString() != "Offering")
-                        .OrderByDescending(a => a.TimeStart)
-                        .Select(a => new AppointmentViewModel
-                        {
-                            Id = a.Id,
-                            ClinicName = this._clinicService
-                                    .GetClinic(a.ClinicId).Name,
-                            DentistName = this._dentistService.GetDentistFullName(a.DentistID),
-                            PatientName = this._patientService.GetPatientFullName(a.PatientId),
-                            TimeStart = a.TimeStart.Date,
-                            TimeEnd = a.TimeEnd,
-                            Status = a.Status.ToString(),
-                            IsRatedByDentist = a.IsRatedByDentist,
-                            IsRatedByPatient = a.IsRatedByPatient,
-                        }).ToArray();
-                }
-                else
-                {
-                    appointmentsViewModel.Appointments = _appointmentService
-                            .GetAllPatientAppointments(user.Id)
-                            .Where(a => a.Status.ToString() != "Offering")
-                            .OrderByDescending(a => a.TimeStart)
-                            .Select(a => new AppointmentViewModel
-                            {
-                                Id = a.Id,
-                                ClinicName = this._clinicService
-                                    .GetClinic(a.ClinicId).Name,
-                                DentistName = this._dentistService.GetDentistFullName(a.DentistID),
-                                PatientName = this._patientService.GetPatientFullName(a.PatientId),
-                                TimeStart = a.TimeStart.Date,
-                                TimeEnd = a.TimeEnd,
-                                Status = a.Status.ToString(),
-                                IsRatedByDentist = a.IsRatedByDentist,
-                                IsRatedByPatient = a.IsRatedByPatient,
-                            })
-                            .ToArray();
-                }
-            }
-
         }
 
         [Authorize(Roles = "Dentist")]
@@ -109,44 +106,41 @@ namespace DentHub.Web.Controllers
         {
             var user = await _userManager.GetUserAsync(User);
 
-            //// Uncomment throwing exception for server-side validation only
-            //if (appointmentInputModel.Duration < 15 || appointmentInputModel.Duration > 8*60)
-            //{
-
-            //	ViewBag["Error"] = "Appointments should last between 15 minutes and 8 hours.";
-            //	return RedirectToAction("CreateOffering");
-
-            //	//throw new InvalidOperationException("Appointments should last between 15 minutes and 8 hours.");
-            //}
-
             if (!ModelState.IsValid)
             {
                 //ViewData["ErrorMessage"] = "Appointments should last between 15 minutes and 8 hours.";
-                ViewBag.ErrorMessage = "Appointments should last between 15 minutes and 8 hours. Please input a valid start and end.";
+                ViewBag.ErrorMessage = "Appointment start should be after at least one hour but not later than in 1 year. Appointment duration should be between 15 minutes and 8 hours. Please input a valid start and end.";
                 //ModelState.AddModelError("", "Appointments should last between 15 minutes and 8 hours.");
                 return View("CreateOffering");
             }
 
-            var appointment = new Appointment
-            {
-                ClinicId = (int)user.ClinicId,
-                Dentist = user,
-                Status = Status.Offering,
-                TimeStart = appointmentInputModel.TimeStart,
-                TimeEnd = appointmentInputModel.TimeEnd,
-            };
+			var duration = (appointmentInputModel.TimeEnd).Subtract(appointmentInputModel.TimeStart).TotalMinutes;
 
-            var duration = (appointment.TimeEnd - appointment.TimeStart).Minutes;
+			if (duration < 15 || duration > 8 * 60)
+			{
+				ViewBag.ErrorMessage = "Appointments should last between 15 minutes and 8 hours. Please input a valid start and end.";
+				//ModelState.AddModelError("", "Appointments should last between 15 minutes and 8 hours.");
+				return View("CreateOffering");
+			}
 
-            if (duration < 15 || duration > 8*60)
-            {
-                ViewBag.ErrorMessage = "Appointments should last between 15 minutes and 8 hours. Please input a valid start and end.";
-                //ModelState.AddModelError("", "Appointments should last between 15 minutes and 8 hours.");
-                return View("CreateOffering");
-            }
+			var minutesFromNow = (int)(appointmentInputModel.TimeEnd).Subtract(DateTime.Now).TotalMinutes;
 
-			await _appointmentService.AddAsync(appointment);
-			await _appointmentService.SaveChangesAsync();
+			if (minutesFromNow < 60 || minutesFromNow > 365*24*80)
+			{
+				ViewBag.ErrorMessage = "Appointment start should be after at least one hour but not later than in 1 year. Please input a valid start and end.";
+				//ModelState.AddModelError("", "Appointments should last between 15 minutes and 8 hours.");
+				return View("CreateOffering");
+			}
+
+			if (this._appointmentService.DuplicateOfferingExists(user, appointmentInputModel.TimeStart, appointmentInputModel.TimeEnd))
+			{
+				ViewBag.ErrorMessage = "Your new offering's time overlaps with an existing offering. Please input a valid start and end or cancel your other offering before you proceed to create the new one.";
+				//ModelState.AddModelError("", "Appointments should last between 15 minutes and 8 hours.");
+				return View("CreateOffering");
+			}
+
+			await this._appointmentService
+				.CreateAppointment(user, appointmentInputModel.TimeStart, appointmentInputModel.TimeEnd);
 
 			return RedirectToAction("Index");
 		}
@@ -156,17 +150,8 @@ namespace DentHub.Web.Controllers
 		{
 			var user = await _userManager.GetUserAsync(User);
 
-			var appointment = this._appointmentService
-					.GetAppointmentById(id);
-
-			if (appointment != null)
-			{
-				appointment.Patient = user;
-				appointment.Status = Status.Booked;
-			}
-
-			this._appointmentService.Update(appointment);
-			await this._appointmentService.SaveChangesAsync();
+			await this._appointmentService
+				.BookAppointment(id, user);
 
 			return RedirectToAction("Index");
 		}
@@ -214,14 +199,12 @@ namespace DentHub.Web.Controllers
 		[Authorize(Roles = "Dentist")]
 		public IActionResult Cancel(int id)
 		{
-			var appointment = this._appointmentService
-					.GetAppointmentById(id);
-
-			this._appointmentService.Delete(appointment);
-			this._appointmentService.SaveChangesAsync();
+			this._appointmentService
+				.CancelAppointment(id);
 
 			return RedirectToAction("Index");
 		}
+
 		// //Uncomment if you revive status "Completed"
 		//[Authorize(Roles = "Dentist,Patient")]
 		//public async Task<IActionResult> Complete(int id)
