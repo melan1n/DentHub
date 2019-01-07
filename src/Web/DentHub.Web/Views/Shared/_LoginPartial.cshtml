@@ -26,11 +26,20 @@ else
                 Register
                 <span class="caret"></span>
             </a>
-            <ul class="dropdown-menu dropdown-menu-right">
+            <ul class="dropdown-menu">
                 <li><a asp-area="Identity" asp-page="/Account/Register">As a dentist</a></li>
                 <li><a asp-area="Identity" asp-page="/Account/RegisterPatient">As a patient</a></li>
             </ul>
         </li>
+
+        @*<li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Register <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+                <li><a asp-area="Identity" asp-page="/Account/Register">As a dentist</a></li>
+                <li><a asp-area="Identity" asp-page="/Account/RegisterPatient">As a patient</a></li>
+            </ul>
+        </li>*@
+
         <li><a asp-area="Identity" asp-page="/Account/Login">Login</a></li>
     </ul>
 }

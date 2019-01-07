@@ -24,7 +24,8 @@ namespace DentHub.Web.Services.DataServices
 		{
 			return this._userRepository
 						.All()
-						.Where(u => u.Specialty != null && u.IsActive);
+						.Where(u => u.Specialty != null && u.IsActive)
+						.ToArray();
 		}
 
 		public IEnumerable<DentHubUser> GetAllActiveClinicDentists(int clinicId)
@@ -37,10 +38,17 @@ namespace DentHub.Web.Services.DataServices
 
 		public DentHubUser GetDentistById(string id)
 		{
-			return this._userRepository
+			var dentist = this._userRepository
 				.All()
 				.Where(d => d.Specialty != null)
 				.FirstOrDefault(d => d.Id == id);
+
+			if (dentist == null)
+			{
+				throw new ArgumentException("No such dentist exists.");
+			}
+
+			return dentist;
 		}
 
 		public Task SaveChangesAsync()
@@ -67,7 +75,6 @@ namespace DentHub.Web.Services.DataServices
 				.ToArray();
 
 			return dentists;
-
 		}
 
 		public string GetDentistFullName(string dentistId)
@@ -81,11 +88,17 @@ namespace DentHub.Web.Services.DataServices
 
         public DentHubUser GetAppointmentDentist(int appointmentId)
         {
-            return this._userRepository
+			var dentist = this._userRepository
 						.All()
 						.FirstOrDefault(d => d.Id == this._appointmentService
 												.GetAppointmentById(appointmentId)
 												.DentistID);
-        }
+			if (dentist == null)
+			{
+				throw new NullReferenceException("Dentist not found");
+			}
+
+			return dentist;
+		}
     }
 }
