@@ -506,7 +506,7 @@ namespace DentHub.Web.Services.DataServices.Tests
 		}
 
 		[Fact]
-		public void GetAppointmentDentist_WithValidAppointmentIdAndDentists_ShouldReturnDentist()
+		public void GetAppointmentDentist_WithValidAppointmentIdAndDentist_ShouldReturnDentist()
 		{
 			var options = new DbContextOptionsBuilder<DentHubContext>()
 			   .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString()) // Give a Unique name to the DB

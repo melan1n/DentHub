@@ -42,10 +42,16 @@ namespace DentHub.Web.Services.DataServices
 
 		public string GetFileUrl(int fileId)
 		{
-			return this._patientFileRepository
-				.All()
-				.FirstOrDefault(f => f.Id == fileId)
-				.FileUrl;
+            var file = this._patientFileRepository
+                 .All()
+                 .FirstOrDefault(f => f.Id == fileId);
+
+            if (file == null)
+            {
+                throw new ArgumentException("File not found");
+            }
+
+            return file.FileUrl;
 		}
 
 		public IEnumerable<PatientFile> GetPatientFiles(string patientId)
