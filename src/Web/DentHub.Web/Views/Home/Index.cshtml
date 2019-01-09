@@ -53,24 +53,48 @@
     </a>
 </div>*@
 
-<div class="row">
+@*<div class="row">
     <div class="col-md-3">
         <h2>Dental Specialties</h2>
         <ul>
             <li>List spcialties here</li>
             <li><a href="https://www.colgate.com/en-us/oral-health/basics/dental-visits/dentist-specialist-which-professional-treats-what-0116">Which Professional Treats What?</a></li>
         </ul>
-    </div>
-    <div class="col-md-3">
-        <h2>How to</h2>
-        <ul>
-            <li><a asp-area="" asp-controller="Home" asp-action="Guidelines">Use this website</a></li>
+    </div>*@
+<div class="col-md-12">
+    @*<h2>How to</h2>*@
+    @*<ul>
+            <li><a asp-area="" asp-controller="Home" asp-action="Guidelines">How to use this website</a></li>
         </ul>
         <ul>
-            <li><a asp-area="" asp-controller="Home" asp-action="ScheduleAppointment">Schedule an appointment</a></li>
+            <li><a asp-area="" asp-controller="Home" asp-action="ScheduleAppointment">How to schedule an appointment</a></li>
         </ul>
+        <ul>
+        <button type="button" class="btn btn-dark">Use this website</button>
+        </ul>
+        <ul>
+            <button type="button" class="btn btn-dark">Schedule an appointment</button>
+        </ul>*@
+    <div class="jumbotron text-center">
+        <div>
+        <h1>Welcome to DentHub!</h1>
     </div>
-    <div class="col-md-3">
+        <div>
+            <h2>Home of online dentist booking</h2>
+        </div>
+        <div>
+            <ul>
+            <a class="btn btn-primary btn-lg btn-block" href="Home/Guidelines" bg-color="dark" role="button">How to use this website</a>
+        </ul>
+        <ul>
+            <a class="btn btn-primary btn-lg btn-block" href="Home/ScheduleAppointment" role="button">How to schedule an appointment</a>
+        </ul>
+        </div>
+    </div>
+    
+</div>
+
+    @*<div class="col-md-3">
         <h2>Clinics</h2>
         <ul>
             <li><a href="https://go.microsoft.com/fwlink/?LinkId=518008">List clinics here</a></li>
@@ -81,5 +105,5 @@
         <ul>
             <li><a href="https://go.microsoft.com/fwlink/?LinkID=517851">List Dentists here</a></li>
         </ul>
-    </div>
-</div>
+    </div>*@
+

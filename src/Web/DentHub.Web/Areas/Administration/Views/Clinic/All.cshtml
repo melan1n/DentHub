@@ -3,8 +3,39 @@
 @{
     ViewData["Title"] = "All";
 }
+<br>
+<div class="panel panel-default">
+    <!-- Default panel contents -->
+    <div class="panel-heading">All Clinics</div>
 
-<h2>All Clinics</h2>
+    <!-- Table -->
+    <table class="table">
+        <tr>
+            <th>Name</th>
+            <th>Address</th>
+            <th>Working Hours</th>
+        </tr>
+        @foreach (var clinic in Model.Clinics)
+        {
+            <tr class=" text-danger">
+                <td>
+                    @clinic.Name 
+                </td>
+                <td>
+                    @clinic.Street @clinic.City @clinic.PostalCode
+                </td>
+                <td>
+                    @clinic.WorkingHours
+                </td>
+                <td>
+                    @Html.ActionLink("Details", "Details", new { id = clinic.Id })
+                </td>
+                @await Html.PartialAsync("_ClinicActionsPartial.cshtml", clinic)
+            </tr>
+        }
+    </table>
+</div>
+@*<h2>All Clinics</h2>
 <hr />
 <dl class="dl-horizontal"></dl>
 <table class="table">
@@ -20,20 +51,8 @@
         @await  Html.PartialAsync("_ClinicActionsPartial.cshtml", clinic)
     </tr>
 
-        @*@foreach (var dentist in clinic.Dentists)
-            {
-                <tr>
-                    @dentist.FirstName @dentist.LastName -- @dentist.Specialty
-                    @Html.ActionLink("Edit", "Edit", new { id = dentist.Id }) |
-                    @Html.ActionLink("Details", "Details", new { id = dentist.Id }) |
-                    <td class="delete-section">
-                        <a class="delete-link" href="@Url.Action("Delete", new {id = dentist.Id})">Delete</a>
-                        <div class="btn btn-primary delete-confirm" style="display:none" data-delete-id="@clinic.Id">Confirm Delete</div>
-                    </td>
-                </tr>
-            }*@
     }
-</table>
+</table>*@
 @await Html.PartialAsync("_ClinicsPartial.cshtml")
 
 

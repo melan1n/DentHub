@@ -104,9 +104,17 @@ namespace DentHub.Web.Services.DataServices
 
         public Rating GetRatingForAppointment(int appointmentId)
         {
-            return this._ratingRepository
+            var rating = this._ratingRepository
                 .All()
                 .FirstOrDefault(r => r.Appointment.Id == appointmentId);
-        }
+			if (rating == null)
+			{
+				throw new ArgumentException("No such appointment found"); 
+			}
+
+			return rating;
+
+
+		}
     }
 }

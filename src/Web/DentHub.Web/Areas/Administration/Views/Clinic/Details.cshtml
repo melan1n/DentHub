@@ -5,22 +5,23 @@
 @{
     ViewData["Title"] = "Details";
 }
-
+<br>
+<h1>@Model.Name</h1>
+<hr>
 <div>
-    <hr />
     <dl class="dl-horizontal">
-        <dt>
+        @*<dt>
             @Html.DisplayNameFor(model => model.Id)
         </dt>
         <dd>
             @Html.DisplayFor(model => model.Id)
-        </dd>
-        <dt>
+        </dd>*@
+        @*<dt>
             @Html.DisplayNameFor(model => model.Name)
         </dt>
         <dd>
             @Html.DisplayFor(model => model.Name)
-        </dd>
+        </dd>*@
         <dt>
             @Html.DisplayNameFor(model => model.Street)
         </dt>
@@ -51,15 +52,15 @@
         <dd>
             @Html.DisplayFor(model => model.WorkingHours)
         </dd>
-        <dt>
+        @*<dt>
             @Html.DisplayNameFor(model => model.Addresss)
         </dt>
         <dd>
             @Html.DisplayFor(model => model.Addresss)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Dentists)
-        </dt>
+            @Html.DisplayNameFor(model => model.Dentists):
+        </dt>*@
 
     </dl>
 </div>
@@ -76,7 +77,20 @@
     <tbody>
         @foreach (var dentist in Model.Dentists)
         {
-            <tr>
+            <div class="media">
+                <div class="media-left">
+                    <a href="#">
+                        <img class="media-object" src="@dentist.ImageUrl">
+                    </a>
+                </div>
+                <div class="media-body">
+                    <h4 class="media-heading">@dentist.FirstName @dentist.LastName</h4>
+                    @dentist.Specialty
+                    <br>
+                    @await Html.PartialAsync("_DentistOfferings", new DentistViewModel { Id = dentist.Id })
+                </div>
+               </div>
+            @*<tr>
                 <td>
                     @dentist.FirstName @dentist.LastName -- @dentist.Specialty
                 </td>
@@ -86,15 +100,7 @@
                 <td>
                     @await Html.PartialAsync("_DentistOfferings", new DentistViewModel { Id = dentist.Id })
                 </td>
-            </tr>
-            @*@await Html.PartialAsync("_DentistOfferings", new { Id = dentist.Id })*@
-            @*@Html.ActionLink("Edit", "Edit", new { id = dentist.Id }) |
-            @Html.ActionLink("Details", "Details", new { id = dentist.Id }) |
-            <td class="delete-section">
-                <a class="delete-link" href="@Url.Action("Delete", new {id = dentist.Id})">Delete</a>
-                <div class="btn btn-primary delete-confirm" style="display:none" data-delete-id="@clinic.Id">Confirm Delete</div>
-            </td>*@
-
+            </tr>*@
         }
     </tbody>
 </table>
