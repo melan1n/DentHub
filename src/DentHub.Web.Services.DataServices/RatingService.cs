@@ -11,7 +11,7 @@ namespace DentHub.Web.Services.DataServices
 	public class RatingService : IRatingService
 	{
 		private readonly IRepository<Rating> _ratingRepository;
-
+	
 		public RatingService(IRepository<Rating> ratingRepository)
 		{
 			this._ratingRepository = ratingRepository;
@@ -104,17 +104,15 @@ namespace DentHub.Web.Services.DataServices
 
         public Rating GetRatingForAppointment(int appointmentId)
         {
-            var rating = this._ratingRepository
+            var ratingRecord = this._ratingRepository
                 .All()
                 .FirstOrDefault(r => r.Appointment.Id == appointmentId);
-			if (rating == null)
-			{
-				throw new ArgumentException("No such appointment found"); 
-			}
 
-			return rating;
-
-
+            if (ratingRecord == null)
+            {
+                throw new InvalidOperationException("No rating found");
+            }
+            return ratingRecord;
 		}
     }
 }

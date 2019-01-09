@@ -40,7 +40,8 @@ namespace DentHub.Web.Services.DataServices.Tests
 			await dbContext.SaveChangesAsync();
 
 			var repository = new DbRepository<Appointment>(dbContext);
-			var service = new AppointmentService(repository);
+            var ratingRepository = new DbRepository<Rating>(dbContext); 
+            var service = new AppointmentService(repository, ratingRepository);
 			var result = service.GetAppointmentById(5);
 			Assert.Same(appointment, result);
 		}
@@ -73,8 +74,9 @@ namespace DentHub.Web.Services.DataServices.Tests
 			await dbContext.SaveChangesAsync();
 
 			var repository = new DbRepository<Appointment>(dbContext);
-			var service = new AppointmentService(repository);
-			Assert.Throws<ArgumentException>(() => service.GetAppointmentById(9));
+            var ratingRepository = new DbRepository<Rating>(dbContext);
+            var service = new AppointmentService(repository, ratingRepository);
+            Assert.Throws<ArgumentException>(() => service.GetAppointmentById(9));
 		}
 
 		[Fact]
@@ -86,8 +88,9 @@ namespace DentHub.Web.Services.DataServices.Tests
 			var dbContext = new DentHubContext(options);
 
 			var repository = new DbRepository<Appointment>(dbContext);
-			var service = new AppointmentService(repository);
-			Assert.Throws<ArgumentException>(() => service.GetAppointmentById(7));
+            var ratingRepository = new DbRepository<Rating>(dbContext);
+            var service = new AppointmentService(repository, ratingRepository);
+            Assert.Throws<ArgumentException>(() => service.GetAppointmentById(7));
 		}
 
 		[Fact]
@@ -127,8 +130,9 @@ namespace DentHub.Web.Services.DataServices.Tests
 			await dbContext.SaveChangesAsync();
 
 			var repository = new DbRepository<Appointment>(dbContext);
-			var service = new AppointmentService(repository);
-			var result = service.GetAllDentistAppointments("1");
+            var ratingRepository = new DbRepository<Rating>(dbContext);
+            var service = new AppointmentService(repository, ratingRepository);
+            var result = service.GetAllDentistAppointments("1");
 			Assert.Equal(new Appointment[] { appointment, appointment2 }, result);
 		}
 
@@ -161,8 +165,9 @@ namespace DentHub.Web.Services.DataServices.Tests
 			await dbContext.SaveChangesAsync();
 
 			var repository = new DbRepository<Appointment>(dbContext);
-			var service = new AppointmentService(repository);
-			Assert.Empty(service.GetAllDentistAppointments("2"));
+            var ratingRepository = new DbRepository<Rating>(dbContext);
+            var service = new AppointmentService(repository, ratingRepository);
+            Assert.Empty(service.GetAllDentistAppointments("2"));
 		}
 
 		[Fact]
@@ -202,8 +207,9 @@ namespace DentHub.Web.Services.DataServices.Tests
 			await dbContext.SaveChangesAsync();
 
 			var repository = new DbRepository<Appointment>(dbContext);
-			var service = new AppointmentService(repository);
-			var result = service.GetAllPatientAppointments("1");
+            var ratingRepository = new DbRepository<Rating>(dbContext);
+            var service = new AppointmentService(repository, ratingRepository);
+            var result = service.GetAllPatientAppointments("1");
 			Assert.Equal(new Appointment[] { appointment, appointment2 }, result);
 		}
 
@@ -236,8 +242,9 @@ namespace DentHub.Web.Services.DataServices.Tests
 			await dbContext.SaveChangesAsync();
 
 			var repository = new DbRepository<Appointment>(dbContext);
-			var service = new AppointmentService(repository);
-			Assert.Empty(service.GetAllPatientAppointments("3"));
+            var ratingRepository = new DbRepository<Rating>(dbContext);
+            var service = new AppointmentService(repository, ratingRepository);
+            Assert.Empty(service.GetAllPatientAppointments("3"));
 		}
 
 		[Fact]
@@ -249,9 +256,10 @@ namespace DentHub.Web.Services.DataServices.Tests
 			var dbContext = new DentHubContext(options);
 
 			var repository = new DbRepository<Appointment>(dbContext);
-			var service = new AppointmentService(repository);
+            var ratingRepository = new DbRepository<Rating>(dbContext);
+            var service = new AppointmentService(repository, ratingRepository);
 
-			var user = new DentHubUser()
+            var user = new DentHubUser()
 			{
 				Id = "1",
 				ClinicId = 1,
@@ -276,9 +284,10 @@ namespace DentHub.Web.Services.DataServices.Tests
 			var dbContext = new DentHubContext(options);
 
 			var repository = new DbRepository<Appointment>(dbContext);
-			var service = new AppointmentService(repository);
+            var ratingRepository = new DbRepository<Rating>(dbContext);
+            var service = new AppointmentService(repository, ratingRepository);
 
-			var user = new DentHubUser()
+            var user = new DentHubUser()
 			{
 				Id = "1",
 				SSN = "123456",
@@ -323,9 +332,10 @@ namespace DentHub.Web.Services.DataServices.Tests
 			var dbContext = new DentHubContext(options);
 
 			var repository = new DbRepository<Appointment>(dbContext);
-			var service = new AppointmentService(repository);
+            var ratingRepository = new DbRepository<Rating>(dbContext);
+            var service = new AppointmentService(repository, ratingRepository);
 
-			var user = new DentHubUser()
+            var user = new DentHubUser()
 			{
 				Id = "1",
 				FirstName = "Test",
@@ -363,9 +373,10 @@ namespace DentHub.Web.Services.DataServices.Tests
 			var dbContext = new DentHubContext(options);
 
 			var repository = new DbRepository<Appointment>(dbContext);
-			var service = new AppointmentService(repository);
+            var ratingRepository = new DbRepository<Rating>(dbContext);
+            var service = new AppointmentService(repository, ratingRepository);
 
-			var user = new DentHubUser()
+            var user = new DentHubUser()
 			{
 				Id = "2",
 				FirstName = "Test2",
@@ -403,9 +414,10 @@ namespace DentHub.Web.Services.DataServices.Tests
 			var dbContext = new DentHubContext(options);
 
 			var repository = new DbRepository<Appointment>(dbContext);
-			var service = new AppointmentService(repository);
+            var ratingRepository = new DbRepository<Rating>(dbContext);
+            var service = new AppointmentService(repository, ratingRepository);
 
-			var appointment = new Appointment
+            var appointment = new Appointment
 			{
 				Id = 41,
 				ClinicId = 1,

@@ -3,30 +3,49 @@
 @{
     ViewData["Title"] = "View";
 }
-
-<h2>All Patients</h2>
+<br>
+<h1>All Patients</h1>
+@*<hr>*@
 
 <table class="table">
-    <thead>
+    <tr>
+        <th>Patient Name</th>
+        <th>Average Rating</th>
+        <th>Actions</th>
+    </tr>
+    @*<thead>
         <tr>
             <th>
-                @*@Html.DisplayNameFor(model => model.Id)*@
+ 
+                Patient Name
             </th>
-            <th></th>
+            <th>
+                Username
+            </th>
+            <th>
+                Average Rating
+            </th>
         </tr>
-    </thead>
+    </thead>*@
     <tbody>
-@foreach (var patient in Model.Patients) {
+        @foreach (var patient in Model.Patients)
+        {
         <tr>
             <td>
-                @patient.FirstName @patient.LastName - @patient.UserName - @patient.AverageRating
+                @patient.FirstName @patient.LastName
+            </td>
+            @*<td>
+                @patient.UserName
+            </td>*@
+            <td>
+                @patient.AverageRating
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new {  id= patient.Id }) |
-                @Html.ActionLink("Details", "Details", new { id=patient.Id }) |
-                @Html.ActionLink("Deactivate", "Deactivate", new { id= patient.Id })
+                @*@Html.ActionLink("Edit", "Edit", new { id = patient.Id }) |*@
+                @Html.ActionLink("Details", "Details", new { id = patient.Id }) |
+                @Html.ActionLink("Deactivate", "Deactivate", new { id = patient.Id })
             </td>
         </tr>
-}
+        }
     </tbody>
 </table>

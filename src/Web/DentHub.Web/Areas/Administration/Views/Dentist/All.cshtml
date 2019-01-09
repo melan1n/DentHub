@@ -3,33 +3,51 @@
 @{
     ViewData["Title"] = "View";
 }
-
-<h2>All Dentists</h2>
+<br>
+    <h1>All Dentists</h1>
+    <hr>
+@*<h2>All Dentists</h2>*@
 
 <table class="table">
-    <thead>
+    @*<thead>
         <tr>
             <th>
-                @*@Html.DisplayNameFor(model => model.Id)*@
+                @Html.DisplayNameFor(model => model.Id)
             </th>
             <th></th>
         </tr>
-    </thead>
+    </thead>*@
     <tbody>
         @foreach (var dentist in Model.Dentists)
         {
-<tr>
-    <td>
-        @dentist.FirstName @dentist.LastName - @dentist.Specialty - @dentist.ClinicName - @dentist.AverageRating
-    </td>
-    <td>
-        <img src="@dentist.ImageUrl" />
-    </td>
-    <td>
-        @Html.ActionLink("Details", "Details", new { id = dentist.Id })
-        @Html.Partial("_DentistActionsPartial", dentist)
-    </td>
-</tr>
-}
+            <div class="media">
+                <div class="media-left">
+                    <a href="#">
+                        <img style=" width: 220px; height: 130px" class="media-object img-size" src="@dentist.ImageUrl">
+                    </a>
+                </div>
+                <div class="media-body">
+                    <h4 class="media-heading">@dentist.FirstName @dentist.LastName (@dentist.ClinicName)</h4>
+                    @dentist.Specialty
+                    <br>
+                    Average Rating: @dentist.AverageRating
+                    <br>
+                    @*@Html.ActionLink("Details", "Details", new { id = dentist.Id })*@
+                    @Html.Partial("_DentistActionsPartial", dentist)
+                </div>
+            </div>
+            @*<tr>
+                <td>
+                    @dentist.FirstName @dentist.LastName - @dentist.Specialty - @dentist.ClinicName - @dentist.AverageRating
+                </td>
+                <td>
+                    <img src="@dentist.ImageUrl" />
+                </td>
+                <td>
+                    @Html.ActionLink("Details", "Details", new { id = dentist.Id })
+                    @Html.Partial("_DentistActionsPartial", dentist)
+                </td>
+            </tr>*@
+        }
     </tbody>
 </table>

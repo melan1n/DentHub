@@ -77,21 +77,6 @@ namespace DentHub.Web.Controllers
 			var patient = this._patientService
 					.GetAppointmentPatient(appointmentId);
 
-            if (ratingRecord == null)
-            {
-                ratingRecord = new Rating
-                {
-                    Appointment = appointment,
-                    DentistId = dentist.Id,
-                    PatientId = patient.Id,
-                };
-
-                await this._ratingService.AddAsync(ratingRecord);
-                await this._ratingService.SaveChangesAsync();
-            }
-
-            
-
             if (User.IsInRole("Dentist"))
             {
                 ratingRecord.RatingByDentist = rating;

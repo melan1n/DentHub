@@ -11,10 +11,13 @@ namespace DentHub.Web.Services.DataServices
     public class AppointmentService : IAppointmentService
     {
         private readonly IRepository<Appointment> _appointmentRepository;
+        private readonly IRepository<Rating> _ratingRepository;
 
-        public AppointmentService(IRepository<Appointment> appointmentRepository)
+        public AppointmentService(IRepository<Appointment> appointmentRepository,
+            IRepository<Rating> ratingRepository)
         {
             this._appointmentRepository = appointmentRepository;
+            this._ratingRepository = ratingRepository;
         }
 
 		public Appointment GetAppointmentById(int id)
@@ -70,7 +73,17 @@ namespace DentHub.Web.Services.DataServices
 			appointment.Patient = user;
 			appointment.Status = Status.Booked;
 
-			this.Update(appointment);
+            var ratingRecord = new Rating
+            {
+                Appointment = appointment,
+                DentistId = appointment.DentistID,
+                PatientId = appointment.PatientId,
+            };
+
+            await this._ratingRepository.AddAsync(ratingRecord);
+            await this._ratingRepository.SaveChangesAsync();
+
+            this.Update(appointment);
 			await this.SaveChangesAsync();
 		}
 

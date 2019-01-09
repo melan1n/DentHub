@@ -66,21 +66,21 @@
 </div>
 
 <table class="table">
-    <thead>
+    @*<thead>
         <tr>
             <th>
-                @*@Html.DisplayNameFor(model => model.Id)*@
+                @Html.DisplayNameFor(model => model.Id)
             </th>
-            <th></th>
+            
         </tr>
-    </thead>
+    </thead>*@
     <tbody>
         @foreach (var dentist in Model.Dentists)
         {
             <div class="media">
                 <div class="media-left">
                     <a href="#">
-                        <img class="media-object" src="@dentist.ImageUrl">
+                        <img style=" width: 220px; height: 130px" class="media-object img-size" src="@dentist.ImageUrl">
                     </a>
                 </div>
                 <div class="media-body">

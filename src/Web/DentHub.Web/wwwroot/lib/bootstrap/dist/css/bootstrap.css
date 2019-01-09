@@ -5213,6 +5213,10 @@ a.thumbnail.active {
 .media-object.img-thumbnail {
   max-width: none;
 }
+.img-size {
+    width: 150px;
+    height: 150px;
+}
 .media-right,
 .media > .pull-right {
   padding-left: 10px;

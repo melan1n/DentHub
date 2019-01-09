@@ -64,7 +64,8 @@ namespace DentHub.Web.Services.DataServices.Tests
 
 			var userRepository = new DbRepository<DentHubUser>(dbContext);
 			var appointmentRepository = new DbRepository<Appointment>(dbContext);
-			var appointmentService = new AppointmentService(appointmentRepository);
+            var ratingRepository = new DbRepository<Rating>(dbContext);
+            var appointmentService = new AppointmentService(appointmentRepository, ratingRepository);
 			var service = new DentistService(userRepository, appointmentService);
 			var result = service.GetAllActiveDentists();
 			Assert.Equal(new DentHubUser[] { dentist, dentist2, dentist4 }, result);
@@ -102,7 +103,8 @@ namespace DentHub.Web.Services.DataServices.Tests
 
 			var userRepository = new DbRepository<DentHubUser>(dbContext);
 			var appointmentRepository = new DbRepository<Appointment>(dbContext);
-			var appointmentService = new AppointmentService(appointmentRepository);
+            var ratingRepository = new DbRepository<Rating>(dbContext);
+            var appointmentService = new AppointmentService(appointmentRepository, ratingRepository);
 			var service = new DentistService(userRepository, appointmentService);
 			var result = service.GetAllActiveDentists();
 			Assert.Empty(result);
@@ -163,7 +165,8 @@ namespace DentHub.Web.Services.DataServices.Tests
 
 			var userRepository = new DbRepository<DentHubUser>(dbContext);
 			var appointmentRepository = new DbRepository<Appointment>(dbContext);
-			var appointmentService = new AppointmentService(appointmentRepository);
+            var ratingRepository = new DbRepository<Rating>(dbContext);
+            var appointmentService = new AppointmentService(appointmentRepository, ratingRepository);
 			var service = new DentistService(userRepository, appointmentService);
 			var result = service.GetAllActiveClinicDentists(1);
 			Assert.Equal(new DentHubUser[] { dentist, dentist2 }, result);
@@ -202,7 +205,8 @@ namespace DentHub.Web.Services.DataServices.Tests
 
 			var userRepository = new DbRepository<DentHubUser>(dbContext);
 			var appointmentRepository = new DbRepository<Appointment>(dbContext);
-			var appointmentService = new AppointmentService(appointmentRepository);
+            var ratingRepository = new DbRepository<Rating>(dbContext);
+            var appointmentService = new AppointmentService(appointmentRepository, ratingRepository);
 			var service = new DentistService(userRepository, appointmentService);
 			var result = service.GetAllActiveClinicDentists(2);
 			Assert.Empty(result);
@@ -243,7 +247,8 @@ namespace DentHub.Web.Services.DataServices.Tests
 
 			var userRepository = new DbRepository<DentHubUser>(dbContext);
 			var appointmentRepository = new DbRepository<Appointment>(dbContext);
-			var appointmentService = new AppointmentService(appointmentRepository);
+            var ratingRepository = new DbRepository<Rating>(dbContext);
+            var appointmentService = new AppointmentService(appointmentRepository, ratingRepository);
 			var service = new DentistService(userRepository, appointmentService);
 			var result = service.GetDentistById("2");
 			Assert.Same(dentist2, result);
@@ -284,7 +289,8 @@ namespace DentHub.Web.Services.DataServices.Tests
 
 			var userRepository = new DbRepository<DentHubUser>(dbContext);
 			var appointmentRepository = new DbRepository<Appointment>(dbContext);
-			var appointmentService = new AppointmentService(appointmentRepository);
+            var ratingRepository = new DbRepository<Rating>(dbContext);
+            var appointmentService = new AppointmentService(appointmentRepository, ratingRepository);
 			var service = new DentistService(userRepository, appointmentService);
 			Assert.Throws<ArgumentException>(() => service.GetDentistById("15"));
 		}
@@ -324,7 +330,8 @@ namespace DentHub.Web.Services.DataServices.Tests
 
 			var userRepository = new DbRepository<DentHubUser>(dbContext);
 			var appointmentRepository = new DbRepository<Appointment>(dbContext);
-			var appointmentService = new AppointmentService(appointmentRepository);
+            var ratingRepository = new DbRepository<Rating>(dbContext);
+            var appointmentService = new AppointmentService(appointmentRepository, ratingRepository);
 			var service = new DentistService(userRepository, appointmentService);
 			Assert.Throws<ArgumentException>(() => service.GetDentistById("21"));
 		}
@@ -339,7 +346,8 @@ namespace DentHub.Web.Services.DataServices.Tests
 
 			var userRepository = new DbRepository<DentHubUser>(dbContext);
 			var appointmentRepository = new DbRepository<Appointment>(dbContext);
-			var appointmentService = new AppointmentService(appointmentRepository);
+            var ratingRepository = new DbRepository<Rating>(dbContext);
+            var appointmentService = new AppointmentService(appointmentRepository, ratingRepository);
 			var service = new DentistService(userRepository, appointmentService);
 			Assert.Throws<ArgumentException>(() => service.GetDentistById("7"));
 		}
@@ -398,7 +406,8 @@ namespace DentHub.Web.Services.DataServices.Tests
 
 			var userRepository = new DbRepository<DentHubUser>(dbContext);
 			var appointmentRepository = new DbRepository<Appointment>(dbContext);
-			var appointmentService = new AppointmentService(appointmentRepository);
+            var ratingRepository = new DbRepository<Rating>(dbContext);
+           var appointmentService = new AppointmentService(appointmentRepository, ratingRepository);
 			var service = new DentistService(userRepository, appointmentService);
 			var result = service.GetAllPatientDentists("1");
 			Assert.Equal(new DentHubUser[] { dentist1, dentist2 }, result);
@@ -458,7 +467,8 @@ namespace DentHub.Web.Services.DataServices.Tests
 
 			var userRepository = new DbRepository<DentHubUser>(dbContext);
 			var appointmentRepository = new DbRepository<Appointment>(dbContext);
-			var appointmentService = new AppointmentService(appointmentRepository);
+            var ratingRepository = new DbRepository<Rating>(dbContext);
+            var appointmentService = new AppointmentService(appointmentRepository, ratingRepository);
 			var service = new DentistService(userRepository, appointmentService);
 			var result = service.GetAllPatientDentists("5");
 			Assert.Empty(result);
@@ -499,7 +509,8 @@ namespace DentHub.Web.Services.DataServices.Tests
 
 			var userRepository = new DbRepository<DentHubUser>(dbContext);
 			var appointmentRepository = new DbRepository<Appointment>(dbContext);
-			var appointmentService = new AppointmentService(appointmentRepository);
+            var ratingRepository = new DbRepository<Rating>(dbContext);
+            var appointmentService = new AppointmentService(appointmentRepository, ratingRepository);
 			var service = new DentistService(userRepository, appointmentService);
 			var result = service.GetDentistFullName("1");
 			Assert.Equal("Test LastName", result);
@@ -549,7 +560,8 @@ namespace DentHub.Web.Services.DataServices.Tests
 
 			var userRepository = new DbRepository<DentHubUser>(dbContext);
 			var appointmentRepository = new DbRepository<Appointment>(dbContext);
-			var appointmentService = new AppointmentService(appointmentRepository);
+            var ratingRepository = new DbRepository<Rating>(dbContext);
+            var appointmentService = new AppointmentService(appointmentRepository, ratingRepository);
 			var service = new DentistService(userRepository, appointmentService);
 			var result = service.GetAppointmentDentist(1);
 			Assert.Equal(dentist1, result);

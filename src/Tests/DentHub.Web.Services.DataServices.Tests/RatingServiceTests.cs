@@ -602,7 +602,7 @@ namespace DentHub.Web.Services.DataServices.Tests
 		}
 
 		[Fact]
-		public void GetRatingForAppointment_WithInInvalidAppointmentId_ShouldThrowException()
+		public void GetRatingForAppointment_WithNonExistingRatingRecord_ShouldThrowException()
 		{
 			var options = new DbContextOptionsBuilder<DentHubContext>()
 			   .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString()) // Give a Unique name to the DB
@@ -629,7 +629,7 @@ namespace DentHub.Web.Services.DataServices.Tests
 
 			var ratingRepository = new DbRepository<Rating>(dbContext);
 			var service = new RatingService(ratingRepository);
-			Assert.Throws<ArgumentException>(() => service.GetRatingForAppointment(3));
+			Assert.Throws<InvalidOperationException>(() => service.GetRatingForAppointment(3));
 		}
 	}
 }
