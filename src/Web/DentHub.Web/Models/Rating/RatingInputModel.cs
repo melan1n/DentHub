@@ -20,7 +20,7 @@ namespace DentHub.Web.Models.Rating
 		public int RatingByPatient { get; set; }
 
 		[Required]
-		[Display(Name = "Provide your rating for this appointment")]
+		[Display(Name = "Provide your rating on the scale of 1 to 10 for this appointment")]
 		[Range(1, 10)]
 		public int Rating { get; set; }
 	}

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -24,6 +25,7 @@ namespace DentHub.Web.Areas.Administration.Models
 
 		public string Country { get; set; }
 
+		[RegularExpression(@"^([ 01]?[0-9]|2[0-3])(:[0-5][0-9])? - ([ 01]?[0-9]|2[0-3])(:[0-5][0-9])?$", ErrorMessage = "Input a string in the format HH:mm - HH:mm")]
 		public string WorkingHours { get; set; }
 
 		public string Addresss =>

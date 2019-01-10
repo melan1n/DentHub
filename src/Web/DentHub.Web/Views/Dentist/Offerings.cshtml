@@ -4,13 +4,23 @@
     ViewData["Title"] = "Offerings";
 }
 
-<h2>@Model.Appointments.FirstOrDefault().DentistName's Offerings</h2>
+<h1>@Model.Appointments.FirstOrDefault().DentistName's Offerings</h1>
+<hr>
 
 <table class="table">
     <thead>
         <tr>
             <th>
-                Dentist Name    (Clinic)  - Appointment Start  : Appointment End - Status 
+                Dentist Name
+            </th>
+             <th>
+                Clinic
+            </th>
+            <th>
+                Appointment Start  - Appointment End
+            </th>
+            <th>
+                Status
             </th>
             <th></th>
         </tr>
@@ -19,11 +29,20 @@
 @foreach (var appointment in Model.Appointments) {
         <tr>
             <td>
-                @appointment.DentistName (@appointment.ClinicName) - @appointment.TimeStart : @appointment.TimeEnd -- Status:@appointment.Status
+                @appointment.DentistName   
+            </td>
+            <td>
+                @appointment.ClinicName
+            </td>
+            <td>
+                @appointment.TimeStart - @appointment.TimeEnd
+            </td>
+            <td>
+                @appointment.Status
             </td>
             <td>
                 @*@Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Book", "Book", new { id = appointment.Id })*@
+            @Html.ActionLink("Book", "Book", new { id = appointment.Id })*@
                 <a href="/Appointment/Book/@appointment.Id">Book</a>
             </td>
         </tr>

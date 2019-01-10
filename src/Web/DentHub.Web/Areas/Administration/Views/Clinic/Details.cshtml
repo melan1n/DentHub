@@ -87,6 +87,8 @@
                     <h4 class="media-heading">@dentist.FirstName @dentist.LastName</h4>
                     @dentist.Specialty
                     <br>
+                    @dentist.AverageRating
+                    <br>
                     @await Html.PartialAsync("_DentistOfferings", new DentistViewModel { Id = dentist.Id })
                 </div>
                </div>

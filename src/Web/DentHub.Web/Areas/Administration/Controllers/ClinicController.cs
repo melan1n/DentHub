@@ -22,17 +22,20 @@ namespace DentHub.Web.Areas.Administration.Controllers
         private readonly IDentistService _dentistService;
         private readonly IAppointmentService _appointmentService;
         private readonly ISpecialtyService _specialtyService;
+        private readonly IRatingService _ratingService;
 
 
         public ClinicController(IClinicService clinicService,
             IDentistService dentistService,
             IAppointmentService appointmentService,
-            ISpecialtyService specialtyService)
+            ISpecialtyService specialtyService,
+			IRatingService ratingService)
         {
             this._clinicService = clinicService;
             this._dentistService = dentistService;
             this._appointmentService = appointmentService;
             this._specialtyService = specialtyService;
+			this._ratingService = ratingService;
         }
 
         public IActionResult All()
@@ -82,52 +85,6 @@ namespace DentHub.Web.Areas.Administration.Controllers
 
         }
 
-
-        //// Delete after exposing Data services
-        //private void GetAllActiveClinics(ClinicsViewModel clinicsViewModel)
-        //{
-
-        //	clinicsViewModel.Clinics = this._clinicRepository
-        //										.All()
-        //										.Where(c => c.IsActive && c.Dentists.Any(d => d.IsActive))
-        //										.Select(
-        //						c => new ClinicViewModel
-        //						{
-        //							Id = c.Id,
-        //							City = c.City,
-        //							Country = c.Country,
-        //							Name = c.Name,
-        //							PostalCode = c.PostalCode,
-        //							Street = c.Street,
-        //							WorkingHours = c.WorkingHours,
-        //							Dentists = this._dentistRepository
-        //										.All()
-        //										.Where(d => d.IsActive && d.ClinicId == c.Id)
-        //										.Select(
-        //							d => new DentistViewModel
-        //							{
-        //								Id = d.Id,
-        //								FirstName = d.FirstName,
-        //								LastName = d.LastName,
-        //								Specialty = d.Specialty.Name,
-        //								ImageUrl = d.ImageUrl,
-        //								Offerrings = this._appointmentRepository
-        //											.All()
-        //											.Where(a => a.DentistID == d.Id)
-        //											.Select(
-        //										a => new AppointmentViewModel
-        //										{
-        //											DentistName = a.Dentist.FirstName + a.Dentist.LastName,
-        //											ClinicName = a.Clinic.Name,
-        //											TimeStart = a.TimeStart,
-        //											TimeEnd = a.TimeEnd,
-        //											Status = a.Status.ToString()
-        //										}).ToArray()
-        //							}).ToList(),
-        //						})
-        //							.ToArray();
-        //}
-
         [Authorize(Roles = "Administrator")]
         public IActionResult Create()
         {
@@ -166,6 +123,7 @@ namespace DentHub.Web.Areas.Administration.Controllers
 										LastName = d.LastName,
 										Specialty = this._specialtyService
 												.GetSpecialtyNameById((int)d.SpecialtyId),
+										AverageRating = this._ratingService.GetAverageDentistRating(d.Id),
 										ImageUrl = d.ImageUrl,
 									}).ToList(),
 			};
