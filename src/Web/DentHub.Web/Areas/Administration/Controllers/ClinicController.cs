@@ -71,7 +71,8 @@ namespace DentHub.Web.Areas.Administration.Controllers
                                                 a => new AppointmentViewModel
                                                 {
                                                     DentistName = a.Dentist.FirstName + a.Dentist.LastName,
-                                                    ClinicName = a.Clinic.Name,
+                                                    ClinicName = this._clinicService
+														.GetClinicById(a.ClinicId).Name,
                                                     TimeStart = a.TimeStart,
                                                     TimeEnd = a.TimeEnd,
                                                     Status = a.Status.ToString()
