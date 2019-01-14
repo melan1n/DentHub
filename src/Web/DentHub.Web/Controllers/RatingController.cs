@@ -88,9 +88,6 @@ namespace DentHub.Web.Controllers
                 ratingRecord.Appointment.IsRatedByPatient = true;
             }
 
-            // Uncomment if you revive status "Completed"
-            //appointment.Status = Status.Completed;
-
             this._appointmentService.Update(appointment);
             this._ratingService.Update(ratingRecord);
 
